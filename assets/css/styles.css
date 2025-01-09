@@ -62,6 +62,43 @@
       - Inputs
 */
 
+     /*codigo para notificaciones*/
+
+        /* Contenedor de notificaciones */
+        .notification-container {
+            position: fixed;
+            text-align: center;
+            width: 20%;
+            bottom: 20px;
+            right: 20px;
+            display: flex;
+            flex-direction: column-reverse; /* Los mensajes nuevos se agregan abajo */
+            gap: 10px;
+            max-width: 300px;
+        }
+
+        /* Notificación */
+        .messenger {
+            padding: 15px;
+            border-radius: 5px;
+            color: white;
+            font-size: 16px;
+            opacity: 1;
+            animation: fadeOut 6s forwards;
+        }
+
+        /* Estilos de notificación */
+        .divNotiError { background-color: #e53935; }
+        .divNotiLike { background-color: #4caf50; }
+        .divNotiNope { background-color: #fb8c00; }
+        .divNotiOther { background-color: #1e88e5; }
+
+        /* Animación */
+        @keyframes fadeOut {
+            0%, 83% { opacity: 1; }
+            100% { opacity: 0; }
+        }
+
 /* 
       ==================================================
       5. Layout y estructura
