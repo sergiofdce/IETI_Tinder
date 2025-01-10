@@ -1,0 +1,642 @@
+[
+    {
+        "nom": "Eduardo",
+        "cognoms": "Iglesias",
+        "alias": "sonia22",
+        "data_naixement": "1998-01-31",
+        "ubicacio": {
+            "latitud": 42.070403,
+            "longitud": -0.317699
+        },
+        "sexe": "No binario",
+        "orientacio_sexual": "Homosexual",
+        "profile_images": {
+            "image1": "..\/assets\/img\/seeder\/img025.webp",
+            "image2": "..\/assets\/img\/seeder\/img026.webp"
+        }
+    },
+    {
+        "nom": "Miguel Ángel",
+        "cognoms": "Mateo",
+        "alias": "nahia77",
+        "data_naixement": "2012-01-20",
+        "ubicacio": {
+            "latitud": 41.291921,
+            "longitud": 1.754955
+        },
+        "sexe": "Hombre",
+        "orientacio_sexual": "Bisexual",
+        "profile_images": {
+            "image1": "..\/assets\/img\/seeder\/img001.webp",
+            "image2": "..\/assets\/img\/seeder\/img052.webp"
+        }
+    },
+    {
+        "nom": "Manuel",
+        "cognoms": "Navarro",
+        "alias": "naponte",
+        "data_naixement": "1984-09-17",
+        "ubicacio": {
+            "latitud": 40.509826,
+            "longitud": -1.579022
+        },
+        "sexe": "No binario",
+        "orientacio_sexual": "Bisexual",
+        "profile_images": {
+            "image1": "..\/assets\/img\/seeder\/img020.webp",
+            "image2": "..\/assets\/img\/seeder\/img050.webp"
+        }
+    },
+    {
+        "nom": "Jon",
+        "cognoms": "Mateo",
+        "alias": "pacheco.zoe",
+        "data_naixement": "2013-10-01",
+        "ubicacio": {
+            "latitud": 40.351689,
+            "longitud": 1.257849
+        },
+        "sexe": "Hombre",
+        "orientacio_sexual": "Homosexual",
+        "profile_images": {
+            "image1": "..\/assets\/img\/seeder\/img007.webp",
+            "image2": "..\/assets\/img\/seeder\/img037.webp"
+        }
+    },
+    {
+        "nom": "Lorena",
+        "cognoms": "Saldaña",
+        "alias": "leyva.dario",
+        "data_naixement": "1997-12-18",
+        "ubicacio": {
+            "latitud": 41.314073,
+            "longitud": -1.332045
+        },
+        "sexe": "Hombre",
+        "orientacio_sexual": "Heterosexual",
+        "profile_images": {
+            "image1": "..\/assets\/img\/seeder\/img022.webp",
+            "image2": "..\/assets\/img\/seeder\/img053.webp"
+        }
+    },
+    {
+        "nom": "Ona",
+        "cognoms": "Quintana",
+        "alias": "umartin",
+        "data_naixement": "2014-09-30",
+        "ubicacio": {
+            "latitud": 40.951078,
+            "longitud": -1.108451
+        },
+        "sexe": "Mujer",
+        "orientacio_sexual": "Bisexual",
+        "profile_images": {
+            "image1": "..\/assets\/img\/seeder\/img002.webp",
+            "image2": "..\/assets\/img\/seeder\/img052.webp"
+        }
+    },
+    {
+        "nom": "Naiara",
+        "cognoms": "Aguilar",
+        "alias": "barela.alex",
+        "data_naixement": "2018-11-28",
+        "ubicacio": {
+            "latitud": 42.764824,
+            "longitud": -3.436581
+        },
+        "sexe": "No binario",
+        "orientacio_sexual": "Heterosexual",
+        "profile_images": {
+            "image1": "..\/assets\/img\/seeder\/img030.webp",
+            "image2": "..\/assets\/img\/seeder\/img057.webp"
+        }
+    },
+    {
+        "nom": "Ángeles",
+        "cognoms": "Domingo",
+        "alias": "pholguin",
+        "data_naixement": "2016-09-09",
+        "ubicacio": {
+            "latitud": 41.552912,
+            "longitud": 1.673409
+        },
+        "sexe": "No binario",
+        "orientacio_sexual": "Heterosexual",
+        "profile_images": {
+            "image1": "..\/assets\/img\/seeder\/img037.webp",
+            "image2": "..\/assets\/img\/seeder\/img050.webp"
+        }
+    },
+    {
+        "nom": "Rubén",
+        "cognoms": "Espinoza",
+        "alias": "fzuniga",
+        "data_naixement": "1972-04-24",
+        "ubicacio": {
+            "latitud": 41.322515,
+            "longitud": 1.424922
+        },
+        "sexe": "No binario",
+        "orientacio_sexual": "Heterosexual",
+        "profile_images": {
+            "image1": "..\/assets\/img\/seeder\/img027.webp",
+            "image2": "..\/assets\/img\/seeder\/img058.webp"
+        }
+    },
+    {
+        "nom": "Saúl",
+        "cognoms": "Cavazos",
+        "alias": "nerea86",
+        "data_naixement": "1981-07-21",
+        "ubicacio": {
+            "latitud": 40.597681,
+            "longitud": 0.694006
+        },
+        "sexe": "Hombre",
+        "orientacio_sexual": "Homosexual",
+        "profile_images": {
+            "image1": "..\/assets\/img\/seeder\/img033.webp",
+            "image2": "..\/assets\/img\/seeder\/img059.webp"
+        }
+    },
+    {
+        "nom": "Unai",
+        "cognoms": "Betancourt",
+        "alias": "gizquierdo",
+        "data_naixement": "1998-06-09",
+        "ubicacio": {
+            "latitud": 42.569665,
+            "longitud": -4.555216
+        },
+        "sexe": "Mujer",
+        "orientacio_sexual": "Homosexual",
+        "profile_images": {
+            "image1": "..\/assets\/img\/seeder\/img023.webp",
+            "image2": "..\/assets\/img\/seeder\/img041.webp"
+        }
+    },
+    {
+        "nom": "Sofía",
+        "cognoms": "Alaniz",
+        "alias": "mara.conde",
+        "data_naixement": "1994-08-03",
+        "ubicacio": {
+            "latitud": 40.492295,
+            "longitud": -1.970532
+        },
+        "sexe": "No binario",
+        "orientacio_sexual": "Bisexual",
+        "profile_images": {
+            "image1": "..\/assets\/img\/seeder\/img020.webp",
+            "image2": "..\/assets\/img\/seeder\/img037.webp"
+        }
+    },
+    {
+        "nom": "Enrique",
+        "cognoms": "Rincón",
+        "alias": "nerea54",
+        "data_naixement": "1997-03-30",
+        "ubicacio": {
+            "latitud": 40.899413,
+            "longitud": -1.80994
+        },
+        "sexe": "Hombre",
+        "orientacio_sexual": "Homosexual",
+        "profile_images": {
+            "image1": "..\/assets\/img\/seeder\/img029.webp",
+            "image2": "..\/assets\/img\/seeder\/img052.webp"
+        }
+    },
+    {
+        "nom": "Blanca",
+        "cognoms": "Heredia",
+        "alias": "qvelez",
+        "data_naixement": "1975-07-02",
+        "ubicacio": {
+            "latitud": 40.478737,
+            "longitud": -1.56255
+        },
+        "sexe": "Mujer",
+        "orientacio_sexual": "Heterosexual",
+        "profile_images": {
+            "image1": "..\/assets\/img\/seeder\/img021.webp",
+            "image2": "..\/assets\/img\/seeder\/img043.webp"
+        }
+    },
+    {
+        "nom": "Victoria",
+        "cognoms": "Santiago",
+        "alias": "dcastellano",
+        "data_naixement": "1982-05-10",
+        "ubicacio": {
+            "latitud": 42.63045,
+            "longitud": 2.084617
+        },
+        "sexe": "Hombre",
+        "orientacio_sexual": "Heterosexual",
+        "profile_images": {
+            "image1": "..\/assets\/img\/seeder\/img001.webp",
+            "image2": "..\/assets\/img\/seeder\/img015.webp"
+        }
+    },
+    {
+        "nom": "Alonso",
+        "cognoms": "Méndez",
+        "alias": "matos.alberto",
+        "data_naixement": "2020-07-04",
+        "ubicacio": {
+            "latitud": 41.947999,
+            "longitud": -3.947758
+        },
+        "sexe": "No binario",
+        "orientacio_sexual": "Heterosexual",
+        "profile_images": {
+            "image1": "..\/assets\/img\/seeder\/img029.webp",
+            "image2": "..\/assets\/img\/seeder\/img037.webp"
+        }
+    },
+    {
+        "nom": "Noelia",
+        "cognoms": "Treviño",
+        "alias": "jesus21",
+        "data_naixement": "1978-04-18",
+        "ubicacio": {
+            "latitud": 41.904938,
+            "longitud": -3.722025
+        },
+        "sexe": "Hombre",
+        "orientacio_sexual": "Bisexual",
+        "profile_images": {
+            "image1": "..\/assets\/img\/seeder\/img034.webp",
+            "image2": "..\/assets\/img\/seeder\/img053.webp"
+        }
+    },
+    {
+        "nom": "María Pilar",
+        "cognoms": "Jaimes",
+        "alias": "victor53",
+        "data_naixement": "1974-11-13",
+        "ubicacio": {
+            "latitud": 40.595815,
+            "longitud": 0.225563
+        },
+        "sexe": "Mujer",
+        "orientacio_sexual": "Heterosexual",
+        "profile_images": {
+            "image1": "..\/assets\/img\/seeder\/img004.webp",
+            "image2": "..\/assets\/img\/seeder\/img024.webp"
+        }
+    },
+    {
+        "nom": "Abril",
+        "cognoms": "Barrientos",
+        "alias": "gerard81",
+        "data_naixement": "2011-06-08",
+        "ubicacio": {
+            "latitud": 41.649228,
+            "longitud": 2.013191
+        },
+        "sexe": "No binario",
+        "orientacio_sexual": "Homosexual",
+        "profile_images": {
+            "image1": "..\/assets\/img\/seeder\/img003.webp",
+            "image2": "..\/assets\/img\/seeder\/img049.webp"
+        }
+    },
+    {
+        "nom": "Josefa",
+        "cognoms": "Meza",
+        "alias": "nceja",
+        "data_naixement": "1997-12-21",
+        "ubicacio": {
+            "latitud": 42.405799,
+            "longitud": 1.146022
+        },
+        "sexe": "Hombre",
+        "orientacio_sexual": "Heterosexual",
+        "profile_images": {
+            "image1": "..\/assets\/img\/seeder\/img030.webp",
+            "image2": "..\/assets\/img\/seeder\/img040.webp"
+        }
+    },
+    {
+        "nom": "Ian",
+        "cognoms": "Silva",
+        "alias": "martina.perales",
+        "data_naixement": "1991-01-07",
+        "ubicacio": {
+            "latitud": 41.948232,
+            "longitud": -0.352164
+        },
+        "sexe": "Hombre",
+        "orientacio_sexual": "Homosexual",
+        "profile_images": {
+            "image1": "..\/assets\/img\/seeder\/img030.webp",
+            "image2": "..\/assets\/img\/seeder\/img041.webp"
+        }
+    },
+    {
+        "nom": "Pedro",
+        "cognoms": "Gálvez",
+        "alias": "elsa.bahena",
+        "data_naixement": "2007-09-03",
+        "ubicacio": {
+            "latitud": 41.663275,
+            "longitud": 2.669745
+        },
+        "sexe": "No binario",
+        "orientacio_sexual": "Heterosexual",
+        "profile_images": {
+            "image1": "..\/assets\/img\/seeder\/img034.webp",
+            "image2": "..\/assets\/img\/seeder\/img051.webp"
+        }
+    },
+    {
+        "nom": "Óscar",
+        "cognoms": "Andrés",
+        "alias": "esther.luque",
+        "data_naixement": "2022-09-11",
+        "ubicacio": {
+            "latitud": 41.715611,
+            "longitud": 0.129572
+        },
+        "sexe": "Mujer",
+        "orientacio_sexual": "Heterosexual",
+        "profile_images": {
+            "image1": "..\/assets\/img\/seeder\/img035.webp",
+            "image2": "..\/assets\/img\/seeder\/img052.webp"
+        }
+    },
+    {
+        "nom": "Encarnación",
+        "cognoms": "Montenegro",
+        "alias": "jaime02",
+        "data_naixement": "1985-02-08",
+        "ubicacio": {
+            "latitud": 41.757272,
+            "longitud": -1.372645
+        },
+        "sexe": "No binario",
+        "orientacio_sexual": "Bisexual",
+        "profile_images": {
+            "image1": "..\/assets\/img\/seeder\/img002.webp",
+            "image2": "..\/assets\/img\/seeder\/img049.webp"
+        }
+    },
+    {
+        "nom": "Alexandra",
+        "cognoms": "Feliciano",
+        "alias": "santiago.lara",
+        "data_naixement": "2001-11-29",
+        "ubicacio": {
+            "latitud": 40.027512,
+            "longitud": -2.687795
+        },
+        "sexe": "Hombre",
+        "orientacio_sexual": "Homosexual",
+        "profile_images": {
+            "image1": "..\/assets\/img\/seeder\/img014.webp",
+            "image2": "..\/assets\/img\/seeder\/img048.webp"
+        }
+    },
+    {
+        "nom": "Asier",
+        "cognoms": "Quesada",
+        "alias": "dzambrano",
+        "data_naixement": "2018-08-19",
+        "ubicacio": {
+            "latitud": 41.038618,
+            "longitud": -0.82948
+        },
+        "sexe": "Mujer",
+        "orientacio_sexual": "Heterosexual",
+        "profile_images": {
+            "image1": "..\/assets\/img\/seeder\/img017.webp",
+            "image2": "..\/assets\/img\/seeder\/img019.webp"
+        }
+    },
+    {
+        "nom": "Victoria",
+        "cognoms": "Murillo",
+        "alias": "vduenas",
+        "data_naixement": "2007-11-10",
+        "ubicacio": {
+            "latitud": 42.719108,
+            "longitud": 2.989157
+        },
+        "sexe": "No binario",
+        "orientacio_sexual": "Homosexual",
+        "profile_images": {
+            "image1": "..\/assets\/img\/seeder\/img012.webp",
+            "image2": "..\/assets\/img\/seeder\/img015.webp"
+        }
+    },
+    {
+        "nom": "Aina",
+        "cognoms": "Ríos",
+        "alias": "colunga.alexia",
+        "data_naixement": "2000-10-21",
+        "ubicacio": {
+            "latitud": 40.669532,
+            "longitud": -3.637074
+        },
+        "sexe": "Hombre",
+        "orientacio_sexual": "Heterosexual",
+        "profile_images": {
+            "image1": "..\/assets\/img\/seeder\/img015.webp",
+            "image2": "..\/assets\/img\/seeder\/img020.webp"
+        }
+    },
+    {
+        "nom": "Javier",
+        "cognoms": "Villaseñor",
+        "alias": "lozada.miguelangel",
+        "data_naixement": "1987-06-04",
+        "ubicacio": {
+            "latitud": 41.334685,
+            "longitud": 0.559436
+        },
+        "sexe": "Hombre",
+        "orientacio_sexual": "Homosexual",
+        "profile_images": {
+            "image1": "..\/assets\/img\/seeder\/img005.webp",
+            "image2": "..\/assets\/img\/seeder\/img054.webp"
+        }
+    },
+    {
+        "nom": "Dario",
+        "cognoms": "Elizondo",
+        "alias": "dario15",
+        "data_naixement": "2009-04-11",
+        "ubicacio": {
+            "latitud": 41.799122,
+            "longitud": 2.743872
+        },
+        "sexe": "Hombre",
+        "orientacio_sexual": "Bisexual",
+        "profile_images": {
+            "image1": "..\/assets\/img\/seeder\/img028.webp",
+            "image2": "..\/assets\/img\/seeder\/img037.webp"
+        }
+    },
+    {
+        "nom": "Gonzalo",
+        "cognoms": "Nava",
+        "alias": "qmanzanares",
+        "data_naixement": "2000-05-13",
+        "ubicacio": {
+            "latitud": 41.368762,
+            "longitud": -1.805656
+        },
+        "sexe": "No binario",
+        "orientacio_sexual": "Bisexual",
+        "profile_images": {
+            "image1": "..\/assets\/img\/seeder\/img015.webp",
+            "image2": "..\/assets\/img\/seeder\/img059.webp"
+        }
+    },
+    {
+        "nom": "Jorge",
+        "cognoms": "Armenta",
+        "alias": "santiago25",
+        "data_naixement": "1993-10-26",
+        "ubicacio": {
+            "latitud": 42.111887,
+            "longitud": -0.587406
+        },
+        "sexe": "Mujer",
+        "orientacio_sexual": "Bisexual",
+        "profile_images": {
+            "image1": "..\/assets\/img\/seeder\/img021.webp",
+            "image2": "..\/assets\/img\/seeder\/img051.webp"
+        }
+    },
+    {
+        "nom": "Ángeles",
+        "cognoms": "Benito",
+        "alias": "fatima.escalante",
+        "data_naixement": "1997-01-25",
+        "ubicacio": {
+            "latitud": 41.701205,
+            "longitud": 1.883273
+        },
+        "sexe": "Hombre",
+        "orientacio_sexual": "Bisexual",
+        "profile_images": {
+            "image1": "..\/assets\/img\/seeder\/img007.webp",
+            "image2": "..\/assets\/img\/seeder\/img042.webp"
+        }
+    },
+    {
+        "nom": "Víctor",
+        "cognoms": "Córdoba",
+        "alias": "clara.villalpando",
+        "data_naixement": "2000-07-20",
+        "ubicacio": {
+            "latitud": 40.50123,
+            "longitud": -0.312843
+        },
+        "sexe": "Mujer",
+        "orientacio_sexual": "Heterosexual",
+        "profile_images": {
+            "image1": "..\/assets\/img\/seeder\/img015.webp",
+            "image2": "..\/assets\/img\/seeder\/img052.webp"
+        }
+    },
+    {
+        "nom": "África",
+        "cognoms": "Rivero",
+        "alias": "unai92",
+        "data_naixement": "1996-08-07",
+        "ubicacio": {
+            "latitud": 41.064188,
+            "longitud": -1.800669
+        },
+        "sexe": "Hombre",
+        "orientacio_sexual": "Bisexual",
+        "profile_images": {
+            "image1": "..\/assets\/img\/seeder\/img044.webp",
+            "image2": "..\/assets\/img\/seeder\/img059.webp"
+        }
+    },
+    {
+        "nom": "Celia",
+        "cognoms": "Silva",
+        "alias": "scarrero",
+        "data_naixement": "1979-02-21",
+        "ubicacio": {
+            "latitud": 41.858792,
+            "longitud": -3.576551
+        },
+        "sexe": "Hombre",
+        "orientacio_sexual": "Heterosexual",
+        "profile_images": {
+            "image1": "..\/assets\/img\/seeder\/img053.webp",
+            "image2": "..\/assets\/img\/seeder\/img057.webp"
+        }
+    },
+    {
+        "nom": "Javier",
+        "cognoms": "Álvarez",
+        "alias": "ralcantar",
+        "data_naixement": "1987-10-11",
+        "ubicacio": {
+            "latitud": 42.697295,
+            "longitud": -2.965355
+        },
+        "sexe": "No binario",
+        "orientacio_sexual": "Homosexual",
+        "profile_images": {
+            "image1": "..\/assets\/img\/seeder\/img010.webp",
+            "image2": "..\/assets\/img\/seeder\/img017.webp"
+        }
+    },
+    {
+        "nom": "Eduardo",
+        "cognoms": "Segovia",
+        "alias": "josemanuel.bautista",
+        "data_naixement": "2005-07-01",
+        "ubicacio": {
+            "latitud": 42.998756,
+            "longitud": -3.133533
+        },
+        "sexe": "Mujer",
+        "orientacio_sexual": "Homosexual",
+        "profile_images": {
+            "image1": "..\/assets\/img\/seeder\/img020.webp",
+            "image2": "..\/assets\/img\/seeder\/img031.webp"
+        }
+    },
+    {
+        "nom": "Ian",
+        "cognoms": "Lucero",
+        "alias": "marquez.nerea",
+        "data_naixement": "2001-01-03",
+        "ubicacio": {
+            "latitud": 40.615842,
+            "longitud": -4.72685
+        },
+        "sexe": "No binario",
+        "orientacio_sexual": "Homosexual",
+        "profile_images": {
+            "image1": "..\/assets\/img\/seeder\/img013.webp",
+            "image2": "..\/assets\/img\/seeder\/img026.webp"
+        }
+    },
+    {
+        "nom": "César",
+        "cognoms": "Centeno",
+        "alias": "guillermo.garibay",
+        "data_naixement": "2018-12-16",
+        "ubicacio": {
+            "latitud": 40.071042,
+            "longitud": -2.485026
+        },
+        "sexe": "No binario",
+        "orientacio_sexual": "Bisexual",
+        "profile_images": {
+            "image1": "..\/assets\/img\/seeder\/img007.webp",
+            "image2": "..\/assets\/img\/seeder\/img012.webp"
+        }
+    }
+]
