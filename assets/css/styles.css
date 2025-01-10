@@ -26,6 +26,29 @@
       - Espaciados
       - Breakpoints
 */
+:root {
+      --darkred-color: #800F2F;
+      --red-color: #CE2D4F;
+      --background-color: #E7A7F1;
+      --blue-color: #8EA4D2;
+      --darkblue-color: #2F418F;
+}
+
+.funnel-display {
+      font-family: "Funnel Display", serif;
+      font-optical-sizing: auto;
+      font-weight: 600;
+      font-style: normal;
+}
+
+.roboto {
+      font-family: "Roboto", serif;
+      font-optical-sizing: auto;
+      font-weight: 300;
+      font-style: normal;
+      font-variation-settings:
+            "wdth" 100;
+}
 
 /* 
       ==================================================
@@ -37,6 +60,17 @@
       - Links
       - Imágenes
 */
+
+body,
+html {
+      height: 100%;
+      margin: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-family: Arial, sans-serif;
+      background-color: var(--background-color);
+}
 
 /* 
       ==================================================
@@ -61,7 +95,39 @@
       - Modales
       - Inputs
 */
-
+label {
+      display: block;
+      font-weight: bold;
+      margin-bottom: 5px;
+  }
+  input {
+      width: 100%;
+      padding: 10px;
+      font-size: 14px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      margin-bottom: 15px;
+      box-sizing: border-box;
+  }
+  
+  button {
+      display: block;
+      width: 100%;
+      padding: 10px;
+      background-color: #555;
+      color: white;
+      text-align: center;
+      font-size: 16px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      margin-bottom: 10px;
+  }
+  
+  button:hover {
+      background-color: #333;
+  }
+  
 /* 
       ==================================================
       5. Layout y estructura
@@ -96,6 +162,15 @@
       - Visibilidad
       - Alineación
 */
+.container {
+      width: 100%;
+      max-width: 460px;
+      padding: 20px;
+      background-color: white;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      border-radius: 10px;
+      box-sizing: border-box;
+}
 
 /* 
       ==================================================
