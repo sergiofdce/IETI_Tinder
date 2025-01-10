@@ -29,9 +29,11 @@
 :root {
       --darkred-color: #800F2F;
       --red-color: #CE2D4F;
-      --background-color: #E7A7F1;
+      --background-color: white;
+      --pink-color: #E7A7F1;
       --blue-color: #8EA4D2;
       --darkblue-color: #2F418F;
+      --text-color: black;
 }
 
 .funnel-display {
@@ -104,29 +106,13 @@ label {
       width: 100%;
       padding: 10px;
       font-size: 14px;
+      background-color: var(--blue-color);
       border: 1px solid #ccc;
       border-radius: 5px;
-      margin-bottom: 15px;
+      margin-bottom: 15px;    
       box-sizing: border-box;
   }
   
-  button {
-      display: block;
-      width: 100%;
-      padding: 10px;
-      background-color: #555;
-      color: white;
-      text-align: center;
-      font-size: 16px;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-      margin-bottom: 10px;
-  }
-  
-  button:hover {
-      background-color: #333;
-  }
   
 /* 
       ==================================================
@@ -151,6 +137,20 @@ label {
       - Chat/Mensajes
       - Admin Panel
 */
+#login .alert {
+      margin-bottom: 10px;
+      padding: 10px;
+      border-radius: 5px;
+      text-align: center;
+      font-weight: bold;
+      color: white;
+}
+#login .alert-danger {
+      background-color: var(--red-color);
+}
+#login .alert-success {
+      background-color: var(--blue-color);
+}
 
 /* 
       ==================================================
@@ -162,7 +162,7 @@ label {
       - Visibilidad
       - Alineación
 */
-.container {
+.flex-container {
       width: 100%;
       max-width: 460px;
       padding: 20px;
