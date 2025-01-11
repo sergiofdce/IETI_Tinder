@@ -1,3 +1,10 @@
+<?php
+session_start();
+//persistencia de sesiones, si el usuario se ha logueado, se redirige a discober
+if (isset($_SESSION["user"])) {
+    header("Location: discober.php");
+}
+?>
 <!DOCTYPE html>
 <html lang="es">
 
