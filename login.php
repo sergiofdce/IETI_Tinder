@@ -42,8 +42,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         } else {
             try {
                 //preparar consulta y sanear los parámetros
-                $query = $pdo->prepare("SELECT * FROM users WHERE mail = :mail");
-                $query->bindParam(':mail', $_POST["email"]);
+                $query = $pdo->prepare("SELECT * FROM users WHERE email = :email");
+                $query->bindParam(':email', $_POST["email"]);
                 $query->execute();
             } catch (PDOException $e) {
                 echo "Error de SQL<br>\n";
@@ -64,7 +64,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $message = "<div class='alert alert-danger'>Rellene ambos campos</div>";
     }
 }
-echo $message;
 ?>
 
 <!DOCTYPE html>
