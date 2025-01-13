@@ -3,7 +3,7 @@ $(() => { //jquery equivalente a DOMContentLoaded
         e.preventDefault();
         sendForm();
     });
-    
+
     // función para enviar el formulario
     function sendForm() {
         $.ajax({
@@ -17,7 +17,7 @@ $(() => { //jquery equivalente a DOMContentLoaded
                 // switch para evaluar el resultado de la petición
                 switch (response) {
                     case 'success':
-                        window.location.href = 'discober.php'; // redirige a discober.php si el usuario se loguea correctamente
+                        window.location.href = 'discover.php'; // redirige a discober.php si el usuario se loguea correctamente
                         break;
                     case 'incorrect password':
                         $('#message').html('Contraseña incorrecta'); // mensaje de error si la contraseña es incorrecta
@@ -37,3 +37,5 @@ $(() => { //jquery equivalente a DOMContentLoaded
     }
 
 });
+
+//NO SIRVE
