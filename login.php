@@ -35,6 +35,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         if ($query->rowCount() > 0) {
             $row = $query->fetch();
             $_SESSION["user"] = $row["id"];
+            $_SESSION["email"] = $row["email"];
             //redireccionar a discover
             header("Location: discover.php");
 
@@ -56,12 +57,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             }
             if ($query->rowCount() > 0) {
                 $message = "<div class='alert alert-danger'>Contraseña incorrecta</div>";
+                $passwordErrorClass = "borderError";
             } else {
                 $message = "<div class='alert alert-danger'>Usuario incorrecto</div>";
+                $emailErrorClass = "borderError";
             }
         }
     } else {
         $message = "<div class='alert alert-danger'>Rellene ambos campos</div>";
+        $emailErrorClass = "borderError";
+        $passwordErrorClass = "borderError";
     }
 }
 ?>
@@ -91,11 +96,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             </div>
             <div id="login" class="roboto">
                 <form action="login.php" method="post">
-                    <label for="email" class="funnel-display">Email</label>
-                    <input type="email" name="email" placeholder="usuario@ieti.site">
-                    <label for="password" class="funnel-display">Contraseña</label>
-                    <input type="password" name="password" placeholder="******">
                     <?php echo $message; ?>
+                    <label for="email" class="funnel-display">Email</label>
+                    <input type="email" name="email" class="<?php echo $emailErrorClass; ?>" placeholder="usuario@ieti.site">
+                    <label for="password" class="funnel-display">Contraseña</label>
+                    <input type="password" name="password" class="<?php echo $passwordErrorClass; ?>" placeholder="******">
                     <input type="submit" name="submit" value="Iniciar Sesión">
                 </form>
                 <p><a href="#">¿Has olvidado la contraseña?</a></p>
