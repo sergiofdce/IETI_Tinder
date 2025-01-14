@@ -62,7 +62,7 @@
                 echo "<div class='match-name'>";
                 echo $row['name'] . " " . $row['surname'];
                 echo "</div>";
-                echo "</a>";s
+                echo "</a>";
             }
         }
         mysqli_close($conn);
