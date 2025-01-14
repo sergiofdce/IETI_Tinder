@@ -86,13 +86,12 @@ mysqli_close($conn);
             margin-bottom: 8px;
         }
 
-        .container-profile img {
-            width: 45%;
-            height: 45%;
-            border-radius: 50%;
-            padding: 5px;
-            object-fit: cover;
-        }
+        .profile-image {
+    width: 150px; /* Tamaño fijo de ancho */
+    height: 150px; /* Tamaño fijo de alto */
+    border-radius: 50%; /* Esto hará que la imagen sea circular */
+    object-fit: cover; /* Esto asegura que la imagen se recorte adecuadamente si es necesario */
+}
 
         .container-profile {
             text-align: left;
@@ -151,10 +150,26 @@ mysqli_close($conn);
             <div class="container-cabecera">
                 <h1 class="profile-title">Perfil</h1>
                 <?php
-                // Si hay foto de perfil, mostrarla con una ruta accesible desde la web
-                $photo_path = !empty($user['photo']) ? $user['photo'] : '/images/default_photo.jpg';
-                echo "<img src='$photo_path' alt='Foto de perfil'>";
+                // Ruta base para las imágenes
+                $base_url = 'assets/img/'; // Suponiendo que las imágenes están en la carpeta 'assets/img/'
+
+                // Verificar si el usuario tiene una foto de perfil
+                $photo_path = !empty($user['photo']) ? $user['photo'] : 'default.png'; // Si no tiene foto, usamos la imagen por defecto
+
+                // Verificar si la imagen existe en el servidor
+                $full_photo_path = $base_url . basename($photo_path); // Obtenemos la ruta completa de la imagen
+
+                // Si la imagen no existe, usamos la imagen predeterminada
+                if (!file_exists($full_photo_path)) {
+                    $full_photo_path = $base_url . 'default.png';
+                }
+
+                // Mostrar la imagen con una clase para controlar el tamaño
+                echo "<img src='$full_photo_path' alt='Foto de perfil' class='profile-image'>";
                 ?>
+
+                
+                
             </div>
             <form class="profile-form" method="POST" action="update_profile.php" id="profileForm">
 
@@ -175,7 +190,9 @@ mysqli_close($conn);
                 <input type="submit" value="Modificar">
             </form>
             <p><a href="logout.php">Desconectar</a></p>
+            
         </div>
+        <div class="notification-container" id="notificationContainer"></div>
     </main>
 
     <footer>
@@ -187,9 +204,65 @@ mysqli_close($conn);
             </ul>
         </nav>
     </footer>
-    <div class="notification-container" id="notificationContainer"></div>
+    
 
     <script>
+
+
+//funcion para mensajes
+
+function typeMessenger(type) {
+    const container = document.getElementById("notificationContainer");
+
+    // Crear un nuevo elemento de mensaje
+    const notification = document.createElement("div");
+    notification.classList.add("messenger");
+
+    // Determinar el estilo y texto del mensaje(añadir los necesarios y poner stilos en el css)
+    switch (type) {
+       
+        case 'error':
+            notification.classList.add("divNotiError");
+            notification.innerText = "¡Error! Algo salió mal";
+            break;
+        case 'like':
+            notification.classList.add("divNotiLike");
+            notification.innerText = "¡Te han dado un like!";
+            break;
+        case 'nope':
+            notification.classList.add("divNotiNope");
+            notification.innerText = "Lo siento, no es una coincidencia.";
+            break;
+        case 'success': // Corregido: Eliminado el 's' extra
+            notification.classList.add("divNotiSuccess");
+            notification.innerText = "¡Cambio realizado con éxito!";
+            break;
+        case 'warning':
+            notification.classList.add("divNotiWarning");
+            notification.innerText = "¡Advertencia! Algo podría no estar bien.";
+            console.log(notification.innerText); // Mover el console.log aquí para que se ejecute
+            break;
+        default:
+            notification.classList.add("divNotiOther");
+            notification.innerText = "Notificación sin tipo específico.";
+            break;
+    }
+
+    // Añadir el mensaje al contenedor
+    container.appendChild(notification);
+
+    // Eliminar el mensaje después de 6 segundos
+    setTimeout(() => {
+        notification.remove();
+    }, 6000);
+
+    // Si hay más de 3 mensajes, eliminar el más antiguo
+    if (container.children.length > 3) {
+        container.firstChild.remove();
+    }
+}
+
+
        
     // Manejo del formulario con Ajax
 document.getElementById("profileForm").addEventListener("submit", function(event) {
@@ -202,7 +275,7 @@ document.getElementById("profileForm").addEventListener("submit", function(event
     if (password && password !== password2) {
         document.getElementById("password").classList.add("input-error");
         document.getElementById("password2").classList.add("input-error");
-        typeMessenger('error', 'Las contraseñas no coinciden');
+        typeMessenger('warning');
         return;
     }
 

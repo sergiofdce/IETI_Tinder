@@ -24,9 +24,10 @@ $password2 = $_POST['password2'] ?? '';
 
 // Verificar que las contraseñas coincidan si se ingresaron
 if ($password && $password !== $password2) {
-    echo json_encode(['status' => 'error', 'message' => 'Las contraseñas no coinciden']);
+    echo json_encode(['status' => 'warning', 'message' => 'Las contraseñas no coinciden']);
     exit();
 }
+
 
 // Si se proporcionó una nueva contraseña, hashearla
 if ($password) {
@@ -43,13 +44,24 @@ if ($password) {
 if ($stmt->execute()) {
     // Obtener los datos actualizados del usuario para devolverlos en la respuesta
     $stmt->close();
+
+    // Obtener la foto del usuario, solo el nombre de la imagen
     $query = "SELECT name, surname, alias, birth_date, location, (SELECT path FROM user_images WHERE user_id = ?) AS photo FROM users WHERE id = ?";
     $stmt = $conn->prepare($query);
     $stmt->bind_param("ii", $user_id, $user_id);
     $stmt->execute();
     $result = $stmt->get_result();
     $user = $result->fetch_assoc();
+
+    // Asegurarse de que la foto devuelta sea solo el nombre del archivo
+    $photo_path = $user['photo'];
+    // Extraer el nombre de la imagen (si se encuentra una ruta completa)
+    $photo_filename = basename($photo_path);
     
+    // Asignar la ruta relativa 'assets/img/' HARDCODED TOTAL!!! CUIDADO CON ESTO EN EL FUTURO
+    $user['photo'] = 'assets/img/' . $photo_filename;
+    
+    // Devolver los datos actualizados, sin cambiar la imagen
     echo json_encode(['status' => 'success', 'message' => 'Perfil actualizado correctamente', 'data' => $user]);
 } else {
     echo json_encode(['status' => 'error', 'message' => 'Error al actualizar el perfil']);
