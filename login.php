@@ -1,6 +1,6 @@
 <?php
 session_start();
-
+include 'functions.php';
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if (!empty($_POST["email"]) && !empty($_POST["password"])) {
         $email = $_POST["email"];
@@ -36,6 +36,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $row = $query->fetch();
             $_SESSION["user"] = $row["id"];
             $_SESSION["email"] = $row["email"];
+            //log de login
+            logEvent("login_success", "El usuario " . $row["email"] . " ha iniciado sesion", $row["email"]);
             //redireccionar a discover
             header("Location: discover.php");
 
@@ -58,15 +60,21 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             if ($query->rowCount() > 0) {
                 $message = "<div class='alert alert-danger'>Contraseña incorrecta</div>";
                 $passwordErrorClass = "borderError";
+                //log de login fallido
+                logEvent("login_failure", "El usuario " . $_POST["email"] . " ha fallado la contraseña", $_POST["email"]);
             } else {
                 $message = "<div class='alert alert-danger'>Usuario incorrecto</div>";
                 $emailErrorClass = "borderError";
+                //log de login fallido
+                logEvent("login_failure", "El usuario " . $_POST["email"] . " no existe", $_POST["email"]);
             }
         }
     } else {
         $message = "<div class='alert alert-danger'>Rellene ambos campos</div>";
         $emailErrorClass = "borderError";
         $passwordErrorClass = "borderError";
+        //log de login fallido
+        logEvent("login_failure", "Se ha introducido uno o varios campos vacíos", "empty");
     }
 }
 ?>
