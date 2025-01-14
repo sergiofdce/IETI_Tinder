@@ -26,7 +26,7 @@
             // Datos usuario logueado
             // --> Mantener datos en estas variables porque son pasadas al JS
             // ID de usuario
-            $user_id = 2; // --> Mantener datos en estas variables porque son pasadas al JS
+            $user_id = 1; // --> Mantener datos en estas variables porque son pasadas al JS
 
             // Email de usuario
             $query = "SELECT email FROM users WHERE id = :session_id";
@@ -56,6 +56,22 @@
                         (m_accepted.sender_id = u.id AND m_accepted.receiver_id = :session_id)
                   )
                   )
+                  -- Exclude users based on rejected matches, but only if session_id has interacted with them
+                  AND NOT EXISTS (
+                  SELECT 1 
+                  FROM matches m_rejected
+                  WHERE m_rejected.status = 'rejected'
+                  AND (
+                        (m_rejected.sender_id = :session_id AND m_rejected.receiver_id = u.id)
+                        OR 
+                        (m_rejected.sender_id = u.id AND m_rejected.receiver_id = :session_id AND NOT EXISTS (
+                              SELECT 1 
+                              FROM matches m_pending
+                              WHERE m_pending.sender_id = :session_id
+                              AND m_pending.receiver_id = u.id
+                        ))
+                  )
+                  )
                   AND (
                   -- Include users that haven't had any interaction with session_id
                   NOT EXISTS (
@@ -73,7 +89,7 @@
                         AND m2.status = 'pending'
                   )
                   )
-                  GROUP BY u.id, u.name, u.surname, u.alias, u.birth_date, u.location, u.genre, u.sexual_preference, u.email
+                  GROUP BY u.id, u.name, u.surname, u.alias, u.birth_date, u.location, u.genre, u.sexual_preference, u.email;
                   ";
 
 
@@ -95,7 +111,7 @@
             <div class="container">
                   <div id="discover-profiles">
                         <div class="profile-container">
-                              <img id="profile-image" src="" alt="Profile Image">
+                              <!-- <img id="profile-image" src="" alt="Profile Image"> -->
                               <div id="profile-info">
                                     <p id="user-name">Username <span id="user-age">Age</span></p>
                               </div>

@@ -55,13 +55,15 @@ try {
                   if (empty($existingMatch)) {
                         // Si no existe, crear un nuevo registro con estado "rejected"
                         $query = "INSERT INTO matches (sender_id, receiver_id, status, request_date) 
-                      VALUES (:senderId, :receiverId, 'rejected', NOW())";
+                  VALUES (:senderId, :receiverId, 'rejected', NOW())";
                         $params = [':senderId' => $senderId, ':receiverId' => $receiverId];
                         executeQuery($pdo, $query, $params);
                         return json_encode(['message' => 'Nope enviado y registrado como rechazado.']);
                   } elseif ($existingMatch[0]['status'] == 'pending') {
                         // Si ya existe y está en "pending", actualizar a "rejected"
-                        $query = "UPDATE matches SET status = 'rejected' WHERE sender_id = :senderId AND receiver_id = :receiverId";
+                        $query = "UPDATE matches SET status = 'rejected' 
+                  WHERE (sender_id = :senderId AND receiver_id = :receiverId) 
+                  OR (sender_id = :receiverId AND receiver_id = :senderId)";
                         $params = [':senderId' => $senderId, ':receiverId' => $receiverId];
                         executeQuery($pdo, $query, $params);
                         return json_encode(['message' => 'La solicitud fue rechazada.']);

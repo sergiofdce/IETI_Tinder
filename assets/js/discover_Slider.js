@@ -31,25 +31,12 @@ document.addEventListener("DOMContentLoaded", function () {
     return;
   }
 
-  preloadImages(profiles);
   loadRandomProfile();
   setupEventListeners();
 });
-
-
-// Preload profile images
-function preloadImages(images) {
-  images.forEach(profile => {
-    profile.images.split(',').forEach(imageUrl => {
-      const img = new Image();
-      img.src = imageUrl;
-    });
-  });
-}
-
  
 // Cargar un perfil aleatorio
-function loadRandomProfile() {
+async function loadRandomProfile() {
   if (usedIndexes.size >= profiles.length) {
     const container = document.querySelector(".container");
     container.innerHTML = "";
@@ -60,7 +47,10 @@ function loadRandomProfile() {
     return;
   }
 
-  // Get random unused profile
+  // Simular un retraso para cargar el perfil
+  await new Promise((resolve) => setTimeout(resolve, 500));
+
+  // Obtener un perfil aleatorio no usado
   let randomIndex;
   do {
     randomIndex = Math.floor(Math.random() * profiles.length);
@@ -72,21 +62,53 @@ function loadRandomProfile() {
   // Guardar el email del perfil actual
   currentProfileEmail = profile.email;
 
-  // Create new profile container
+  // Crear el nuevo contenedor de perfil
   const container = document.getElementById("discover-profiles");
   container.innerHTML = `
     <div class="profile-container">
-      <img id="profile-image" src="${profile.images.split(',')[0]}" alt="Profile Image">
+      <div class="slider">
+        <img class="profile-image" src="${
+          profile.images.split(",")[0]
+        }" alt="Profile Image">
+        <img class="profile-image" src="${
+          profile.images.split(",")[1]
+        }" alt="Profile Image" style="display: none;">
+      </div>
       <div id="profile-info">
-        <p id="user-name">${profile.name} <span id="user-age">${calculateAge(profile.birth_date)}</span></p>
+        <div class="paginator">
+          <span class="dot active"></span>
+          <span class="dot"></span>
+        </div>
+        <p id="user-name">${profile.name} <span id="user-age">${calculateAge(
+    profile.birth_date
+  )}</span></p>
       </div>
     </div>
   `;
 
-  // Reset variables and setup new listeners
-  setupEventListeners();
+  // Evento animación de arrastrar
+  // setupEventListeners();
+
+  // Slider imagenes
+  setupSlider();
 }
 
+// Configurar el slider
+function setupSlider() {
+  const images = document.querySelectorAll(".profile-image");
+  const dots = document.querySelectorAll(".dot");
+  let currentIndex = 0;
+
+  images.forEach((image, index) => {
+    image.addEventListener("click", () => {
+      images[currentIndex].style.display = "none";
+      dots[currentIndex].classList.remove("active");
+      currentIndex = (currentIndex + 1) % images.length;
+      images[currentIndex].style.display = "block";
+      dots[currentIndex].classList.add("active");
+    });
+  });
+}
 
 // Calcular edad
 function calculateAge(birthdate) {
@@ -110,48 +132,41 @@ function calculateAge(birthdate) {
 // ==================================================
 
 // Nope
-document.getElementById('nope').addEventListener('click', function () {
-    sendInteraction('nope');
+document.getElementById("nope").addEventListener("click", function () {
+  handleSwipe("left"); // Llamamos a handleSwipe, que ya se encarga de enviar la interacción
 });
 
 // Like
-document.getElementById('like').addEventListener('click', function () {
-    sendInteraction('like');
+document.getElementById("like").addEventListener("click", function () {
+  handleSwipe("right"); // Llamamos a handleSwipe, que ya se encarga de enviar la interacción
 });
 
 // Función para enviar la interacción al servidor
-function sendInteraction(action) {
-
+async function sendInteraction(action) {
   const data = {
     senderID: userId,
-    receiverID: profiles.find(profile => profile.email === currentProfileEmail).id,
+    receiverID: profiles.find(
+      (profile) => profile.email === currentProfileEmail
+    ).id,
     action: action,
   };
 
-  // console.log("Datos enviados al servidor:", data);
-
-
-  // Enviar la interacción al servidor con fetch
-  fetch("includes/interactions.php", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(data),
-  })
-    .then((response) => response.text()) // Cambiar a .text() para inspeccionar la respuesta cruda
-    .then((responseText) => {
-      // console.log("Respuesta cruda del servidor:", responseText);
-      return JSON.parse(responseText); // Intenta convertirlo a JSON
-    })
-    .then((responseData) => {
-      console.log("Respuesta del servidor:", responseData);
-      if (responseData.message === "Match!") {
-        showMatchWindow();
-      }
-    })
-    .catch((error) => {
-      console.error("Error al enviar la interacción:", error);
+  try {
+    const response = await fetch("includes/interactions.php", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(data),
     });
 
+    const responseText = await response.text(); // Obtener la respuesta como texto
+    const responseData = JSON.parse(responseText); // Convertir la respuesta a JSON
+
+    console.log("Respuesta del servidor:", responseData);
+    return responseData; // Retornar la respuesta del servidor
+  } catch (error) {
+    console.error("Error al enviar la interacción:", error);
+    return null; // Retornar null en caso de error
+  }
 }
 
 // Match
@@ -161,8 +176,28 @@ const showMatch = document.getElementById("showMatch");
 const container = document.querySelector(".container");
 
 function showMatchWindow() {
-  showMatch.style.display = "block";
-  container.classList.add("blur");
+  return new Promise((resolve) => {
+    // Mostrar la ventana de match
+    showMatch.style.display = "block";
+
+    // Desenfocar el fondo
+    container.classList.add("blur");
+
+    // Seleccionar los botones usando sus ID's
+    const closeButton1 = document.getElementById("closeMatch1");
+    const closeButton2 = document.getElementById("closeMatch2");
+
+    // Agregar el event listener a ambos botones de cierre
+    closeButton1.addEventListener("click", () => {
+      showMatch.style.display = "none";
+      resolve();
+    });
+
+    closeButton2.addEventListener("click", () => {
+      showMatch.style.display = "none";
+      resolve();
+    });
+  });
 }
 
 function hideMatchWindow() {
@@ -170,12 +205,15 @@ function hideMatchWindow() {
   container.classList.remove("blur");
 }
 
-document
-  .getElementById("closeMatch1")
-  .addEventListener("click", hideMatchWindow);
-document
-  .getElementById("closeMatch2")
-  .addEventListener("click", hideMatchWindow);
+// Match -> Message
+document.getElementById("closeMatch1").addEventListener("click", function () {
+  hideMatchWindow();
+});
+// Match -> Discover
+document.getElementById("closeMatch2").addEventListener("click", function () {
+  hideMatchWindow();
+  loadRandomProfile();
+});
 
 
 // ==================================================
@@ -265,19 +303,43 @@ function handleDragEnd() {
   }
 }
 
-function handleSwipe(direction) {
+async function handleSwipe(direction) {
   if (isAnimating) return;
   isAnimating = true;
 
   const isRight = direction === "right";
   profileContainer.classList.add(isRight ? "swiped-right" : "swiped-left");
-  showStamp(isRight ? "LIKE" : "NOPE");
+  // showStamp(isRight ? "LIKE" : "NOPE");
 
-  // Wait for animation to complete before loading next profile
-  setTimeout(() => {
+  try {
+    // Enviar interacción y esperar la respuesta del servidor
+    const matchResponse = await sendInteraction(
+      direction === "right" ? "like" : "nope"
+    );
+
+    // Si hay un match
+    if (matchResponse && matchResponse.message === "Match!") {
+      await showMatchWindow(); // Espera a que se muestre el popup
+
+      // Limpiamos la animación actual
+      profileContainer.classList.remove("swiped-right", "swiped-left");
+      isAnimating = false;
+
+      // Cargamos el siguiente perfil solo después de que el usuario
+      // cierre la ventana de match
+      await loadRandomProfile();
+    } else {
+      // Si no hay match, esperamos que termine la animación
+      // await new Promise((resolve) => setTimeout(resolve, 100));
+      profileContainer.classList.remove("swiped-right", "swiped-left");
+      isAnimating = false;
+      await loadRandomProfile();
+    }
+  } catch (error) {
+    console.error("Error durante el swipe:", error);
     isAnimating = false;
-    loadRandomProfile();
-  }, 100);
+    profileContainer.classList.remove("swiped-right", "swiped-left");
+  }
 }
 
 function updateStamp(deltaX) {
