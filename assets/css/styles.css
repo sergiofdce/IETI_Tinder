@@ -1,3 +1,4 @@
+
 /* 
       ==================================================
       Índice de contenido
@@ -105,7 +106,8 @@
             border-top: 1px solid #ccc;
             border-bottom-left-radius: 30px;
             border-bottom-right-radius: 30px;
-            z-index: 1000;
+            z-index: 9999;
+            width: 100%;/**/
 
       }
 
@@ -157,18 +159,6 @@
       - Tamaños de fuente
 */
 
-/* 
-      ==================================================
-      4. Componentes comunes
-      ==================================================
-      - Botones
-      - Formularios
-      - Tarjetas de perfil
-      - Mensajes de error/éxito
-      - Notificaciones
-      - Modales
-      - Inputs
-*/
 
       /* 4.5 Notificaciones CSS */
 
@@ -210,6 +200,22 @@
       .divNotiOther {
             background-color: #1e88e5;
       }
+
+      .divNotiSuccess {
+            background-color: green;
+           
+        }
+        
+        .divNotiWarning {
+            background-color: orange;
+           
+        }
+        
+        .divNotiInfo {
+            background-color: blue;
+            
+        }
+        
 
 
 
@@ -263,6 +269,7 @@
      
 
         .title-messenger {
+            margin-bottom: 5px;
             font-size: 20px;
         }
 
@@ -392,13 +399,27 @@
 
     .last-message {
         font-size: 12px;
-        color: gray;
+        color: #2F418F;
     }
 
     .conversation-item:hover {
         box-shadow: none;
         
     }
+
+    .no-results-message {
+      width: 100%;
+      text-align: center;
+      font-size: 18px;
+      color: #333;
+      font-weight: bold;
+      margin-top: 30px;
+      padding: 10px;
+      background-color: #f8d7da;
+      border: 1px solid #f5c6cb;
+      border-radius: 5px;
+  }
+  
 
 
 
