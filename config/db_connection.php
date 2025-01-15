@@ -3,7 +3,7 @@
 $host = '127.0.0.1';
 $dbname = 'tinder';
 $username = 'admin';
-$password = '123';
+$password = 'admin123';
 
 try {
       // Crear conexión PDO

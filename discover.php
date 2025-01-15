@@ -1,10 +1,13 @@
+<?php
+session_start();
+?>
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
       <meta charset="UTF-8">
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
-      <title>Document</title>
+      <title>Descubrir</title>
       <link rel="stylesheet" href="assets/css/styles.css">
       <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
@@ -27,24 +30,48 @@
             // --> Mantener datos en estas variables porque son pasadas al JS
             // ID de usuario
             $user_id = 1; // --> Mantener datos en estas variables porque son pasadas al JS
+            //$user_id = $_SESSION['user_id'];
 
             // Email de usuario
-            $query = "SELECT email FROM users WHERE id = :session_id";
+            $query = "SELECT * FROM users WHERE id = :session_id";
             $params = [':session_id' => $user_id];
             $results = executeQuery($pdo, $query, $params);
             $user_email = $results[0]['email'];
-
+            $user_genre = $results[0]['genre'];
+            $user_preference = $results[0]['sexual_preference'];
+            $user_location = $results[0]['location'];
+            
+            //$user_location tiene formato 'lat, long' y hay que separarlo en dos variables
+            $user_lat = substr($user_location, 0, strpos($user_location, ','));
+            $user_long = substr($user_location, strpos($user_location, ',') + 1);
             // Algoritmo
 
             // Seleccionar todos los usuarios que no sean el usuario logueado
             // y que no haya interactuado antes
-            // falta comprobar que sea misma preferencia sexual
+
             $query = "
                   SELECT DISTINCT u.id, u.name, u.surname, u.alias, u.birth_date, u.location, u.genre, u.sexual_preference, u.email,
-                  GROUP_CONCAT(ui.path ORDER BY ui.id ASC) AS images
+                  GROUP_CONCAT(ui.path ORDER BY ui.id ASC) AS images,
+                  -- Calcular la distancia entre el usuario y el usuario logueado usando Haversine
+                  (
+                        6371 * acos(
+                              cos(radians(:lat)) * cos(radians(SUBSTRING_INDEX(u.location, ',', 1))) *
+                              cos(radians(SUBSTRING_INDEX(u.location, ',', -1)) - radians(:long)) +
+                              sin(radians(:lat)) * sin(radians(SUBSTRING_INDEX(u.location, ',', 1)))
+                        )
+                  ) AS distance
                   FROM users u
                   LEFT JOIN user_images ui ON u.id = ui.user_id
                   WHERE u.id != :session_id
+                  -- Seleccionar usuarios con preferencias sexuales compatibles
+                    AND (
+                        (:user_genre = 'home' AND :user_preference = 'heterosexual' AND u.genre = 'dona')
+                        OR (:user_genre = 'home' AND :user_preference = 'homosexual' AND u.genre = 'home')
+                        OR (:user_genre = 'dona' AND :user_preference = 'heterosexual' AND u.genre = 'home')
+                        OR (:user_genre = 'dona' AND :user_preference = 'homosexual' AND u.genre = 'dona')
+                        OR (:user_preference = 'bisexual')
+                        OR (:user_genre = 'no binari')
+                        )
                   -- Exclude users that have an accepted match with session_id (check both directions)
                   AND NOT EXISTS (
                   SELECT 1 
@@ -89,14 +116,15 @@
                         AND m2.status = 'pending'
                   )
                   )
-                  GROUP BY u.id, u.name, u.surname, u.alias, u.birth_date, u.location, u.genre, u.sexual_preference, u.email;
+                  GROUP BY u.id, u.name, u.surname, u.alias, u.birth_date, u.location, u.genre, u.sexual_preference, u.email
+                  ORDER BY distance ASC;
                   ";
 
 
 
             // Le pasamos el user_id de la cookie como parámetro
 
-            $params = [':session_id' => $user_id];
+            $params = [':session_id' => $user_id, ':user_genre' => $user_genre, ':user_preference' => $user_preference, ':lat' => $user_lat, ':long' => $user_long];
 
 
 

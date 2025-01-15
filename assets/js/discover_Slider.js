@@ -31,7 +31,8 @@ document.addEventListener("DOMContentLoaded", function () {
     return;
   }
 
-  loadRandomProfile();
+  //loadRandomProfile();
+  loadNextProfile();
   setupEventListeners();
 });
  
@@ -58,6 +59,65 @@ async function loadRandomProfile() {
 
   usedIndexes.add(randomIndex);
   const profile = profiles[randomIndex];
+
+  // Guardar el email del perfil actual
+  currentProfileEmail = profile.email;
+
+  // Crear el nuevo contenedor de perfil
+  const container = document.getElementById("discover-profiles");
+  container.innerHTML = `
+    <div class="profile-container">
+      <div class="slider">
+        <img class="profile-image" src="${
+          profile.images.split(",")[0]
+        }" alt="Profile Image">
+        <img class="profile-image" src="${
+          profile.images.split(",")[1]
+        }" alt="Profile Image" style="display: none;">
+      </div>
+      <div id="profile-info">
+        <div class="paginator">
+          <span class="dot active"></span>
+          <span class="dot"></span>
+        </div>
+        <p id="user-name">${profile.name} <span id="user-age">${calculateAge(
+    profile.birth_date
+  )}</span></p>
+      </div>
+    </div>
+  `;
+
+  // Evento animación de arrastrar
+  // setupEventListeners();
+
+  // Slider imagenes
+  setupSlider();
+}
+
+// Cargar un perfil secuencial
+// TODO: no parece funcionar bien. 
+let currentIndex = 0;
+async function loadNextProfile() {
+  if (usedIndexes.size >= profiles.length) {
+    const container = document.querySelector(".container");
+    container.innerHTML = "";
+    const message = document.createElement("p");
+    message.setAttribute("class", "no-profiles-message");
+    message.textContent = "No hi ha perfils disponibles";
+    container.appendChild(message);
+    return;
+  }
+
+  // Simular un retraso para cargar el perfil
+  await new Promise((resolve) => setTimeout(resolve, 500));
+
+  // Obtener un perfil aleatorio no usado
+  if (currentIndex >= profiles.length) {
+    currentIndex = 0; // reinicia el índice cuando se llega al final de la secuencia
+  }
+
+  const profile = profiles[currentIndex];
+  currentIndex++; // incrementa el índice para el próximo perfil
 
   // Guardar el email del perfil actual
   currentProfileEmail = profile.email;
