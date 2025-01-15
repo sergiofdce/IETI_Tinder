@@ -1,22 +1,20 @@
 <?php
 session_start();
-$_SESSION["user_id"] = 1; // Reemplaza con el ID del usuario actual
-
-// Verificar si el usuario está logueado
 if (!isset($_SESSION["user_id"])) {
-    header("Location: login.php");
-    exit();
+      header("Location: login.php");
 }
 
+// $_SESSION["user_id"] = 1; // Reemplaza con el ID del usuario actual
+
 $user_id = $_SESSION["user_id"];
-$conn = mysqli_connect('localhost', 'admin', 'admin', 'tinder');
+$conn = mysqli_connect('localhost', 'admin', 'admin123', 'tinder');
 
 if (!$conn) {
     die('Error de conexión: ' . mysqli_connect_error());
 }
 
 // Obtener los datos del usuario
-$query = "SELECT id, name, surname, alias, birth_date, location, (SELECT path FROM user_images WHERE user_id = ?) AS photo FROM users WHERE id = ?";
+$query = "SELECT id, name, surname, alias, birth_date, location, (SELECT path FROM user_images WHERE user_id = ? LIMIT 1) AS photo FROM users WHERE id = ?";
 $stmt = $conn->prepare($query);
 $stmt->bind_param("ii", $user_id, $user_id);
 $stmt->execute();
@@ -311,7 +309,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['ajax'])) {
             </form>
             <div class="re-pie">
                 <p class="edit-fotos"><a href="">Editar fotos</a></p>
-                <p class="logout"><a href="logaut.php">Cerrar sessión</a></p>
+                <p class="logout"><a href="logout.php">Cerrar sessión</a></p>
             </div>
             
         </div>
