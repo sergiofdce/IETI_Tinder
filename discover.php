@@ -1,5 +1,8 @@
 <?php
 session_start();
+if (!isset($_SESSION["user"])) {
+      header("Location: login.php");
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -29,8 +32,8 @@ session_start();
             // Datos usuario logueado
             // --> Mantener datos en estas variables porque son pasadas al JS
             // ID de usuario
-            $user_id = 1; // --> Mantener datos en estas variables porque son pasadas al JS
-            //$user_id = $_SESSION['user_id'];
+            // $user_id = 1; // --> Mantener datos en estas variables porque son pasadas al JS
+            $user_id = $_SESSION['user_id'];
 
             // Email de usuario
             $query = "SELECT * FROM users WHERE id = :session_id";
