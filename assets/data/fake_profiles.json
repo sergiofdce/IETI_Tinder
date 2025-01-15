@@ -1,0 +1,192 @@
+[
+    {
+        "name": "Carla",
+        "surname": "Díez",
+        "alias": "exposito.miguel",
+        "birth_date": "1973-02-21",
+        "location": {
+            "latitude": 42.808427,
+            "longitude": -0.790223
+        },
+        "genre": "no binari",
+        "sexual_preference": "homosexual",
+        "profile_images": {
+            "image1": "assets\/img\/seeder\/img010.webp",
+            "image2": "assets\/img\/seeder\/img057.webp"
+        },
+        "email": "exposito.miguel@iesesteveterradas.cat",
+        "password": "3c9909afec25354d551dae21590bb26e38d53f2173b8d3dc3eee4c047e7ab1c1eb8b85103e3be7ba613b31bb5c9c36214dc9f14a42fd7a2fdb84856bca5c44c2",
+        "created_at": "2025-01-13 20:53:52"
+    },
+    {
+        "name": "Izan",
+        "surname": "Roldán",
+        "alias": "ignacio16",
+        "birth_date": "2003-10-20",
+        "location": {
+            "latitude": 42.43705,
+            "longitude": -2.195678
+        },
+        "genre": "no binari",
+        "sexual_preference": "heterosexual",
+        "profile_images": {
+            "image1": "assets\/img\/seeder\/img030.webp",
+            "image2": "assets\/img\/seeder\/img054.webp"
+        },
+        "email": "ignacio16@iesesteveterradas.cat",
+        "password": "3c9909afec25354d551dae21590bb26e38d53f2173b8d3dc3eee4c047e7ab1c1eb8b85103e3be7ba613b31bb5c9c36214dc9f14a42fd7a2fdb84856bca5c44c2",
+        "created_at": "2025-01-13 20:53:52"
+    },
+    {
+        "name": "Mara",
+        "surname": "Cuevas",
+        "alias": "villegas.ainhoa",
+        "birth_date": "1993-08-17",
+        "location": {
+            "latitude": 40.62302,
+            "longitude": -4.117147
+        },
+        "genre": "no binari",
+        "sexual_preference": "heterosexual",
+        "profile_images": {
+            "image1": "assets\/img\/seeder\/img038.webp",
+            "image2": "assets\/img\/seeder\/img043.webp"
+        },
+        "email": "villegas.ainhoa@iesesteveterradas.cat",
+        "password": "3c9909afec25354d551dae21590bb26e38d53f2173b8d3dc3eee4c047e7ab1c1eb8b85103e3be7ba613b31bb5c9c36214dc9f14a42fd7a2fdb84856bca5c44c2",
+        "created_at": "2025-01-13 20:53:52"
+    },
+    {
+        "name": "Nahia",
+        "surname": "Olivas",
+        "alias": "barajas.ander",
+        "birth_date": "1994-01-18",
+        "location": {
+            "latitude": 42.425589,
+            "longitude": -2.536731
+        },
+        "genre": "home",
+        "sexual_preference": "heterosexual",
+        "profile_images": {
+            "image1": "assets\/img\/seeder\/img020.webp",
+            "image2": "assets\/img\/seeder\/img035.webp"
+        },
+        "email": "barajas.ander@iesesteveterradas.cat",
+        "password": "3c9909afec25354d551dae21590bb26e38d53f2173b8d3dc3eee4c047e7ab1c1eb8b85103e3be7ba613b31bb5c9c36214dc9f14a42fd7a2fdb84856bca5c44c2",
+        "created_at": "2025-01-13 20:53:52"
+    },
+    {
+        "name": "Francisca",
+        "surname": "Gil",
+        "alias": "venegas.marcos",
+        "birth_date": "1997-07-17",
+        "location": {
+            "latitude": 42.860436,
+            "longitude": -3.068506
+        },
+        "genre": "dona",
+        "sexual_preference": "homosexual",
+        "profile_images": {
+            "image1": "assets\/img\/seeder\/img026.webp",
+            "image2": "assets\/img\/seeder\/img051.webp"
+        },
+        "email": "venegas.marcos@iesesteveterradas.cat",
+        "password": "3c9909afec25354d551dae21590bb26e38d53f2173b8d3dc3eee4c047e7ab1c1eb8b85103e3be7ba613b31bb5c9c36214dc9f14a42fd7a2fdb84856bca5c44c2",
+        "created_at": "2025-01-13 20:53:52"
+    },
+    {
+        "name": "Cristian",
+        "surname": "Márquez",
+        "alias": "ona41",
+        "birth_date": "1988-05-30",
+        "location": {
+            "latitude": 40.722388,
+            "longitude": -4.486458
+        },
+        "genre": "dona",
+        "sexual_preference": "bisexual",
+        "profile_images": {
+            "image1": "assets\/img\/seeder\/img005.webp",
+            "image2": "assets\/img\/seeder\/img029.webp"
+        },
+        "email": "ona41@iesesteveterradas.cat",
+        "password": "3c9909afec25354d551dae21590bb26e38d53f2173b8d3dc3eee4c047e7ab1c1eb8b85103e3be7ba613b31bb5c9c36214dc9f14a42fd7a2fdb84856bca5c44c2",
+        "created_at": "2025-01-13 20:53:52"
+    },
+    {
+        "name": "Héctor",
+        "surname": "Pabón",
+        "alias": "carla76",
+        "birth_date": "1981-01-19",
+        "location": {
+            "latitude": 42.192053,
+            "longitude": -3.400765
+        },
+        "genre": "dona",
+        "sexual_preference": "heterosexual",
+        "profile_images": {
+            "image1": "assets\/img\/seeder\/img023.webp",
+            "image2": "assets\/img\/seeder\/img042.webp"
+        },
+        "email": "carla76@iesesteveterradas.cat",
+        "password": "3c9909afec25354d551dae21590bb26e38d53f2173b8d3dc3eee4c047e7ab1c1eb8b85103e3be7ba613b31bb5c9c36214dc9f14a42fd7a2fdb84856bca5c44c2",
+        "created_at": "2025-01-13 20:53:52"
+    },
+    {
+        "name": "Arnau",
+        "surname": "Guillen",
+        "alias": "upuga",
+        "birth_date": "1973-06-24",
+        "location": {
+            "latitude": 40.549722,
+            "longitude": -0.583086
+        },
+        "genre": "dona",
+        "sexual_preference": "heterosexual",
+        "profile_images": {
+            "image1": "assets\/img\/seeder\/img023.webp",
+            "image2": "assets\/img\/seeder\/img039.webp"
+        },
+        "email": "upuga@iesesteveterradas.cat",
+        "password": "3c9909afec25354d551dae21590bb26e38d53f2173b8d3dc3eee4c047e7ab1c1eb8b85103e3be7ba613b31bb5c9c36214dc9f14a42fd7a2fdb84856bca5c44c2",
+        "created_at": "2025-01-13 20:53:52"
+    },
+    {
+        "name": "César",
+        "surname": "Carrillo",
+        "alias": "aaron74",
+        "birth_date": "1971-11-11",
+        "location": {
+            "latitude": 40.044364,
+            "longitude": -1.49131
+        },
+        "genre": "home",
+        "sexual_preference": "bisexual",
+        "profile_images": {
+            "image1": "assets\/img\/seeder\/img004.webp",
+            "image2": "assets\/img\/seeder\/img010.webp"
+        },
+        "email": "aaron74@iesesteveterradas.cat",
+        "password": "3c9909afec25354d551dae21590bb26e38d53f2173b8d3dc3eee4c047e7ab1c1eb8b85103e3be7ba613b31bb5c9c36214dc9f14a42fd7a2fdb84856bca5c44c2",
+        "created_at": "2025-01-13 20:53:52"
+    },
+    {
+        "name": "Daniel",
+        "surname": "Zelaya",
+        "alias": "paula52",
+        "birth_date": "1998-03-23",
+        "location": {
+            "latitude": 40.632584,
+            "longitude": -1.177999
+        },
+        "genre": "home",
+        "sexual_preference": "heterosexual",
+        "profile_images": {
+            "image1": "assets\/img\/seeder\/img007.webp",
+            "image2": "assets\/img\/seeder\/img059.webp"
+        },
+        "email": "paula52@iesesteveterradas.cat",
+        "password": "3c9909afec25354d551dae21590bb26e38d53f2173b8d3dc3eee4c047e7ab1c1eb8b85103e3be7ba613b31bb5c9c36214dc9f14a42fd7a2fdb84856bca5c44c2",
+        "created_at": "2025-01-13 20:53:52"
+    }
+]
