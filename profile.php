@@ -1,49 +1,89 @@
 <?php
 session_start();
 $_SESSION["user_id"] = 1; // Reemplaza con el ID del usuario actual
+
 // Verificar si el usuario está logueado
 if (!isset($_SESSION["user_id"])) {
-    header("Location: login.php"); // Redirigir al login si no está autenticado
+    header("Location: login.php");
     exit();
 }
 
-// Obtener el ID del usuario desde la sesión
-
 $user_id = $_SESSION["user_id"];
-
-// Conectar a la base de datos
 $conn = mysqli_connect('localhost', 'admin', 'admin', 'tinder');
 
-// Verificar si la conexión fue exitosa
 if (!$conn) {
     die('Error de conexión: ' . mysqli_connect_error());
 }
 
-// Consulta para obtener los datos del perfil
-$query = "
-    SELECT u.name, u.surname, u.alias, u.birth_date, u.location, ui.path AS photo
-    FROM users u
-    LEFT JOIN user_images ui ON u.id = ui.user_id
-    WHERE u.id = ?
-";
-
-// Preparar la consulta
+// Obtener los datos del usuario
+$query = "SELECT id, name, surname, alias, birth_date, location, (SELECT path FROM user_images WHERE user_id = ?) AS photo FROM users WHERE id = ?";
 $stmt = $conn->prepare($query);
-$stmt->bind_param("i", $user_id); // Bind del ID del usuario
+$stmt->bind_param("ii", $user_id, $user_id);
 $stmt->execute();
-
-// Obtener los resultados
 $result = $stmt->get_result();
+$user = $result->fetch_assoc();
 
-// Verificar si se obtuvo algún dato
-if ($result->num_rows > 0) {
-    $user = $result->fetch_assoc();
-} else {
-    die("Error: No se encontraron los datos del usuario.");
+if (!$user) {
+    echo "Usuario no encontrado.";
+    exit();
 }
 
-// Cerrar la conexión
-mysqli_close($conn);
+
+// Lógica de actualización si es un request Ajax
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['ajax'])) {
+    $name = $_POST['name'] ?? '';
+    $surname = $_POST['surname'] ?? '';
+    $username = $_POST['username'] ?? '';
+    $birthdate = $_POST['birthdate'] ?? '';
+    $location = $_POST['location'] ?? '';
+    $password = $_POST['password'] ?? '';
+    $password2 = $_POST['password2'] ?? '';
+
+    // Verificar que las contraseñas coincidan solo si ambas están llenas
+    if ($password || $password2) { // Solo verifica si uno de los campos de contraseñas tiene valor
+        if ($password !== $password2) {
+            echo json_encode(['status' => 'warning', 'message' => 'Las contraseñas no coinciden']);
+            exit();
+        }
+
+        // Hashear la nueva contraseña si las contraseñas coinciden
+        $password = password_hash($password, PASSWORD_BCRYPT);
+        $query = "UPDATE users SET name = ?, surname = ?, alias = ?, birth_date = ?, location = ?, password = ? WHERE id = ?";
+        $stmt = $conn->prepare($query);
+        $stmt->bind_param("ssssssi", $name, $surname, $username, $birthdate, $location, $password, $user_id);
+    } else {
+        // Si no hay contraseñas, no las modificamos
+        $query = "UPDATE users SET name = ?, surname = ?, alias = ?, birth_date = ?, location = ? WHERE id = ?";
+        $stmt = $conn->prepare($query);
+        $stmt->bind_param("sssssi", $name, $surname, $username, $birthdate, $location, $user_id);
+    }
+
+    if ($stmt->execute()) {
+        // Obtener los datos actualizados del usuario para devolverlos en la respuesta
+        $stmt->close();
+
+        // Obtener la foto del usuario
+        $query = "SELECT name, surname, alias, birth_date, location, (SELECT path FROM user_images WHERE user_id = ?) AS photo FROM users WHERE id = ?";
+        $stmt = $conn->prepare($query);
+        $stmt->bind_param("ii", $user_id, $user_id);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $user = $result->fetch_assoc();
+
+        $photo_path = $user['photo'];
+        $photo_filename = basename($photo_path);
+        $user['photo'] = 'assets/img/' . $photo_filename;
+
+        echo json_encode(['status' => 'success', 'message' => 'Perfil actualizado correctamente', 'data' => $user]);
+    } else {
+        echo json_encode(['status' => 'error', 'message' => 'Error al actualizar el perfil']);
+    }
+
+    $stmt->close();
+    $conn->close();
+    exit();
+}
+
 ?>
 
 <!DOCTYPE html>
@@ -103,39 +143,94 @@ mysqli_close($conn);
             margin-bottom: 12px;
         }
 
-        .profile-form label {
-            display: block;
-            font-weight: bold;
-            margin-bottom: 5px;
-        }
+        .profile-form {
+    display: flex;
+    flex-direction: column;
+    margin-top: 20px;
+}
 
-        .profile-form input {
-            width: 100%;
-            padding: 8px;
-            font-size: 10px;
-            color: white;
-            background-image: linear-gradient(to left, var(--blue-color), var(--red-color));
-            border: 0;
-            border-radius: 5px;
-            margin-bottom: 8px;
-            box-sizing: border-box;
-        }
+.profile-form .form-group {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 12px;
+    align-items: center; /* Alinea verticalmente las etiquetas y los inputs */
+}
 
-        .profile-form input::placeholder {
-            color: rgb(210, 210, 210);
-        }
+.profile-form label {
+    width: 50%; /* Ajusta el tamaño de las etiquetas */
+    text-align: left;
+    font-weight: bold;
+}
 
+.profile-form input {
+    width: 45%; /* Ajusta el tamaño de los inputs */
+    padding: 8px;
+    font-size: 12px;
+    color: white;
+    background-image: linear-gradient(to left, var(--blue-color), var(--red-color));
+    border: 0;
+    border-radius: 5px;
+    margin-bottom: 8px;
+    box-sizing: border-box;
+}
+
+.profile-form input::placeholder {
+    color: rgb(210, 210, 210);
+}
+
+
+        /* Estilo original del botón de submit */
         .profile-form input[type="submit"] {
             width: 100%;
             padding: 8px;
-            font-size: 10px;
+            font-size: 14px;
             color: white;
             background-image: linear-gradient(to top left, var(--darkblue-color), var(--darkred-color));
             border: 0;
             border-radius: 5px;
             margin-bottom: 8px;
             box-sizing: border-box;
+            margin-top: 20px;
+            transition: background-color 0.3s ease, transform 0.2s ease;  /* Transiciones suaves */
         }
+
+        /* Efecto hover para el botón de submit */
+        .profile-form input[type="submit"]:hover {
+            background-image: linear-gradient(to top left, var(--blue-color), var(--red-color));  /* Cambiar el fondo */
+            transform: translateY(-2px);  /* Efecto de levantamiento */
+        }
+
+        /* Efecto active para el botón de submit */
+        .profile-form input[type="submit"]:active {
+            background-image: linear-gradient(to top left, var(--blue-color), var(--darkblue-color));  /* Cambiar el fondo */
+            transform: translateY(0);  /* Vuelve a la posición original */
+        }
+
+
+        .edit-fotos a {
+            display: inline-block;  /* Asegura que el enlace sea un bloque en línea, como un botón */
+            padding: 8px; /* Espaciado interno para hacerlo más "botonizado" */
+            background-image: linear-gradient(to left, var(--darkblue-color), var(--darkred-color));
+            color: white;  /* Color de texto */
+            font-size: 14px;  /* Tamaño de fuente adecuado */
+            text-align: center;  /* Centrar el texto */
+            text-decoration: none;  /* Eliminar el subrayado predeterminado */
+            border-radius: 5px;  /* Bordes redondeados */
+            border: none;  /* Sin borde visible */
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);  /* Sombra sutil */
+            transition: background-color 0.3s ease, transform 0.2s ease;  /* Transiciones suaves */
+        }
+
+        .edit-fotos a:hover {
+            background-image: linear-gradient(to left, var(--blue-color), var(--red-color));
+            transform: translateY(-2px);  /* Efecto de levantamiento */
+        }
+
+        .edit-fotos a:active {
+            background-image: linear-gradient(to left, var(--blue-color), var(--darkblue-color));
+            transform: translateY(0);  /* Vuelve a la posición original */
+        }
+
     </style>
 </head>
 
@@ -171,25 +266,39 @@ mysqli_close($conn);
                 
                 
             </div>
-            <form class="profile-form" method="POST" action="update_profile.php" id="profileForm">
-
-                <label for="name">Nombre:</label>
-                <input type="text" id="name" name="name" value="<?php echo htmlspecialchars($user['name']); ?>" placeholder="Nombre">
-                <label for="surname">Apellidos:</label>
-                <input type="text" id="surname" name="surname" value="<?php echo htmlspecialchars($user['surname']); ?>" placeholder="Apellidos">
-                <label for="username">Alias:</label>
-                <input type="text" id="username" name="username" value="<?php echo htmlspecialchars($user['alias']); ?>" placeholder="Alias">
-                <label for="birthdate">Fecha de nacimiento:</label>
-                <input type="date" id="birthdate" name="birthdate" value="<?php echo $user['birth_date']; ?>">
-                <label for="location">Ubicación:</label>
-                <input type="text" id="location" name="location" value="<?php echo htmlspecialchars($user['location']); ?>" placeholder="Ubicación">
-                <label for="password">Contraseña:</label>
-                <input type="password" id="password" name="password" placeholder="Nueva contraseña">
-                <label for="password2">Repetir contraseña:</label>
-                <input type="password" id="password2" name="password2" placeholder="Confirmar contraseña">
-                <input type="submit" value="Modificar">
+            <form class="profile-form" method="POST" action="profile.php" id="profileForm">
+                <div class="form-group">
+                    <label for="name">Nombre:</label>
+                    <input type="text" id="name" name="name" value="<?php echo htmlspecialchars($user['name']); ?>" placeholder="Nombre">
+                </div>
+                <div class="form-group">
+                    <label for="surname">Apellidos:</label>
+                    <input type="text" id="surname" name="surname" value="<?php echo htmlspecialchars($user['surname']); ?>" placeholder="Apellidos">
+                </div>
+                <div class="form-group">
+                    <label for="username">Alias:</label>
+                    <input type="text" id="username" name="username" value="<?php echo htmlspecialchars($user['alias']); ?>" placeholder="Alias">
+                </div>
+                <div class="form-group">
+                    <label for="birthdate">Fecha de nacimiento:</label>
+                    <input type="date" id="birthdate" name="birthdate" value="<?php echo $user['birth_date']; ?>">
+                </div>
+                <div class="form-group">
+                    <label for="location">Ubicación:</label>
+                    <input type="text" id="location" name="location" value="<?php echo htmlspecialchars($user['location']); ?>" placeholder="Ubicación">
+                </div>
+                <div class="form-group">
+                    <label for="password">Contraseña:</label>
+                    <input type="password" id="password" name="password" placeholder="Nueva contraseña">
+                </div>
+                <div class="form-group">
+                    <label for="password2">Repetir contraseña:</label>
+                    <input type="password" id="password2" name="password2" placeholder="Confirmar contraseña">
+                </div>
+               <input type="submit" value="Modificar">
             </form>
-            <p><a href="logout.php">Desconectar</a></p>
+
+            <p class="edit-fotos"><a href="">Editar fotos</a></p>
             
         </div>
         <div class="notification-container" id="notificationContainer"></div>
@@ -264,46 +373,46 @@ function typeMessenger(type) {
 
 
        
-    // Manejo del formulario con Ajax
+   // Manejo del formulario con Ajax
 document.getElementById("profileForm").addEventListener("submit", function(event) {
     event.preventDefault(); // Prevenir el comportamiento por defecto del formulario
 
     const password = document.getElementById("password").value;
     const password2 = document.getElementById("password2").value;
 
-    // Verificar que las contraseñas coincidan
-    if (password && password !== password2) {
+    // Verificar que las contraseñas coincidan solo si se modifican
+    if ((password && password !== password2) || (password2 && password2 !== password)) {
         document.getElementById("password").classList.add("input-error");
         document.getElementById("password2").classList.add("input-error");
-        typeMessenger('warning');
+        typeMessenger('warning', 'Las contraseñas no coinciden');
         return;
     }
 
     const formData = new FormData(this);
+    formData.append('ajax', true); // Asegúrate de que el formulario es enviado como una solicitud AJAX
 
     // Enviar datos por Ajax
     const xhr = new XMLHttpRequest();
-    xhr.open("POST", "update_profile.php", true);
+    xhr.open("POST", "profile.php", true);
     xhr.onload = function() {
         if (xhr.status === 200) {
             const response = JSON.parse(xhr.responseText);
             if (response.status === 'success') {
-                // Mostrar el mensaje de éxito en verde
-                typeMessenger('success', response.message); // Aquí muestra 'Cambio realizado con éxito'
+                typeMessenger('success', response.message); // Mostrar mensaje de éxito
 
-                // Aquí puedes actualizar dinámicamente los datos mostrados en la página
+                // Actualizar los datos mostrados en la página
                 document.querySelector('#name').value = response.data.name;
                 document.querySelector('#surname').value = response.data.surname;
                 document.querySelector('#username').value = response.data.alias;
                 document.querySelector('#birthdate').value = response.data.birth_date;
                 document.querySelector('#location').value = response.data.location;
+
                 // Actualizar la imagen si ha cambiado
                 if (response.data.photo) {
                     document.querySelector('img').src = response.data.photo;
                 }
-
             } else {
-                typeMessenger('error', response.message); // Muestra el mensaje de error si algo falla
+                typeMessenger('error', response.message); // Mostrar mensaje de error si algo falla
             }
         } else {
             typeMessenger('error', 'Error al actualizar el perfil');
@@ -311,6 +420,7 @@ document.getElementById("profileForm").addEventListener("submit", function(event
     };
     xhr.send(formData);
 });
+
 
 
     </script>
