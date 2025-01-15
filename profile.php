@@ -95,6 +95,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['ajax'])) {
     <title>Perfil</title>
     <link rel="stylesheet" href="assets/css/styles.css">
     <script src="/assets/js/script.js"></script> 
+    <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_GOOGLE_MAPS_API_KEY&callback=initMap" async defer></script>
+
     <style>
         :root {
             --darkred-color: #800F2F;
@@ -285,7 +287,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['ajax'])) {
                 </div>
                 <div class="form-group">
                     <label for="location">Ubicación:</label>
-                    <input type="text" id="location" name="location" value="<?php echo htmlspecialchars($user['location']); ?>" placeholder="Ubicación">
+                    <input type="text" id="location" name="location" value="<?php echo htmlspecialchars($user['location']); ?>" placeholder="Ubicación" onblur="getCoordinates(this.value)">
+
                 </div>
                 <div class="form-group">
                     <label for="password">Contraseña:</label>
@@ -420,6 +423,24 @@ document.getElementById("profileForm").addEventListener("submit", function(event
     };
     xhr.send(formData);
 });
+
+// Obtener coordenadas de Google Maps usando Geocoding API
+function getCoordinates(location) {
+    const geocoder = new google.maps.Geocoder();
+
+    geocoder.geocode({ 'address': location }, function(results, status) {
+        if (status === 'OK') {
+            const lat = results[0].geometry.location.lat();
+            const lng = results[0].geometry.location.lng();
+            
+            // Llenamos el campo location con las coordenadas (lat, lng)
+            document.getElementById("location").value = `POINT(${lat} ${lng})`;
+        } else {
+            alert("No se pudo geolocalizar el lugar: " + status);
+        }
+    });
+}
+
 
 
 

@@ -5,20 +5,23 @@ DROP DATABASE IF EXISTS tinder;
 CREATE DATABASE tinder;
 USE tinder;
 
--- Tabla users
+-- Tabla usuarios
 CREATE TABLE users (
     id INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(255) NOT NULL,
     surname VARCHAR(255) NOT NULL,
     alias VARCHAR(100) NOT NULL,
     birth_date DATE NOT NULL,
-    location VARCHAR(255),
+    location_geo POINT,  -- Columna location_geo de tipo POINT
+    location VARCHAR(75) NOT NULL,  -- Nueva columna location como VARCHAR(75)
     genre ENUM('home', 'dona', 'no binari'),
     sexual_preference ENUM('heterosexual', 'homosexual', 'bisexual') NOT NULL,
     password VARCHAR(255) NOT NULL,
     email VARCHAR(255) UNIQUE NOT NULL,
     created_at DATE NOT NULL
 );
+
+
 
 -- Tabla fotos_Usuarios
 CREATE TABLE user_images (
@@ -54,3 +57,11 @@ CREATE TABLE messages (
     FOREIGN KEY (sender_id) REFERENCES users(id) ON DELETE CASCADE,
     FOREIGN KEY (receiver_id) REFERENCES users(id) ON DELETE CASCADE
 );
+
+
+--INSERT INTO users (name, surname, alias, birth_date, location, genre, sexual_preference, password, email, created_at)
+--VALUES ('Juan', 'Pérez', 'juanp', '1990-05-20', ST_GeomFromText('POINT(-3.7038 40.4168)'), 'home', 'heterosexual', 'hashedpassword', 'juan@example.com', '2025-01-01');
+
+
+--ver datos cofificados de localizacion de manera legible
+--SELECT id, ST_AsText(location) AS readable_location FROM users;
