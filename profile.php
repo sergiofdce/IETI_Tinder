@@ -72,7 +72,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['ajax'])) {
 
         $photo_path = $user['photo'];
         $photo_filename = basename($photo_path);
-        $user['photo'] = 'assets/img/' . $photo_filename;
+        $user['photo'] = 'assets/img/seeder/' . $photo_filename;///////////////////////////////////////////////////////
 
         echo json_encode(['status' => 'success', 'message' => 'Perfil actualizado correctamente', 'data' => $user]);
     } else {
@@ -256,7 +256,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['ajax'])) {
                 <h1 class="profile-title"><?php echo htmlspecialchars($user['name']); ?></h1>
                 <?php
                 // Ruta base para las imágenes
-                $base_url = 'assets/img/'; // Suponiendo que las imágenes están en la carpeta 'assets/img/'
+                $base_url = 'assets/img/seeder/'; ///////////////////////////////////////////////////////
+                // Suponiendo que las imágenes están en la carpeta 'assets/img/'
 
                 // Verificar si el usuario tiene una foto de perfil
                 $photo_path = !empty($user['photo']) ? $user['photo'] : 'default.png'; // Si no tiene foto, usamos la imagen por defecto
@@ -422,7 +423,7 @@ document.getElementById("profileForm").addEventListener("submit", function(event
 
                 // Actualizar la imagen si ha cambiado
                 if (response.data.photo) {
-                    document.querySelector('img').src = response.data.photo;
+                    document.querySelector('img/seeder').src = response.data.photo;//////////////////////////////////////////
                 }
                 document.querySelector('.profile-title').innerText = response.data.name;
             } else {

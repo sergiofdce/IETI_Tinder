@@ -52,7 +52,7 @@
                 echo "<a href='#' class='match-item' style='text-decoration: none;'>";
                 echo "<div class='contenedor-foto-match'>";
                 $foto_path = $row['foto'];
-                $base_url = 'images/';
+                $base_url = 'assets/img/seeder/';//////////////////////////////////////////////////////
                 if (!empty($foto_path) && file_exists($base_url . basename($foto_path))) {
                     echo "<img src='" . $base_url . basename($foto_path) . "' alt='Foto del usuario' style='width: 100%; height: 100%; object-fit: cover;'>";
                 } else {
@@ -108,7 +108,7 @@
                 // Contenedor de la foto
                 echo "<div class='contenedor-foto-conversation'>";
                 $foto_path = $row['foto'];
-                $base_url = 'images/';
+                $base_url = 'assets/img/seeder/';//////////////////////////////////////////////////////
                 if (!empty($foto_path) && file_exists($base_url . basename($foto_path))) {
                     echo "<img src='" . $base_url . basename($foto_path) . "' alt='Foto del usuario' style='width: 100%; height: 100%; object-fit: cover;'>";
                 } else {
