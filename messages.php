@@ -1,3 +1,11 @@
+<?php
+session_start();
+$_SESSION["user_id"] = 1; // Reemplaza con el ID del usuario actual
+if (!isset($_SESSION["user_id"])) {
+     header("Location: login.php");
+}
+?>
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -24,9 +32,9 @@
     <h1 class="title-messenger">MIS MATCHES</h1>
     <div class="container-matches">
     <?php
-    $_POST["id_usuario"] = 15; // Reemplaza con el ID del usuario actual
-    if (isset($_POST["id_usuario"])) {
-        $id_usuario = $_POST["id_usuario"];
+    
+    if (isset($_SESSION["user_id"])) {
+        $id_usuario = $_SESSION["user_id"];
         $conn = mysqli_connect('localhost', 'admin', 'admin', 'tinder');
         $consulta = "SELECT u.name, u.surname, ui.path as 'foto'
                     FROM users u
@@ -75,8 +83,8 @@
             <h1 class="title-messenger">MENSAJES</h1>
             <div class="container-conversaciones">
     <?php
-    if (isset($_POST["id_usuario"])) {
-        $id_usuario = $_POST["id_usuario"];
+    if (isset($_SESSION["user_id"])) {
+        $id_usuario = $_SESSION["user_id"];
         $conn = mysqli_connect('localhost', 'admin', 'admin', 'tinder');
         $consulta = "SELECT u.name, u.surname, ui.path AS 'foto', m.message, m.sent_at AS 'fechaMensaje'
                     FROM users u
