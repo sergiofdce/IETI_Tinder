@@ -233,6 +233,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['ajax'])) {
             transform: translateY(0);  /* Vuelve a la posición original */
         }
 
+        .re-pie {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+            
+        }
+
     </style>
 </head>
 
@@ -245,7 +253,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['ajax'])) {
     <main>
         <div class="container-profile">
             <div class="container-cabecera">
-                <h1 class="profile-title">Perfil</h1>
+                <h1 class="profile-title"><?php echo htmlspecialchars($user['name']); ?></h1>
                 <?php
                 // Ruta base para las imágenes
                 $base_url = 'assets/img/'; // Suponiendo que las imágenes están en la carpeta 'assets/img/'
@@ -300,8 +308,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['ajax'])) {
                 </div>
                <input type="submit" value="Modificar">
             </form>
-
-            <p class="edit-fotos"><a href="">Editar fotos</a></p>
+            <div class="re-pie">
+                <p class="edit-fotos"><a href="">Editar fotos</a></p>
+                <p class="logout"><a href="logaut.php">Cerrar sessión</a></p>
+            </div>
             
         </div>
         <div class="notification-container" id="notificationContainer"></div>
@@ -414,6 +424,7 @@ document.getElementById("profileForm").addEventListener("submit", function(event
                 if (response.data.photo) {
                     document.querySelector('img').src = response.data.photo;
                 }
+                document.querySelector('.profile-title').innerText = response.data.name;
             } else {
                 typeMessenger('error', response.message); // Mostrar mensaje de error si algo falla
             }
