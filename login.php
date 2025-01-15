@@ -13,7 +13,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $results = executeQuery($pdo, $query, $params);
 
         if ($results) {
-            $_SESSION["user"] = $results[0]["id"];
+            $_SESSION["user_id"] = $results[0]["id"];
             $_SESSION["email"] = $results[0]["email"];
             logEvent("login_success", "El usuario " . $results[0]["email"] . " ha iniciado sesion", $results[0]["email"]);
             header("Location: discover.php");
