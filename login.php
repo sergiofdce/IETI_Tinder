@@ -1,71 +1,34 @@
 <?php
 session_start();
-include 'functions.php';
+include 'includes/functions.php';
+require_once 'config/db_connection.php';
+
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if (!empty($_POST["email"]) && !empty($_POST["password"])) {
         $email = $_POST["email"];
         $password = hash('sha512', $_POST["password"]);
 
-        try {
-            $hostname = "localhost";
-            $dbname = "tinder";
-            $username = "admin";
-            $pw = "admin123";
-            $pdo = new PDO("mysql:host=$hostname;dbname=$dbname", "$username", "$pw");
-        } catch (PDOException $e) {
-            echo "Error connectant a la BD: " . $e->getMessage() . "<br>\n";
-            exit;
-        }
-        try {
-            //preparar consulta y sanear los parámetros
-            $query = $pdo->prepare("SELECT * FROM users WHERE email = :email AND password = :password");
-            $query->bindParam(':email', $email);
-            $query->bindParam(':password', $password);
-            $query->execute();
-        } catch (PDOException $e) {
-            echo "Error de SQL<br>\n";
-            //comprobacion de errores
-            $e = $query->errorInfo();
-            if ($e[0] != '00000') {
-                echo "\nPDO::errorInfo():\n";
-                die("Error accedint a dades: " . $e[2]);
-            }
-        }
-        //si login correcto, ir a vista discover
-        if ($query->rowCount() > 0) {
-            $row = $query->fetch();
-            $_SESSION["user"] = $row["id"];
-            $_SESSION["email"] = $row["email"];
-            //log de login
-            logEvent("login_success", "El usuario " . $row["email"] . " ha iniciado sesion", $row["email"]);
-            //redireccionar a discover
-            header("Location: discover.php");
+        $query = "SELECT * FROM users WHERE email = :email AND password = :password";
+        $params = [':email' => $email, ':password' => $password];
+        $results = executeQuery($pdo, $query, $params);
 
-            //si el login no es correcto buscamos si existe el usuario para mostrar password incorrecto     
+        if ($results) {
+            $_SESSION["user"] = $results[0]["id"];
+            $_SESSION["email"] = $results[0]["email"];
+            logEvent("login_success", "El usuario " . $results[0]["email"] . " ha iniciado sesion", $results[0]["email"]);
+            header("Location: discover.php");
         } else {
-            try {
-                //preparar consulta y sanear los parámetros
-                $query = $pdo->prepare("SELECT * FROM users WHERE email = :email");
-                $query->bindParam(':email', $_POST["email"]);
-                $query->execute();
-            } catch (PDOException $e) {
-                echo "Error de SQL<br>\n";
-                //comprobacion de errores
-                $e = $query->errorInfo();
-                if ($e[0] != '00000') {
-                    echo "\nPDO::errorInfo():\n";
-                    die("Error accedint a dades: " . $e[2]);
-                }
-            }
-            if ($query->rowCount() > 0) {
+            $query = "SELECT * FROM users WHERE email = :email";
+            $params = [':email' => $email];
+            $results = executeQuery($pdo, $query, $params);
+
+            if ($results) {
                 $message = "<div class='alert alert-danger'>Contraseña incorrecta</div>";
                 $passwordErrorClass = "borderError";
-                //log de login fallido
                 logEvent("login_failure", "El usuario " . $_POST["email"] . " ha fallado la contraseña", $_POST["email"]);
             } else {
                 $message = "<div class='alert alert-danger'>Usuario incorrecto</div>";
                 $emailErrorClass = "borderError";
-                //log de login fallido
                 logEvent("login_failure", "El usuario " . $_POST["email"] . " no existe", $_POST["email"]);
             }
         }
@@ -73,7 +36,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $message = "<div class='alert alert-danger'>Rellene ambos campos</div>";
         $emailErrorClass = "borderError";
         $passwordErrorClass = "borderError";
-        //log de login fallido
         logEvent("login_failure", "Se ha introducido uno o varios campos vacíos", "empty");
     }
 }

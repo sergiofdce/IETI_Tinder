@@ -4,8 +4,8 @@
 // IMPORTS
 // ==================================================
       // Importar Faker
-      require_once '../assets/modules/faker/vendor/autoload.php';
-      use Faker\Factory;
+      // require_once '../assets/modules/faker/vendor/autoload.php';
+      // use Faker\Factory;
 
       // Sistema de logs
       $tempLogsFile = '../tmp/logs.txt';
@@ -17,61 +17,73 @@
       // Generar personas ficticias
             // IN: generateFakeProfiles(int)
             // OUT: /assets/data/fake_profiles.json
-            function generateFakeProfiles($number) {
-                  // Crear una instancia de Faker con datos españoles
-                  $faker = Factory::create('es_ES');
+            // function generateFakeProfiles($number) {
+            //       // Crear una instancia de Faker con datos españoles
+            //       $faker = Factory::create('es_ES');
 
-                  // Opciones predefinidas
-                  $sexes = ['Hombre', 'Mujer', 'No binario'];
-                  $sexualOrientations = ['Heterosexual', 'Homosexual', 'Bisexual'];
+            //       // Opciones predefinidas
+            //       $genres = ['home', 'dona', 'no binari'];
+            //       $sexualOrientations = ['heterosexual', 'homosexual', 'bisexual'];
 
-                  // Rutas imágenes
-                  $imageDirectory = '../assets/img/seeder/';
-                  $imageFiles = glob($imageDirectory . '*.webp', GLOB_BRACE);
+            //       // Rutas imágenes
+            //       $imageDirectory = '../assets/img/seeder/';
+            //       $imageFiles = glob($imageDirectory . '*.webp', GLOB_BRACE);
 
-                  // Array para almacenar datos generados
-                  $data = [];
+            //       // Array para almacenar datos generados
+            //       $data = [];
 
-                  for ($i = 0; $i < $number; $i++) {
-                        // Definir datos
-                        $name = $faker->firstName;
-                        $lastName = $faker->lastName;
-                        $alias = $faker->userName;
-                        $birthDate = $faker->date('Y-m-d');
-                        $latitude = $faker->latitude(40, 43); // Latitud entre 40 y 43 (España)
-                        $longitude = $faker->longitude(-5, 3); // Longitud entre -5 y 3 (España)
-                        $sex = $sexes[array_rand($sexes)];
-                        $sexualOrientation = $sexualOrientations[array_rand($sexualOrientations)];
+            //       // Fecha actual y fecha límite para los 18 años
+            //       $currentDate = date('Y-m-d');
+            //       $eighteenYearsAgo = date('Y-m-d', strtotime('-18 years', strtotime($currentDate)));
 
-                        // Seleccionar dos imágenes de perfil aleatorias
-                        $profileImages = array_rand($imageFiles, 2);
-                        $profileImage1 = $imageFiles[$profileImages[0]];
-                        $profileImage2 = $imageFiles[$profileImages[1]];
+            //       for ($i = 0; $i < $number; $i++) {
+            //             // Definir datos
+            //             $name = $faker->firstName;
+            //             $lastName = $faker->lastName;
+            //             $alias = $faker->userName;
 
-                        // Agregar datos al array
-                        $data[] = [
-                              'nom' => $name,
-                              'cognoms' => $lastName,
-                              'alias' => $alias,
-                              'data_naixement' => $birthDate,
-                              'ubicacio' => [
-                                    'latitud' => $latitude,
-                                    'longitud' => $longitude
-                              ],
-                              'sexe' => $sex,
-                              'orientacio_sexual' => $sexualOrientation,
-                              'profile_images' => [
-                                    'image1' => $profileImage1,
-                                    'image2' => $profileImage2
-                              ]
-                        ];
-                  }
+            //             // Generar una fecha de nacimiento aleatoria, asegurando que la persona tiene como máximo 18 años
+            //             $birthDate = $faker->date('Y-m-d', $eighteenYearsAgo);
 
-                  // Guardar datos en .json
-                  $jsonFilePath = '../assets/data/fake_profiles.json';
-                  file_put_contents($jsonFilePath, json_encode($data, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));
+            //             $latitude = $faker->latitude(40, 43); // Latitud entre 40 y 43 (España)
+            //             $longitude = $faker->longitude(-5, 3); // Longitud entre -5 y 3 (España)
+            //             $userGenre = $genres[array_rand($genres)];
+            //             $sexualOrientation = $sexualOrientations[array_rand($sexualOrientations)];
 
-            }
+            //             // Seleccionar dos imágenes de perfil aleatorias
+            //             $profileImages = array_rand($imageFiles, 2);
+            //             $profileImage1 = "assets/img/seeder/" . basename($imageFiles[$profileImages[0]]);
+            //             $profileImage2 = "assets/img/seeder/" . basename($imageFiles[$profileImages[1]]);
+
+            //             // Generar email
+            //             $email = $alias . '@iesesteveterradas.cat';
+
+            //             // Agregar datos al array
+            //             $data[] = [
+            //                   'name' => $name,
+            //                   'surname' => $lastName,
+            //                   'alias' => $alias,
+            //                   'birth_date' => $birthDate,
+            //                   'location' => [
+            //                         'latitude' => $latitude,
+            //                         'longitude' => $longitude
+            //                   ],  // Ahora 'location' es un array con 'latitude' y 'longitude'
+            //                   'genre' => $userGenre,
+            //                   'sexual_preference' => $sexualOrientation,
+            //                   'profile_images' => [
+            //                         'image1' => $profileImage1,
+            //                         'image2' => $profileImage2
+            //                   ],
+            //                   'email' => $email,
+            //                   'password' => '3c9909afec25354d551dae21590bb26e38d53f2173b8d3dc3eee4c047e7ab1c1eb8b85103e3be7ba613b31bb5c9c36214dc9f14a42fd7a2fdb84856bca5c44c2', // Contraseña encriptada
+            //                   'created_at' => date('Y-m-d H:i:s') // Fecha de creación actual
+            //             ];
+            //       }
+
+            //       // Guardar datos en .json
+            //       $jsonFilePath = '../assets/data/fake_profiles.json';
+            //       file_put_contents($jsonFilePath, json_encode($data, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));
+            // }
 
       // Generar logs de eventos
             // IN: logEvent($eventType, $description, $userEmail)
@@ -160,7 +172,16 @@
       // Seguir aquí próxima función...
             // IN: 
             // OUT: 
-  
-?>
 
+// ================================================== //
+// EJECUCIÓN
+// ==================================================
+
+      // Ejecutar la función de generación de perfiles ficticios
+      // generateFakeProfiles(10);
+
+
+
+      
+?>
 
