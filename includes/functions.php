@@ -8,7 +8,7 @@
       // use Faker\Factory;
 
       // Sistema de logs
-      $tempLogsFile = '../tmp/logs.txt';
+      $tempLogsFile = 'tmp/logs.txt';
 
 // ==================================================
 // FUNCIONES
@@ -178,7 +178,7 @@
 // ==================================================
 
       // Ejecutar la función de generación de perfiles ficticios
-      // generateFakeProfiles(10);
+      // generateFakeProfiles(40);
 
 
 

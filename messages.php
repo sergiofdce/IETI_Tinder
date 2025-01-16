@@ -8,6 +8,7 @@ if (!isset($_SESSION["user_id"])) {
 require_once 'config/db_connection.php';
 
 ?>
+
 <!DOCTYPE html>
 <html lang="es">
 
