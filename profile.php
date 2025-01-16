@@ -1,10 +1,11 @@
 <?php
 session_start();
-if (!isset($_SESSION["user_id"])) {
-      header("Location: login.php");
-}
 
-// $_SESSION["user_id"] = 1; // Reemplaza con el ID del usuario actual
+// Verificar si el usuario está logueado
+if (!isset($_SESSION["user_id"])) {
+    header("Location: login.php");
+    exit();
+}
 
 $user_id = $_SESSION["user_id"];
 $conn = mysqli_connect('localhost', 'admin', 'admin123', 'tinder');
@@ -33,7 +34,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['ajax'])) {
     $surname = $_POST['surname'] ?? '';
     $username = $_POST['username'] ?? '';
     $birthdate = $_POST['birthdate'] ?? '';
-    $location = $_POST['location'] ?? '';
+    $location = $_POST['location'] ?? '';  // "lat,lng"
+    $coords = explode(',', $location);
+    $lat = $coords[0];  // Latitud
+    $lng = $coords[1];  // Longitud
     $password = $_POST['password'] ?? '';
     $password2 = $_POST['password2'] ?? '';
 
@@ -61,7 +65,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['ajax'])) {
         $stmt->close();
 
         // Obtener la foto del usuario
-        $query = "SELECT name, surname, alias, birth_date, location, (SELECT path FROM user_images WHERE user_id = ?) AS photo FROM users WHERE id = ?";
+        $query = "SELECT name, surname, alias, birth_date, location, (SELECT path FROM user_images WHERE user_id = ? LIMIT 1) AS photo FROM users WHERE id = ?";
         $stmt = $conn->prepare($query);
         $stmt->bind_param("ii", $user_id, $user_id);
         $stmt->execute();
@@ -93,7 +97,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['ajax'])) {
     <title>Perfil</title>
     <link rel="stylesheet" href="assets/css/styles.css">
     <script src="/assets/js/script.js"></script> 
-    <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_GOOGLE_MAPS_API_KEY&callback=initMap" async defer></script>
+    <!-- Incluir Leaflet.js desde un CDN -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+
 
     <style>
         :root {
@@ -127,56 +134,66 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['ajax'])) {
         }
 
         .profile-image {
-    width: 150px; /* Tamaño fijo de ancho */
-    height: 150px; /* Tamaño fijo de alto */
-    border-radius: 50%; /* Esto hará que la imagen sea circular */
-    object-fit: cover; /* Esto asegura que la imagen se recorte adecuadamente si es necesario */
-}
+            width: 150px; /* Tamaño fijo de ancho */
+            height: 150px; /* Tamaño fijo de alto */
+            border-radius: 50%; /* Esto hará que la imagen sea circular */
+            object-fit: cover; /* Esto asegura que la imagen se recorte adecuadamente si es necesario */
+        }
 
         .container-profile {
             text-align: left;
             flex-grow: 1;
         }
 
-        .container-profile p {
-            margin-top: 12px;
-            margin-bottom: 12px;
-        }
+      
 
         .profile-form {
-    display: flex;
-    flex-direction: column;
-    margin-top: 20px;
-}
+            display: flex;
+            flex-direction: column;
+            margin-top: 20px;
+        }
 
-.profile-form .form-group {
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 12px;
-    align-items: center; /* Alinea verticalmente las etiquetas y los inputs */
-}
+        .profile-form .form-group, .form-group-location  {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 12px;
+            align-items: center; /* Alinea verticalmente las etiquetas y los inputs */
+        }
 
-.profile-form label {
-    width: 50%; /* Ajusta el tamaño de las etiquetas */
-    text-align: left;
-    font-weight: bold;
-}
+        .profile-form label {
+            width: 50%; /* Ajusta el tamaño de las etiquetas */
+            text-align: left;
+            font-weight: bold;
+        }
 
-.profile-form input {
-    width: 45%; /* Ajusta el tamaño de los inputs */
-    padding: 8px;
-    font-size: 12px;
-    color: white;
-    background-image: linear-gradient(to left, var(--blue-color), var(--red-color));
-    border: 0;
-    border-radius: 5px;
-    margin-bottom: 8px;
-    box-sizing: border-box;
-}
+        .profile-form input {
+            width: 45%; /* Ajusta el tamaño de los inputs */
+            padding: 8px;
+            font-size: 12px;
+            color: white;
+            background-image: linear-gradient(to left, var(--blue-color), var(--red-color));
+            border: 0;
+            border-radius: 5px;
+            margin-bottom: 8px;
+            box-sizing: border-box;
+        }
 
-.profile-form input::placeholder {
-    color: rgb(210, 210, 210);
-}
+        .profile-form input::placeholder {
+            color: rgb(210, 210, 210);
+        }
+
+        .form-group-location input {
+            width: 32%; /* Ajusta el tamaño de los inputs */
+            padding: 8px;
+            font-size: 12px;
+            color: white;
+            background-image: linear-gradient(to left, var(--blue-color), var(--red-color));
+            border: 0;
+            border-radius: 5px;
+            margin-bottom: 8px;
+            box-sizing: border-box;
+            
+        }
 
 
         /* Estilo original del botón de submit */
@@ -238,6 +255,63 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['ajax'])) {
             width: 100%;
             
         }
+        #mapContainer {
+            display: none; /* Cambia a 'block' cuando se haga clic en el botón de editar ubicación */
+            position: fixed; /* Lo fijamos para que no afecte al flujo del documento */
+            top: 25%;
+            left: 10%;
+            z-index: 9999; /* Asegúrate de que sea más alto que otros elementos de la página */
+            background-color: rgba(0, 0, 0, 0.7); /* Fondo semi-transparente */
+            width: 100%;
+            height: 100vh; /* Ocupa toda la pantalla */
+        }
+
+        #map {
+            height: 50%; /* Ocupa el 90% de la pantalla */
+            width: 50%;
+            margin: 5%; /* Deja un pequeño espacio en la parte superior */
+        }
+
+        #btnShowMap, #btnCloseMap, #editLocationBtn {
+            
+           
+            padding: 8px;
+            font-size: 12px;
+            color: white;
+            background-image: linear-gradient(to left, var(--blue-color), var(--red-color));
+            border: 0;
+            margin-left:2px;
+            border-radius: 5px;
+            margin-bottom: 8px;
+            box-sizing: border-box;
+        }
+
+        #acceptLocation {
+            background-color: blue;
+            color: white;
+            padding: 8px;
+            border-radius: 5px;
+        }
+
+        .edit-location-icon {
+            width: 14px;  
+            height: 12px; 
+            object-fit: contain; 
+            border-radius: 5px;
+        }
+
+
+
+        #btnShowMap:hover, #btnCloseMap:hover, #editLocationBtn:hover  {
+            background-image: linear-gradient(to left, var(--blue-color), var(--darkred-color));
+            transform: translateY(-2px);
+        }
+
+        #btnShowMap:active, #btnCloseMap:active, #editLocationBtn:active  {
+            background-image: linear-gradient(to left, var(--blue-color), var(--darkblue-color));
+            transform: translateY(0);
+        }
+
 
     </style>
 </head>
@@ -292,9 +366,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['ajax'])) {
                     <label for="birthdate">Fecha de nacimiento:</label>
                     <input type="date" id="birthdate" name="birthdate" value="<?php echo $user['birth_date']; ?>">
                 </div>
-                <div class="form-group">
+                <div class="form-group-location">
                     <label for="location">Ubicación:</label>
-                    <input type="text" id="location" name="location" value="<?php echo htmlspecialchars($user['location']); ?>" placeholder="Ubicación" onblur="getCoordinates(this.value)">
+                    <input type="text" id="location" name="location" value="<?php echo htmlspecialchars($user['location']); ?>" placeholder="Ubicación" readonly>
+                    <button type="button" id="editLocationBtn" class="edit-fotos">
+                        <img src="assets/img/icon/ubicacion.png" alt="Ubicación" class="edit-location-icon">
+                    </button>
 
                 </div>
                 <div class="form-group">
@@ -310,6 +387,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['ajax'])) {
             <div class="re-pie">
                 <p class="edit-fotos"><a href="">Editar fotos</a></p>
                 <p class="logout"><a href="logout.php">Cerrar sessión</a></p>
+                <!-- Contenedor del mapa -->
+                <div id="mapContainer" style="display: none; width: 300px; height: 300px;">
+                    <div id="map" style="height: 100%; width: 100%;"></div> <!-- El mapa se renderiza aquí -->
+                    <button id="acceptLocation">Aceptar ubicación</button> <!-- Botón para aceptar la ubicación -->
+                </div>
+
+
             </div>
             
         </div>
@@ -433,26 +517,66 @@ document.getElementById("profileForm").addEventListener("submit", function(event
     };
     xhr.send(formData);
 });
+let map;
+let marker;
+let mapContainer = document.getElementById("mapContainer");
+let locationInput = document.getElementById("location");  // Asumo que tienes un input de ubicación
+let editLocationBtn = document.getElementById("editLocationBtn");
+let acceptLocationBtn = document.getElementById("acceptLocation");
 
-// Obtener coordenadas de Google Maps usando Geocoding API
-function getCoordinates(location) {
-    const geocoder = new google.maps.Geocoder();
+// Mostrar el mapa cuando se hace clic en el botón "Seleccionar Ubicación"
+editLocationBtn.addEventListener("click", function() {
+    mapContainer.style.display = 'block'; // Mostrar el mapa
+    initMap(); // Inicializar el mapa
+    editLocationBtn.disabled = true; // Deshabilitar el botón mientras el mapa está visible
+});
 
-    geocoder.geocode({ 'address': location }, function(results, status) {
-        if (status === 'OK') {
-            const lat = results[0].geometry.location.lat();
-            const lng = results[0].geometry.location.lng();
-            
-            // Llenamos el campo location con las coordenadas (lat, lng)
-            document.getElementById("location").value = `POINT(${lat} ${lng})`;
-        } else {
-            alert("No se pudo geolocalizar el lugar: " + status);
-        }
+// Aceptar la ubicación seleccionada y actualizar el campo de ubicación
+acceptLocationBtn.addEventListener("click", function() {
+    const latLng = marker.getLatLng();
+    locationInput.value = `${latLng.lat},${latLng.lng}`; // Establecer las coordenadas en el campo input
+    mapContainer.style.display = 'none'; // Ocultar el mapa
+    editLocationBtn.disabled = false; // Habilitar el botón nuevamente
+});
+
+// Inicializar el mapa
+function initMap() {
+    // Si el mapa ya ha sido inicializado, no lo volvemos a crear
+    if (map) return;
+
+    // Crear un mapa centrado en una ubicación inicial (por ejemplo, Madrid)
+    map = L.map('map').setView([40.4168, -3.7038], 13); // Madrid como punto de inicio
+
+    // Usar OpenStreetMap como capa base
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+    }).addTo(map);
+
+    // Crear un marcador y agregarlo al mapa
+    marker = L.marker([40.4168, -3.7038], { draggable: true }).addTo(map);
+
+    // Escuchar el evento de arrastre del marcador
+    marker.on('dragend', function(event) {
+        const latLng = event.target.getLatLng();
+        const lat = latLng.lat;
+        const lng = latLng.lng;
+
+        // Actualizar el valor del campo location con las nuevas coordenadas
+        locationInput.value = `${lat},${lng}`;
+    });
+
+    // Escuchar el evento de clic en el mapa para colocar un marcador en esa ubicación
+    map.on('click', function(event) {
+        const lat = event.latlng.lat;
+        const lng = event.latlng.lng;
+
+        // Colocar el marcador en el lugar donde se hace clic
+        marker.setLatLng([lat, lng]);
+
+        // Actualizar el valor del campo location con las nuevas coordenadas
+        locationInput.value = `${lat},${lng}`;
     });
 }
-
-
-
 
     </script>
 

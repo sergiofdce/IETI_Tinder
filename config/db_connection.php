@@ -113,7 +113,7 @@ function executeQuery($pdo, $query, $params = []) {
 }
 
 // Subir .json a la BBDD
-//cargarJson($pdo, '../assets/data/fake_profiles.json');
+// cargarJson($pdo, '../assets/data/fake_profiles.json');
 
 
 ?>

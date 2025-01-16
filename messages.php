@@ -1,9 +1,10 @@
 <?php
 session_start();
 if (!isset($_SESSION["user_id"])) {
-      header("Location: login.php");
+     header("Location: login.php");
 }
 ?>
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -30,11 +31,11 @@ if (!isset($_SESSION["user_id"])) {
     <h1 class="title-messenger">MIS MATCHES</h1>
     <div class="container-matches">
     <?php
-    $_POST["id_usuario"] = 15; // Reemplaza con el ID del usuario actual
+    
     if (isset($_SESSION["user_id"])) {
         $id_usuario = $_SESSION["user_id"];
         $conn = mysqli_connect('localhost', 'admin', 'admin123', 'tinder');
-        $query = "SELECT u.name, u.surname, ui.path as 'foto'
+        $consulta = "SELECT u.name, u.surname, ui.path as 'foto'
                     FROM users u
                     JOIN user_images ui ON u.id = ui.user_id
                     JOIN matches r ON (r.sender_id = ? AND r.receiver_id = u.id) OR (r.receiver_id = ? AND r.sender_id = u.id)
@@ -81,8 +82,8 @@ if (!isset($_SESSION["user_id"])) {
             <h1 class="title-messenger">MENSAJES</h1>
             <div class="container-conversaciones">
     <?php
-    if (isset($_POST["id_usuario"])) {
-        $id_usuario = $_POST["id_usuario"];
+    if (isset($_SESSION["user_id"])) {
+        $id_usuario = $_SESSION["user_id"];
         $conn = mysqli_connect('localhost', 'admin', 'admin123', 'tinder');
         $consulta = "SELECT u.name, u.surname, ui.path AS 'foto', m.message, m.sent_at AS 'fechaMensaje'
                     FROM users u
