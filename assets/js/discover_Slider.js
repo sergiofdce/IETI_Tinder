@@ -26,7 +26,7 @@ document.addEventListener("DOMContentLoaded", function () {
     container.innerHTML = "";
     const message = document.createElement("p");
     message.setAttribute("class", "no-profiles-message");
-    message.textContent = "No hi ha perfils disponibles";
+    message.textContent = "No hay perfiles disponibles";
     container.appendChild(message);
     return;
   }
@@ -43,7 +43,7 @@ async function loadRandomProfile() {
     container.innerHTML = "";
     const message = document.createElement("p");
     message.setAttribute("class", "no-profiles-message");
-    message.textContent = "No hi ha perfils disponibles";
+    message.textContent = "No hay perfiles disponibles";
     container.appendChild(message);
     return;
   }
@@ -103,7 +103,7 @@ async function loadNextProfile() {
     container.innerHTML = "";
     const message = document.createElement("p");
     message.setAttribute("class", "no-profiles-message");
-    message.textContent = "No hi ha perfils disponibles";
+    message.textContent = "No hay perfiles disponibles";
     container.appendChild(message);
     return;
   }
@@ -112,13 +112,19 @@ async function loadNextProfile() {
   await new Promise((resolve) => setTimeout(resolve, 500));
 
   // Obtener un perfil aleatorio no usado
-  if (currentIndex >= profiles.length) {
-    currentIndex = 0; // reinicia el índice cuando se llega al final de la secuencia
+  while (usedIndexes.has(currentIndex)) {
+    currentIndex++;
   }
 
+  usedIndexes.add(currentIndex);
   const profile = profiles[currentIndex];
-  currentIndex++; // incrementa el índice para el próximo perfil
+  console.log('Llamando a loadNextProfile()');
 
+  // Verifica que el índice esté siendo actualizado correctamente
+  console.log('Índice actual:', currentIndex);
+
+  // Verifica que no estés utilizando un bucle que esté causando que se muestre el mismo elemento dos veces
+  console.log('Bucle actual:', profiles.length);
   // Guardar el email del perfil actual
   currentProfileEmail = profile.email;
 
@@ -222,6 +228,18 @@ async function sendInteraction(action) {
     const responseData = JSON.parse(responseText); // Convertir la respuesta a JSON
 
     console.log("Respuesta del servidor:", responseData);
+
+    // Llamar a logEvent en el servidor
+    await fetch("includes/log_event.php", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        eventType: action === "like" ? "like_sent" : "nope_sent",
+        description: `Envió un ${action} al usuario ${currentProfileEmail}`,
+        userEmail: userEmail,
+      }),
+    });
+
     return responseData; // Retornar la respuesta del servidor
   } catch (error) {
     console.error("Error al enviar la interacción:", error);
@@ -272,7 +290,8 @@ document.getElementById("closeMatch1").addEventListener("click", function () {
 // Match -> Discover
 document.getElementById("closeMatch2").addEventListener("click", function () {
   hideMatchWindow();
-  loadRandomProfile();
+  //loadRandomProfile();
+  loadNextProfile();
 });
 
 
@@ -387,13 +406,15 @@ async function handleSwipe(direction) {
 
       // Cargamos el siguiente perfil solo después de que el usuario
       // cierre la ventana de match
-      await loadRandomProfile();
+      //await loadRandomProfile();
+      await loadNextProfile();
     } else {
       // Si no hay match, esperamos que termine la animación
       // await new Promise((resolve) => setTimeout(resolve, 100));
       profileContainer.classList.remove("swiped-right", "swiped-left");
       isAnimating = false;
-      await loadRandomProfile();
+      //await loadRandomProfile();
+      await loadNextProfile();
     }
   } catch (error) {
     console.error("Error durante el swipe:", error);

@@ -8,22 +8,19 @@ logEvent($eventType, $description, $userEmail)
 1. Autenticación (auth)
       Eventos relacionados con el inicio, cierre de sesión y manejo de cuentas.
 
-      login_success: Inicio de sesión exitoso.
-      login_failure: Fallo en el inicio de sesión (contraseña incorrecta, usuario no encontrado).
+      login_success: El usuario (mail) ha iniciado sesion.
+      login_failure: Fallo en el inicio de sesión, contraseña incorrecta.
+      login_failure: Fallo en el inicio de sesión, usuario no encontrado.
       logout: Cierre de sesión.
-      password_reset: Solicitud de restablecimiento de contraseña.
-      password_change: Cambio de contraseña exitoso.
+
 
 2. Perfil de usuario (profile)
       Acciones relacionadas con cambios en el perfil.
 
-      profile_update: Actualización de información del perfil (nombre, foto, etc.).
-      profile_view: Vista de perfil de un usuario.
+      profile_update: El usuario ha actualizado su perfl
 
 3. Interacción entre usuarios (interaction)
-      Acciones como likes, matches y mensajes.
 
-      like_sent: Se envió un like a otro usuario.
-      like_received: Se recibió un like de otro usuario.
+      like_sent: Envió un like al usuario ().
+      nope_sent: Envió un nope al usuario ().
       match_created: Match entre dos usuarios.
-      message_sent: Envío de un mensaje.
