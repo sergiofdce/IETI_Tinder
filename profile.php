@@ -6,6 +6,8 @@ if (!isset($_SESSION["user_id"])) {
 
 $user_id = $_SESSION["user_id"];
 require_once 'config/db_connection.php';
+include 'includes/functions.php';
+logEvent("page_view", "El usuario ha accedido a la página Profile", $_SESSION["email"]);
 
 $query = "SELECT id, name, surname, alias, birth_date, location, 
                 (SELECT path FROM user_images WHERE user_id = ? LIMIT 1) AS photo 
@@ -50,6 +52,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     try {
         executeQuery($pdo, $update_query, $update_params);
         echo json_encode(['status' => 'success', 'message' => '¡Cambio realizado con éxito!', 'name' => $name]);
+        logEvent("profile_update", "El usuario ha actualizado sus datos", $_SESSION["email"]);
+
     } catch (Exception $e) {
         echo json_encode(['status' => 'error', 'message' => '¡Error! Algo salió mal']);
     }
@@ -139,7 +143,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             <div class="re-pie">
                 <p><a href="">Editar fotos</a></p>
-                <p><a href="logout.php">Cerrar sessión</a></p>
+                <p><a href="logout.php">Cerrar sesión</a></p>
             </div>
 
         </div>

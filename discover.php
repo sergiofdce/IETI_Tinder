@@ -2,7 +2,14 @@
 session_start();
 if (!isset($_SESSION["user_id"])) {
       header("Location: login.php");
+      exit();
 }
+
+include 'includes/functions.php';
+
+// Registrar evento de visualización de la página
+logEvent("page_view", "El usuario ha accedido a la página Discover", $_SESSION["email"]);
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -155,8 +162,6 @@ if (!isset($_SESSION["user_id"])) {
                         </div>
                   </div>
                   <div id="actions">
-                        <!-- <button id="nope">Nope</button>
-                        <button id="like">Like</button> -->
                         <button id="nope" class="discover-actionButton nope-button">
                               <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                     <path d="M18 6 6 18"></path>

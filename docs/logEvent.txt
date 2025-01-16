@@ -18,8 +18,6 @@ logEvent($eventType, $description, $userEmail)
       Acciones relacionadas con cambios en el perfil.
 
       profile_update: El usuario ha actualizado su perfl
-      password_change: El usuario ha intentado cambiar la contraseña sin éxito.
-      password_change: Cambio de contraseña exitoso.
 
 3. Interacción entre usuarios (interaction)
 

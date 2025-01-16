@@ -7,6 +7,9 @@ if (!isset($_SESSION["user_id"])) {
 // Database connection
 require_once 'config/db_connection.php';
 
+include 'includes/functions.php';
+logEvent("page_view", "El usuario ha accedido a la página Messages", $_SESSION["email"]);
+
 ?>
 
 <!DOCTYPE html>

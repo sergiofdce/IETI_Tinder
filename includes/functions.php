@@ -91,31 +91,31 @@
                   $currentDate = date('Y-m-d');
 
                   // Define la ruta y nombre del archivo de logs con la fecha actual
-                  $tempLogsFile = '/logs/' . $currentDate . '.txt';
+                  $logsDir = __DIR__ . '/../logs';
+                  $tempLogsFile = $logsDir . '/' . $currentDate . '.txt';
+
+                  // Verificar y establecer permisos de escritura para el directorio de logs
+                  if (!is_dir($logsDir)) {
+                        mkdir($logsDir, 0777, true);
+                  } else {
+                        chmod($logsDir, 0777);
+                  }
 
                   // Crear el log con los datos
-                  $log = [
-                        'timestamp' => date('Y-m-d H:i:s'), // Fecha y hora actual
-                        'user_email' => $userEmail, // Email del usuario
-                        'event_type' => $eventType,  // Tipo de evento
-                        'description' => $description, // Descripción del evento
-                        'request_uri' => $_SERVER['REQUEST_URI'] ?? 'N/A', // URI de la petición
-                        'additional_data' => [
-                              'ip_address' => $_SERVER['REMOTE_ADDR'] ?? 'N/A', // Dirección IP
-                              'user_agent' => $_SERVER['HTTP_USER_AGENT'] ?? 'N/A' // Navegador del usuario
-                        ]
-                  ];
-
-                  // Convierte el log a una cadena JSON para escribirlo
-                  $logData = json_encode($log, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
+                  $log = sprintf(
+                        "[%s] %s: %s - %s (IP: %s, User Agent: %s, URI: %s)\n",
+                        date('Y-m-d H:i:s'), // Fecha y hora actual
+                        $eventType, // Tipo de evento
+                        $userEmail, // Email del usuario
+                        $description, // Descripción del evento
+                        $_SERVER['REMOTE_ADDR'] ?? 'N/A', // Dirección IP
+                        $_SERVER['HTTP_USER_AGENT'] ?? 'N/A', // Navegador del usuario
+                        $_SERVER['REQUEST_URI'] ?? 'N/A' // URI de la petición
+                  );
 
                   // Si el archivo no existe, lo crea y escribe la primera línea
                   // Si el archivo existe, se añade al final del archivo
-                  if (!file_exists($tempLogsFile)) {
-                        file_put_contents($tempLogsFile, $logData . PHP_EOL);
-                  } else {
-                        file_put_contents($tempLogsFile, $logData . PHP_EOL, FILE_APPEND);
-                  }
+                  file_put_contents($tempLogsFile, $log, FILE_APPEND);
             }
 
 

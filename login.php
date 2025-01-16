@@ -25,7 +25,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $message = "Datos incorrectos";
             $emailErrorClass = "borderError";
             $passwordErrorClass = "borderError";
-            logEvent("login_failure", "El usuario " . $_POST["email"] . " ha fallado la contraseña o no existe", $_POST["email"]);
+            logEvent("login_failure", "El usuario " . $_POST["email"] . " ha fallado la contraseña", $_POST["email"]);
         }
     } else {
         $message = "Rellene ambos campos";
