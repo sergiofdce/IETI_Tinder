@@ -57,6 +57,8 @@ https://github.com/sergiofdce/IETI_Tinder.git
 
 3. Importa la base de datos:
 
+<img width="649" alt="image" src="https://github.com/user-attachments/assets/6128154b-4daf-4478-b6da-733ff5d0af4f" />
+
 - Puedes encontrar el script en la ruta /config/tinder.sql
 ```bash
 mysql -u username -p database_name < tinder.sql
@@ -69,6 +71,8 @@ define('DB_USER', 'su_nombre_de_usuario');
 define('DB_PASS', 'su_contraseña');
 define('DB_NAME', 'tinder');
 ```
+
+
 
 ## 📂 Estructura del proyecto
 
