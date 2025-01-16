@@ -89,7 +89,7 @@ logEvent("page_view", "El usuario ha accedido a la página Messages", $_SESSION[
                 <?php
                 if (isset($_SESSION["user_id"])) {
                     $id_usuario = $_SESSION["user_id"];
-                    $query = "SELECT u.name, u.surname, ui.path AS 'foto', m.message, m.sent_at AS 'fechaMensaje'
+                    $query = "SELECT u.id, u.name, u.surname, ui.path AS 'foto', m.message, m.sent_at AS 'fechaMensaje'
                         FROM users u
                         JOIN user_images ui ON u.id = ui.user_id
                         JOIN messages m ON (m.sender_id = ? AND m.receiver_id = u.id) 
@@ -108,28 +108,32 @@ logEvent("page_view", "El usuario ha accedido a la página Messages", $_SESSION[
                     if (!$resultat || count($resultat) === 0) {
                         echo "<p class='messages-no-content'>No tienes ninguna conversación aún, descubre gente nueva y haz match.</p>";
                     } else {
+                        $displayedUsers = [];
                         foreach ($resultat as $row) {
-                            echo "<a href='#'>";
-                            echo "<div class='conversation-item'>";
-                            echo "<div class='contenedor-foto-conversation'>";
-                            $foto_path = $row['foto'];
-                            $base_url = 'assets/img/seeder/';
-                            if (!empty($foto_path) && file_exists($base_url . basename($foto_path))) {
-                                echo "<img src='" . $base_url . basename($foto_path) . "' alt='Foto del usuario'>";
-                            } else {
-                                echo "<img src='default_photo.jpg' alt='Foto por defecto'>";
+                            if (!in_array($row['id'], $displayedUsers)) {
+                                $displayedUsers[] = $row['id'];
+                                echo "<a href='#'>";
+                                echo "<div class='conversation-item'>";
+                                echo "<div class='contenedor-foto-conversation'>";
+                                $foto_path = $row['foto'];
+                                $base_url = 'assets/img/seeder/';
+                                if (!empty($foto_path) && file_exists($base_url . basename($foto_path))) {
+                                    echo "<img src='" . $base_url . basename($foto_path) . "' alt='Foto del usuario'>";
+                                } else {
+                                    echo "<img src='default_photo.jpg' alt='Foto por defecto'>";
+                                }
+                                echo "</div>";
+                                echo "<div class='conversation-details'>";
+                                echo "<div class='conversation-name'>";
+                                echo $row['name'] . " " . $row['surname'];
+                                echo "</div>";
+                                echo "<div class='last-message'>";
+                                echo $row['message'];
+                                echo "</div>";
+                                echo "</div>";
+                                echo "</div>";
+                                echo "</a>";
                             }
-                            echo "</div>";
-                            echo "<div class='conversation-details'>";
-                            echo "<div class='conversation-name'>";
-                            echo $row['name'] . " " . $row['surname'];
-                            echo "</div>";
-                            echo "<div class='last-message'>";
-                            echo $row['message'];
-                            echo "</div>";
-                            echo "</div>";
-                            echo "</div>";
-                            echo "</a>";
                         }
                     }
                 }
