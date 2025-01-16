@@ -52,6 +52,23 @@ function showMessage(type, message) {
     }
 }
 
+// Ocultar el label e input de repetir contraseña inicialmente
+document.getElementById('password2').style.display = 'none';
+document.querySelector('label[for="password2"]').style.display = 'none';
+
+// Mostrar el campo de repetir contraseña solo cuando haya algo escrito en el campo de contraseña
+document.getElementById('password').addEventListener('input', function() {
+    const password2 = document.getElementById('password2');
+    const password2Label = document.querySelector('label[for="password2"]');
+    if (this.value) {
+        password2.style.display = 'block';
+        password2Label.style.display = 'block';
+    } else {
+        password2.style.display = 'none';
+        password2Label.style.display = 'none';
+    }
+});
+
 // Manejo del formulario con Ajax
 document.getElementById('profileForm').addEventListener('submit', function(event) {
     event.preventDefault();
