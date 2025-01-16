@@ -13,6 +13,9 @@ let isAnimating = false;
 // Matches
 let currentProfileEmail = "";
 
+// BUGFIX DEL SERVIDOR
+hideMatchWindow();
+
 // ==================================================
 // Carga de perfiles
 // ==================================================
