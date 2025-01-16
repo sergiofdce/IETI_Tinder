@@ -2,7 +2,14 @@
 session_start();
 if (!isset($_SESSION["user_id"])) {
       header("Location: login.php");
+      exit();
 }
+
+include 'includes/functions.php';
+
+// Registrar evento de visualización de la página
+logEvent("page_view", "El usuario ha accedido a la página Discover", $_SESSION["email"]);
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -14,6 +21,12 @@ if (!isset($_SESSION["user_id"])) {
       <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
       <title>EasyDates - Discover</title>
       <link rel="icon" type="image/png" href="assets/img/web/icon.ico">
+      <!-- Google Fonts -->
+      <link rel="preconnect" href="https://fonts.googleapis.com">
+      <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+      <link href="https://fonts.googleapis.com/css2?family=Funnel+Display:wght@300..800&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+      <link href="https://fonts.googleapis.com/css2?family=Funnel+Display:wght@300..800&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+
 </head>
 
 <body>
@@ -149,8 +162,6 @@ if (!isset($_SESSION["user_id"])) {
                         </div>
                   </div>
                   <div id="actions">
-                        <!-- <button id="nope">Nope</button>
-                        <button id="like">Like</button> -->
                         <button id="nope" class="discover-actionButton nope-button">
                               <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                     <path d="M18 6 6 18"></path>
@@ -165,39 +176,10 @@ if (!isset($_SESSION["user_id"])) {
                   </div>
             </div>
 
-            <div id="showMatch" style="
-                                    display: none;
-                                    position: fixed;
-                                    top: 50%;
-                                    left: 50%;
-                                    transform: translate(-50%, -50%);
-                                    border: 1px solid black;
-                                    padding: 10px;
-                                    background-color: white;
-                                    width: 300px;
-                                    height: auto;
-                                    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
-                                    z-index: 1000;
-                                    text-align: center;
-                                    ">
-                  <p style="margin-bottom: 20px; font-size: 50px;">It's a Match!</p>
-                  <button id="closeMatch1" style="
-                        margin-right: 10px;
-                        padding: 10px 20px;
-                        background-color: #007BFF;
-                        color: white;
-                        border: none;
-                        border-radius: 5px;
-                        cursor: pointer;
-                  ">Conversa</button>
-                  <button id="closeMatch2" style="
-                        padding: 10px 20px;
-                        background-color: #6c757d;
-                        color: white;
-                        border: none;
-                        border-radius: 5px;
-                        cursor: pointer;
-                  ">Discover</button>
+            <div id="showMatch">
+                  <p id="matchTitle">It's a Match!</p>
+                  <button id="closeMatch1">Conversa</button>
+                  <button id="closeMatch2">Discover</button>
             </div>
 
             <script>

@@ -3,7 +3,7 @@
 $host = '127.0.0.1';
 $dbname = 'tinder';
 $username = 'admin';
-$password = 'admin123';
+$password = '123';
 
 try {
       // Crear conexión PDO
@@ -113,7 +113,7 @@ function executeQuery($pdo, $query, $params = []) {
 }
 
 // Subir .json a la BBDD
-// cargarJson($pdo, '../assets/data/fake_profiles.json');
+//cargarJson($pdo, 'assets/data/fake_profiles.json');
 
 
 ?>

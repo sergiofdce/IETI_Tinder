@@ -1,91 +1,88 @@
 // ==================================================
 // Formulario de perfil
 // ==================================================
-        // Función para mostrar mensajes
-        function showMessage(type, message) {
-            const container = document.getElementById("notificationContainer");
 
-            // Crear un nuevo elemento de mensaje
-            const notification = document.createElement("div");
-            notification.classList.add("messenger");
+// Función para mostrar mensajes
+function showMessage(type, message) {
+    const container = document.getElementById("notificationContainer");
 
-            // Determinar el estilo y texto del mensaje
-            switch (type) {
-                case 'error':
-                    notification.classList.add("divNotiError");
-                    notification.innerText = message || "¡Error! Algo salió mal";
-                    break;
-                case 'like':
-                    notification.classList.add("divNotiLike");
-                    notification.innerText = message || "¡Te han dado un like!";
-                    break;
-                case 'nope':
-                    notification.classList.add("divNotiNope");
-                    notification.innerText = message || "Lo siento, no es una coincidencia.";
-                    break;
-                case 'success':
-                    notification.classList.add("divNotiSuccess");
-                    notification.innerText = message || "¡Cambio realizado con éxito!";
-                    break;
-                case 'warning':
-                    notification.classList.add("divNotiWarning");
-                    notification.innerText = message || "¡Advertencia! Algo podría no estar bien.";
-                    break;
-                default:
-                    notification.classList.add("divNotiOther");
-                    notification.innerText = message || "Notificación sin tipo específico.";
-                    break;
-            }
+    // Crear un nuevo elemento de mensaje
+    const notification = document.createElement("div");
+    notification.classList.add("messenger");
 
-            // Añadir el mensaje al contenedor
-            container.appendChild(notification);
+    // Determinar el estilo y texto del mensaje
+    switch (type) {
+        case 'error':
+            notification.classList.add("divNotiError");
+            notification.innerText = message || "¡Error! Algo salió mal";
+            break;
+        case 'like':
+            notification.classList.add("divNotiLike");
+            notification.innerText = message || "¡Te han dado un like!";
+            break;
+        case 'nope':
+            notification.classList.add("divNotiNope");
+            notification.innerText = message || "Lo siento, no es una coincidencia.";
+            break;
+        case 'success':
+            notification.classList.add("divNotiSuccess");
+            notification.innerText = message || "¡Cambio realizado con éxito!";
+            break;
+        case 'warning':
+            notification.classList.add("divNotiWarning");
+            notification.innerText = message || "¡Advertencia! Algo podría no estar bien.";
+            break;
+        default:
+            notification.classList.add("divNotiOther");
+            notification.innerText = message || "Notificación sin tipo específico.";
+            break;
+    }
 
-            // Eliminar el mensaje después de 6 segundos
-            setTimeout(() => {
-                notification.remove();
-            }, 6000);
+    // Añadir el mensaje al contenedor
+    container.appendChild(notification);
 
-            // Si hay más de 3 mensajes, eliminar el más antiguo
-            if (container.children.length > 3) {
-                container.firstChild.remove();
-            }
+    // Eliminar el mensaje después de 6 segundos
+    setTimeout(() => {
+        notification.remove();
+    }, 6000);
+
+    // Si hay más de 3 mensajes, eliminar el más antiguo
+    if (container.children.length > 3) {
+        container.firstChild.remove();
+    }
+}
+
+// Manejo del formulario con Ajax
+document.getElementById('profileForm').addEventListener('submit', function(event) {
+    event.preventDefault();
+
+    const password = document.getElementById('password').value;
+    const password2 = document.getElementById('password2').value;
+
+    if (password && password !== password2) {
+        showMessage('error', 'Las contraseñas no coinciden');
+        return;
+    }
+
+    const formData = new FormData(this);
+
+    fetch('profile.php', {
+        method: 'POST',
+        body: formData
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.status === 'success') {
+            showMessage('success', data.message);
+            document.querySelector('.container-cabecera h1').innerText = data.name;
+        } else {
+            showMessage('error', data.message);
         }
-
-        // Manejo del formulario con Ajax
-        document.getElementById('profileForm').addEventListener('submit', function(event) {
-            event.preventDefault();
-
-            const password = document.getElementById('password').value;
-            const password2 = document.getElementById('password2').value;
-
-            if (password && password !== password2) {
-                showMessage('error', 'Las contraseñas no coinciden');
-                return;
-            }
-
-            const formData = new FormData(this);
-
-            fetch('profile.php', {
-                method: 'POST',
-                body: formData
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.status === 'success') {
-                    showMessage('success', data.message);
-                    document.querySelector('.container-cabecera h1').innerText = data.name;
-                } else {
-                    showMessage('error', data.message);
-                }
-            })
-            .catch(error => {
-                showMessage('error', '¡Error! Algo salió mal');
-            });
-        });
-
-
-
-
+    })
+    .catch(error => {
+        showMessage('error', '¡Error! Algo salió mal');
+    });
+});
 
 // ==================================================
 // MAP API
