@@ -13,8 +13,6 @@ let isAnimating = false;
 // Matches
 let currentProfileEmail = "";
 
-// BUGFIX DEL SERVIDOR
-hideMatchWindow();
 
 // ==================================================
 // Carga de perfiles
@@ -22,6 +20,8 @@ hideMatchWindow();
 
 // Perfil inicial
 document.addEventListener("DOMContentLoaded", function () {
+  // BUGFIX DEL SERVIDOR
+hideMatchWindow();
   console.log(profiles);
 
   if (profiles.length === 0) {
