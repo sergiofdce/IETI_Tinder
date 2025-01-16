@@ -3,6 +3,10 @@ session_start();
 include 'includes/functions.php';
 require_once 'config/db_connection.php';
 
+error_reporting(E_ERROR | E_PARSE);
+
+$message = "";
+
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if (!empty($_POST["email"]) && !empty($_POST["password"])) {
         $email = $_POST["email"];
@@ -18,25 +22,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             logEvent("login_success", "El usuario " . $results[0]["email"] . " ha iniciado sesion", $results[0]["email"]);
             header("Location: discover.php");
         } else {
-            $query = "SELECT * FROM users WHERE email = :email";
-            $params = [':email' => $email];
-            $results = executeQuery($pdo, $query, $params);
-
-            if ($results) {
-                $message = "<div class='alert alert-danger'>Contraseña incorrecta</div>";
-                $passwordErrorClass = "borderError";
-                logEvent("login_failure", "El usuario " . $_POST["email"] . " ha fallado la contraseña", $_POST["email"]);
-            } else {
-                $message = "<div class='alert alert-danger'>Usuario incorrecto</div>";
-                $emailErrorClass = "borderError";
-                logEvent("login_failure", "El usuario " . $_POST["email"] . " no existe", $_POST["email"]);
-            }
+            $message = "Datos incorrectos";
+            $emailErrorClass = "borderError";
+            $passwordErrorClass = "borderError";
+            logEvent("login_failure", "El usuario " . $_POST["email"] . " ha fallado la contraseña o no existe", $_POST["email"]);
         }
     } else {
-        $message = "<div class='alert alert-danger'>Rellene ambos campos</div>";
+        $message = "Rellene ambos campos";
         $emailErrorClass = "borderError";
         $passwordErrorClass = "borderError";
-        logEvent("login_failure", "Se ha introducido uno o varios campos vacíos", "empty");
+        // logEvent("login_failure", "Se ha introducido uno o varios campos vacíos", "empty");
     }
 }
 ?>
@@ -52,34 +47,55 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Funnel+Display:wght@600&family=Roboto:wght@300&display=swap" rel="stylesheet">
-    <title>Iniciar Sesión</title>
+    <title>EasyDates</title>
+    <link rel="icon" type="image/png" href="assets/img/web/icon.ico">
 </head>
 
-<body id="login">
-    <header>
+<body>
+    <header id="login">
     </header>
-    <main>
-        <div class="flex-container">
-            <div id="logo">
-                <h1 class="funnel-display">LOGO PLACEHOLDER</h1>
-                <p class="roboto">Descripción del sitio</p>
+    <main id="login">
+        <div id="login-container">
+            <div id="login-header">
+                <img src="assets/img/web/logo.png" alt="Login" id="login-image">
+                <p id="login-eslogan">Love Made Simple</p>
             </div>
+
             <div id="login" class="roboto">
                 <form action="login.php" method="post">
-                    <?php echo $message; ?>
-                    <label for="email" class="funnel-display">Email</label>
-                    <input type="email" name="email" class="<?php echo $emailErrorClass; ?>" placeholder="usuario@ieti.site">
-                    <label for="password" class="funnel-display">Contraseña</label>
-                    <input type="password" name="password" class="<?php echo $passwordErrorClass; ?>" placeholder="******">
-                    <input type="submit" name="submit" value="Iniciar Sesión">
+                    <div class='login-alert'><?php echo $message; ?></div>
+                    <!-- <label for="email" >Email</label> -->
+                    <!-- <input type="email" name="email" class="<?php echo $emailErrorClass; ?>" placeholder="usuario@ieti.site"> -->
+
+                    <div class="form__group field">
+                        <input type="email" name="email" class="<?php echo $emailErrorClass; ?> form__field" placeholder="Email">
+                        <label for="email" class="form__label">Email</label>
+                    </div>
+
+                    <!-- <label for="password">Contraseña</label>
+                    <input type="password" name="password" class="<?php echo $passwordErrorClass; ?>" placeholder="******"> -->
+
+                    <div class="form__group field">
+                        <input type="password" name="password" class="<?php echo $passwordErrorClass; ?> form__field" placeholder="Contraseña">
+                        <label for="password" class="form__label">Contraseña</label>
+                    </div>
+
+
+                    <input type="submit" name="submit" value="Iniciar Sesión" class="styled-submit">
+
+
                 </form>
-                <p><a href="#">¿Has olvidado la contraseña?</a></p>
-                <p><a href="register.php">Crear nueva cuenta</a></p>
+
+                <div id="login-links">
+                    <p class="login-link"><a href="#">¿Has olvidado la contraseña?</a></p>
+                    <p class="login-link"><a href="register.php">Crear nueva cuenta</a></p>
+                </div>
+
             </div>
         </div>
     </main>
 
-    <footer>
+    <footer id="login">
     </footer>
 
 </body>

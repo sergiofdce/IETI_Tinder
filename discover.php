@@ -10,16 +10,16 @@ if (!isset($_SESSION["user_id"])) {
 <head>
       <meta charset="UTF-8">
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
-      <title>Descubrir</title>
       <link rel="stylesheet" href="assets/css/styles.css">
       <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-
+      <title>EasyDates - Discover</title>
+      <link rel="icon" type="image/png" href="assets/img/web/icon.ico">
 </head>
 
 <body>
 
       <header>
-            <h1>Easydates</h1>
+            <img src="assets/img/web/logo.png" alt="EasyDates" id="logo">
       </header>
 
       <main>
@@ -43,7 +43,7 @@ if (!isset($_SESSION["user_id"])) {
             $user_genre = $results[0]['genre'];
             $user_preference = $results[0]['sexual_preference'];
             $user_location = $results[0]['location'];
-            
+
             //$user_location tiene formato 'lat, long' y hay que separarlo en dos variables
             $user_lat = substr($user_location, 0, strpos($user_location, ','));
             $user_long = substr($user_location, strpos($user_location, ',') + 1);
@@ -142,15 +142,26 @@ if (!isset($_SESSION["user_id"])) {
             <div class="container">
                   <div id="discover-profiles">
                         <div class="profile-container">
-                              <!-- <img id="profile-image" src="" alt="Profile Image"> -->
+                              <!-- <img id="discover-image" src="" alt="Profile Image"> -->
                               <div id="profile-info">
                                     <p id="user-name">Username <span id="user-age">Age</span></p>
                               </div>
                         </div>
                   </div>
                   <div id="actions">
-                        <button id="nope">Nope</button>
-                        <button id="like">Like</button>
+                        <!-- <button id="nope">Nope</button>
+                        <button id="like">Like</button> -->
+                        <button id="nope" class="discover-actionButton nope-button">
+                              <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M18 6 6 18"></path>
+                                    <path d="m6 6 12 12"></path>
+                              </svg>
+                        </button>
+                        <button id="like" class="discover-actionButton like-button">
+                              <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"></path>
+                              </svg>
+                        </button>
                   </div>
             </div>
 
@@ -203,9 +214,21 @@ if (!isset($_SESSION["user_id"])) {
       <footer>
             <nav>
                   <ul>
-                        <li><a href="discover.php">Descobrir</a></li>
-                        <li><a href="messages.php">Missatges</a></li>
-                        <li><a href="profile.php">Perfil</a></li>
+                        <li>
+                              <a href="discover.php">
+                                    <img class="footer-icons" src="assets/img/web/search.png" alt="Logout">
+                              </a>
+                        </li>
+                        <li>
+                              <a href="messages.php">
+                                    <img class="footer-icons" src="assets/img/web/message.png" alt="Logout">
+                              </a>
+                        </li>
+                        <li>
+                              <a href="profile.php">
+                                    <img class="footer-icons" src="assets/img/web/user.png" alt="Logout">
+                              </a>
+                        </li>
                   </ul>
             </nav>
       </footer>
