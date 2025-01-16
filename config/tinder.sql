@@ -5,7 +5,7 @@ DROP DATABASE IF EXISTS tinder;
 CREATE DATABASE tinder;
 USE tinder;
 
--- Tabla usuarios
+-- Tabla users
 CREATE TABLE users (
     id INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(255) NOT NULL,
@@ -19,8 +19,6 @@ CREATE TABLE users (
     email VARCHAR(255) UNIQUE NOT NULL,
     created_at DATE NOT NULL
 );
-
-
 
 -- Tabla fotos_Usuarios
 CREATE TABLE user_images (

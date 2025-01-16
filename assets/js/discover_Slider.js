@@ -68,10 +68,10 @@ async function loadRandomProfile() {
   container.innerHTML = `
     <div class="profile-container">
       <div class="slider">
-        <img class="profile-image" src="${
+        <img class="discover-image" src="${
           profile.images.split(",")[0]
         }" alt="Profile Image">
-        <img class="profile-image" src="${
+        <img class="discover-image" src="${
           profile.images.split(",")[1]
         }" alt="Profile Image" style="display: none;">
       </div>
@@ -127,10 +127,10 @@ async function loadNextProfile() {
   container.innerHTML = `
     <div class="profile-container">
       <div class="slider">
-        <img class="profile-image" src="${
+        <img class="discover-image" src="${
           profile.images.split(",")[0]
         }" alt="Profile Image">
-        <img class="profile-image" src="${
+        <img class="discover-image" src="${
           profile.images.split(",")[1]
         }" alt="Profile Image" style="display: none;">
       </div>
@@ -155,7 +155,7 @@ async function loadNextProfile() {
 
 // Configurar el slider
 function setupSlider() {
-  const images = document.querySelectorAll(".profile-image");
+  const images = document.querySelectorAll(".discover-image");
   const dots = document.querySelectorAll(".dot");
   let currentIndex = 0;
 
