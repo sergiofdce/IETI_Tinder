@@ -23,14 +23,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             header("Location: discover.php");
         } else {
             $message = "Datos incorrectos";
-            $emailErrorClass = "borderError";
-            $passwordErrorClass = "borderError";
+            $passwordErrorClass = "form__field--error";
             logEvent("login_failure", "El usuario " . $_POST["email"] . " ha fallado la contraseña", $_POST["email"]);
         }
     } else {
         $message = "Rellene ambos campos";
-        $emailErrorClass = "borderError";
-        $passwordErrorClass = "borderError";
         logEvent("login_failure", "Se ha introducido uno o varios campos vacíos", "empty");
     }
 }

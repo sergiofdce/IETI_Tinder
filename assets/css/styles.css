@@ -366,6 +366,23 @@
             font-weight: 700;
       }
 
+      /* Error input */
+
+            .form__field--error {
+                  border-color: red;
+                  /* Cambia el color del borde a rojo */
+            }
+      
+            .form__field--error:focus {
+                  border-color: red;
+                  /* Cambia el borde a rojo cuando está enfocado */
+            }
+      
+            .form__label--error {
+                  color: red;
+                  /* Cambia el color del texto de la etiqueta a rojo */
+            }
+
       /* reset input */
       .form__field:required,
       .form__field:invalid {
