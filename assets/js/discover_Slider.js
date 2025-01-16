@@ -26,7 +26,7 @@ document.addEventListener("DOMContentLoaded", function () {
     container.innerHTML = "";
     const message = document.createElement("p");
     message.setAttribute("class", "no-profiles-message");
-    message.textContent = "No hi ha perfils disponibles";
+    message.textContent = "No hay perfiles disponibles";
     container.appendChild(message);
     return;
   }
@@ -43,7 +43,7 @@ async function loadRandomProfile() {
     container.innerHTML = "";
     const message = document.createElement("p");
     message.setAttribute("class", "no-profiles-message");
-    message.textContent = "No hi ha perfils disponibles";
+    message.textContent = "No hay perfiles disponibles";
     container.appendChild(message);
     return;
   }
@@ -103,7 +103,7 @@ async function loadNextProfile() {
     container.innerHTML = "";
     const message = document.createElement("p");
     message.setAttribute("class", "no-profiles-message");
-    message.textContent = "No hi ha perfils disponibles";
+    message.textContent = "No hay perfiles disponibles";
     container.appendChild(message);
     return;
   }

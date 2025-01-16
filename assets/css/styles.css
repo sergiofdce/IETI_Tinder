@@ -19,13 +19,28 @@
       ==================================================
       1. Variables y configuración
       ==================================================
-      - Paleta de colores principal
-      - Paleta de colores secundaria
+      - Paleta de colores
       - Variables para modo oscuro
       - Fuentes
-      - Espaciados
-      - Breakpoints
 */
+      /* Paleta de colores */
+      :root {
+            --a-focus-color: #510743;
+            --secondary-color: #383d77;
+      }
+
+      /* Modo oscuro */
+
+      /* Fuentes */
+      body {
+            font-family: "Roboto", serif;
+      }
+
+      .fuente-titulos {
+            font-family: "Funnel Display", serif;
+            color: var(--secondary-color)
+      }
+
 
 /* 
       ==================================================
@@ -149,7 +164,7 @@
       }
 
       a:hover, a:focus {
-            color: #0056b3;
+            color: var(--a-focus-color);
       }
 
 /* 
@@ -275,6 +290,7 @@
             margin: 0 auto;
       }
       #login-eslogan {
+            color: var(--secondary-color);
             font-size: 30px;
             font-weight: 500;
             justify-self: center;
@@ -282,7 +298,7 @@
 
       /* Error Message */
       .login-alert{
-            color: red;
+            color: var(--a-focus-color);
             font-size: 25px;
             margin-top: 10px;
             justify-self: center;
@@ -616,6 +632,53 @@
             background-color: #bbb;
       }
 
+      /* Match Popout */
+      #showMatch {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            border: 1px solid black;
+            padding: 10px;
+            background-color: white;
+            width: 340px;
+            height: auto;
+            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
+            z-index: 1000;
+            text-align: center;
+            border-radius: 20px;
+      }
+
+      #matchTitle {
+            margin-bottom: 30px;
+            font-size: 50px;
+            font-family: "Funnel Display", serif;
+      }
+
+      #closeMatch1 {
+            font-size: 18px;
+            margin-bottom: 20px;
+            margin-right: 10px;
+            padding: 10px 20px;
+            background-color: #af4ca8;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+      }
+
+      #closeMatch2 {
+            font-size: 18px;
+            margin-right: 10px;
+            padding: 10px 20px;
+            background-color: #af4ca8;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+      }
+
       /* 6.4 Profile */
       .container-cabecera {
             display: flex;
@@ -637,12 +700,14 @@
             flex-direction: column;
             gap: 15px;
             width: 100%;
+            font-size: 18px;
       }
 
       .profile-form .input-group {
             display: flex;
             align-items: center;
             gap: 10px;
+            
       }
 
       .profile-form label {
@@ -660,6 +725,7 @@
             width: 100%;
             max-width: 300px;
             box-sizing: border-box;
+            font-size: 16px;
       }
 
       .profile-form input[type="submit"] {
@@ -682,6 +748,7 @@
             justify-content: space-between;
             align-items: center;
             width: 100%;
+            font-size: 18px;
       }
 
       /* Mapa */
@@ -717,6 +784,144 @@
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
       }
 
+
+      /* 6.4 Mensajes */
+
+
+      /* Matches */
+      #messages-matches {
+            height: 220px;
+            align-items: center;
+      }
+
+      .messages-no-content {
+            margin: 10px;
+            margin-top: 40px;
+            font-size: 19px;
+            text-align: center;
+      }
+      #matches-container {
+            display: flex;
+            padding: 10px;
+            border-radius: 10px;
+            gap: 10px;
+            scroll-snap-type: x mandatory;
+            scroll-behavior: smooth;
+            overflow-x: hidden;
+      }
+
+      #matches-container:hover {
+            overflow-x: auto;
+            scrollbar-width: thin;
+            scrollbar-color: #888 #f5f5f5;
+      }
+
+      .match-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            width: 100px;
+            flex: 0 0 auto;
+            scroll-snap-align: center;
+      }
+
+      .match-item img {
+            width: auto;
+            height: 100px;
+            border-radius: 10%;
+            object-fit: cover;
+      }
+
+      .match-name {
+            margin-top: 5px;
+            font-size: 17px;
+            color: #333;
+      }
+
+
+      /* Mensajes */
+      #conversaciones-container {
+            padding: 10px;
+            border-radius: 10px;
+            gap: 10px;
+            display: flex;
+            flex-direction: column;
+            margin-top: 20px;
+            height: 405px;
+            overflow-y: hidden;
+            scrollbar-width: thin;
+            scrollbar-color: #888 #f5f5f5;
+            scroll-snap-type: x mandatory;
+            scroll-behavior: smooth;      
+      }
+
+      #conversaciones-container:hover {
+            overflow-y: auto;
+            scrollbar-width: thin;
+            scrollbar-color: #888 #f5f5f5;
+      }
+
+      #messages-conversaciones {
+            align-items: center;
+      }
+
+      #messages-conversaciones p {
+            margin: 10px;
+            margin-top: 40px;
+      }
+      .conversation-item {
+            display: flex;
+            align-items: center;
+            padding: 10px;
+            background-color: #fff;
+            border-radius: 10px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+      }
+
+      /* Efecto al pasar el mouse sobre la conversación */
+      .conversation-item:hover {
+            background-color: #f9f9f9;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+      }
+
+      /* Estilo para la foto de perfil */
+      .contenedor-foto-conversation {
+            width: 60px;
+            height: 60px;
+            margin-right: 15px;
+            border-radius: 50%;
+            overflow: hidden;
+      }
+
+      /* Foto de perfil */
+      .contenedor-foto-conversation img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+      }
+
+      /* Detalles de la conversación */
+      .conversation-details {
+            flex: 1;
+      }
+
+      /* Nombre del usuario */
+      .conversation-name {
+            font-weight: bold;
+            font-size: 20px;
+            color: #333;
+            margin-bottom: 5px;
+      }
+
+      /* Último mensaje */
+      .last-message {
+            font-size: 16px;
+            color: #555;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+      }
 
 
 /* 

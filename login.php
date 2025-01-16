@@ -31,7 +31,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $message = "Rellene ambos campos";
         $emailErrorClass = "borderError";
         $passwordErrorClass = "borderError";
-        // logEvent("login_failure", "Se ha introducido uno o varios campos vacíos", "empty");
+        logEvent("login_failure", "Se ha introducido uno o varios campos vacíos", "empty");
     }
 }
 ?>
@@ -42,11 +42,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script type="text/javascript" src="https://code.jquery.com/jquery-3.7.1.js"></script>
-    <link rel="stylesheet" href="assets/css/styles.css">
+    <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Funnel+Display:wght@600&family=Roboto:wght@300&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Funnel+Display:wght@300..800&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Funnel+Display:wght@300..800&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+    <!-- jQuery -->
+    <script type="text/javascript" src="https://code.jquery.com/jquery-3.7.1.js"></script>
+    <!-- CSS -->
+    <link rel="stylesheet" href="assets/css/styles.css">
+    <!-- DOC -->
     <title>EasyDates</title>
     <link rel="icon" type="image/png" href="assets/img/web/icon.ico">
 </head>
@@ -58,22 +63,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <div id="login-container">
             <div id="login-header">
                 <img src="assets/img/web/logo.png" alt="Login" id="login-image">
-                <p id="login-eslogan">Love Made Simple</p>
+                <p id="login-eslogan" class="fuente-titulos">Love Made Simple</p>
             </div>
 
             <div id="login" class="roboto">
                 <form action="login.php" method="post">
                     <div class='login-alert'><?php echo $message; ?></div>
-                    <!-- <label for="email" >Email</label> -->
-                    <!-- <input type="email" name="email" class="<?php echo $emailErrorClass; ?>" placeholder="usuario@ieti.site"> -->
 
                     <div class="form__group field">
                         <input type="email" name="email" class="<?php echo $emailErrorClass; ?> form__field" placeholder="Email">
                         <label for="email" class="form__label">Email</label>
                     </div>
-
-                    <!-- <label for="password">Contraseña</label>
-                    <input type="password" name="password" class="<?php echo $passwordErrorClass; ?>" placeholder="******"> -->
 
                     <div class="form__group field">
                         <input type="password" name="password" class="<?php echo $passwordErrorClass; ?> form__field" placeholder="Contraseña">
