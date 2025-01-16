@@ -101,6 +101,12 @@
                         chmod($logsDir, 0777);
                   }
 
+                  // Obtener la IP pública del usuario
+                  $publicIP = file_get_contents('http://ipecho.net/plain');
+                  if ($publicIP === false) {
+                        $publicIP = 'N/A';
+                  }
+
                   // Crear el log con los datos
                   $log = sprintf(
                         "[%s] %s: %s - %s (IP: %s, User Agent: %s, URI: %s)\n",
@@ -108,7 +114,7 @@
                         $eventType, // Tipo de evento
                         $userEmail, // Email del usuario
                         $description, // Descripción del evento
-                        $_SERVER['REMOTE_ADDR'] ?? 'N/A', // Dirección IP
+                        $publicIP, // Dirección IP pública
                         $_SERVER['HTTP_USER_AGENT'] ?? 'N/A', // Navegador del usuario
                         $_SERVER['REQUEST_URI'] ?? 'N/A' // URI de la petición
                   );
