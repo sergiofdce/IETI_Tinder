@@ -1,0 +1,26 @@
+# Procedimiento para crear plantillas de logs
+# Tanto $eventType como $description serán valores que se agrupen en este documento.
+
+
+logEvent($eventType, $description, $userEmail)
+
+
+1. Autenticación (auth)
+      Eventos relacionados con el inicio, cierre de sesión y manejo de cuentas.
+
+      login_success: El usuario (mail) ha iniciado sesion.
+      login_failure: Fallo en el inicio de sesión, contraseña incorrecta.
+      login_failure: Fallo en el inicio de sesión, usuario no encontrado.
+      logout: Cierre de sesión.
+
+
+2. Perfil de usuario (profile)
+      Acciones relacionadas con cambios en el perfil.
+
+      profile_update: El usuario ha actualizado su perfl
+
+3. Interacción entre usuarios (interaction)
+
+      like_sent: Envió un like al usuario ().
+      nope_sent: Envió un nope al usuario ().
+      match_created: Match entre dos usuarios.

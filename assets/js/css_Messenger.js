@@ -22,14 +22,6 @@ function typeMessenger(type) {
             notification.classList.add("divNotiNope");
             notification.innerText = "Lo siento, no es una coincidencia.";
             break;
-        case 'success':
-            notification.classList.add("divNotiSuccess");
-            notification.innerText = "¡Cambio realizado con éxito!";
-            break;
-        case 'warning':
-            notification.classList.add("divNotiWarning");
-            notification.innerText = "¡Advertencia! Algo podría no estar bien.";
-            break;
         default:
             notification.classList.add("divNotiOther");
             notification.innerText = "Notificación sin tipo específico.";

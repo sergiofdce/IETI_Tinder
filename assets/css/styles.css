@@ -1,4 +1,3 @@
-
 /* 
       ==================================================
       Índice de contenido
@@ -20,13 +19,28 @@
       ==================================================
       1. Variables y configuración
       ==================================================
-      - Paleta de colores principal
-      - Paleta de colores secundaria
+      - Paleta de colores
       - Variables para modo oscuro
       - Fuentes
-      - Espaciados
-      - Breakpoints
 */
+      /* Paleta de colores */
+      :root {
+            --a-focus-color: #510743;
+            --secondary-color: #383d77;
+      }
+
+      /* Modo oscuro */
+
+      /* Fuentes */
+      body {
+            font-family: "Roboto", serif;
+      }
+
+      .fuente-titulos {
+            font-family: "Funnel Display", serif;
+            color: var(--secondary-color)
+      }
+
 
 /* 
       ==================================================
@@ -56,97 +70,11 @@
       }
 
       /* 2.3 Estilos base para body y etiquetas */
-      /*body {
-            margin: 0 auto;
-            width: 100%;
-            max-width: 460px;
-            height: 90vh;
-            max-height: 870px;
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            border-radius: 30px;
-            border: 1px solid #ccc;
-      }
-
-      header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 10px 20px;
-            background-color: #f1f1f1;
-            border-bottom: 1px solid #ccc;
-            border-top-left-radius: 30px;
-            border-top-right-radius: 30px;
-            height: 70px;
-      }
-
-      main {
-            height: calc(100% - 70px - 60px);
-            padding: 20px;
-            background-color: #ffffff;
-      }
-
-      .container {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            height: 100%;
-            background-color: #f1f1f1;
-      }
-
-      footer {
-            height: 60px;
-            background-color: #f1f1f1;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            border-top: 1px solid #ccc;
-            border-bottom-left-radius: 30px;
-            border-bottom-right-radius: 30px;
-            z-index: 9999;
-            width: 100%;
-
-      }
-
-      footer nav {
-            width: 100%;
-            max-width: 460px;
-            padding: 0 20px;
-      }
-
-      footer nav ul {
-            display: flex;
-            justify-content: space-around;
-            list-style-type: none;
-            margin: 0;
-            padding: 0;
-      }
-
-      footer nav ul li {
-            display: inline-block;
-      }
-
-      footer nav ul li a {
-            text-decoration: none;
-            color: #333;
-            font-size: 16px;
-            font-weight: bold;
-            padding: 10px;
-            transition: color 0.3s, transform 0.3s;
-      }*/
-      /*nueva estructura principal*/
-
       body {
             margin: 0 auto;
             width: 100%;
             max-width: 460px;
-            height: 90vh;
-            min-height: 100vh; /* Asegura que el body ocupe al menos toda la altura de la pantalla */
-        
-            /*max-height: 870px;*/
+            height: 870px;
             position: absolute;
             top: 50%;
             left: 50%;
@@ -156,23 +84,27 @@
       }
 
       header {
+            background-color: #b1a6db;
             display: flex;
             justify-content: space-between;
             align-items: center;
             padding: 10px 20px;
-            background-color: #f1f1f1;
-            border-bottom: 1px solid #ccc;
             border-top-left-radius: 30px;
             border-top-right-radius: 30px;
             height: 70px;
+            color: #fff;
+      }
+
+      header img {
+            width: 180px;
+            height: auto;
       }
 
       main {
             height: calc(100% - 70px - 60px);
             padding: 20px;
             background-color: #ffffff;
-            overflow: auto; /* Esto asegura que el contenido se desplace cuando sea necesario */
-}
+      }
 
       .container {
             display: flex;
@@ -180,24 +112,18 @@
             align-items: center;
             justify-content: center;
             height: 100%;
-            background-color: #f1f1f1;
       }
 
       footer {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            height: 60px; /* Ajusta la altura del footer */
-            background-color: #f1f1f1;
+            background-color: #b1a6dbb1;
+            color: #fff;
+            height: 60px;
             display: flex;
             justify-content: center;
             align-items: center;
             border-bottom-left-radius: 30px;
             border-bottom-right-radius: 30px;
-            z-index: 9999; /* Asegura que el footer esté por encima de otros elementos */
-}
-
+      }
 
       footer nav {
             width: 100%;
@@ -225,17 +151,11 @@
             padding: 10px;
             transition: color 0.3s, transform 0.3s;
       }
-         /* 2.5 Estilos base para Links */
-         a {
-            text-decoration: none;
-            color: inherit;
+
+      .footer-icons {
+            width: 24px;
+            height: 24px;
       }
-
-      a:hover, a:focus {
-            color: #0056b3;
-      }
-
-
 
       /* 2.5 Estilos base para Links */
       a {
@@ -244,7 +164,7 @@
       }
 
       a:hover, a:focus {
-            color: #0056b3;
+            color: var(--a-focus-color);
       }
 
 /* 
@@ -258,61 +178,75 @@
       - Tamaños de fuente
 */
 
+/* 
+      ==================================================
+      4. Componentes comunes
+      ==================================================
+      - Botones
+      - Formularios
+      - Tarjetas de perfil
+      - Mensajes de error/éxito
+      - Notificaciones
+      - Modales
+      - Inputs
+*/
 
-     /* 4.5 Notificaciones CSS */
-.notification-container {
-      position: fixed;
-      text-align: center;
-      width:60%;
-      bottom: 30px; /* Ajusta esto para moverlas un poco más arriba */
-      right: 20px;
-      display: flex;
-      flex-direction: column-reverse;
-      gap: 15px; /* Ajuste en el espacio entre notificaciones */
-      max-width: 400px; /* Aumenta el ancho máximo */
-      margin-bottom: 30px;
-  }
+
+
+      /* 4.5 Notificaciones CSS */
+      .notification-container {
+            position: fixed;
+            text-align: center;
+            width: 70%;
+            top: 100px; /* Ajusta esto para moverlas un poco más arriba */
+            right: 70px;
+            display: flex;
+            flex-direction: column-reverse;
+            gap: 15px; /* Ajuste en el espacio entre notificaciones */
+            max-width: 400px; /* Aumenta el ancho máximo */
+            margin-bottom: 30px;
+      }
   
-  /* Notificación */
-  .messenger {
-      padding: 15px;
-      border-radius: 10px; /* Aumenta el radio para que sea más redondeado */
-      color: white;
-      font-size: 12px; /* Aumenta el tamaño de la fuente */
-      opacity: 1;
-      animation: fadeOut 6s forwards;
-      box-sizing: border-box; /* Asegura que el padding no afecte el tamaño */
-  }
-  
-  /* Estilos de notificación */
-  .divNotiError {
-      background-color: #e53935;
-  }
-  
-  .divNotiLike {
-      background-color: #4caf50;
-  }
-  
-  .divNotiNope {
-      background-color: #fb8c00;
-  }
-  
-  .divNotiOther {
-      background-color: #1e88e5;
-  }
-  
-  .divNotiSuccess {
-      background-color: green;
-  }
-  
-  .divNotiWarning {
-      background-color: orange;
-  }
-  
-  .divNotiInfo {
-      background-color: blue;
-  }
-  
+      /* Notificación */
+      .messenger {
+            padding: 15px;
+            border-radius: 10px; /* Aumenta el radio para que sea más redondeado */
+            color: white;
+            font-size: 20px; /* Aumenta el tamaño de la fuente */
+            opacity: 1;
+            animation: fadeOut 6s forwards;
+            box-sizing: border-box; /* Asegura que el padding no afecte el tamaño */
+      }
+      
+      /* Estilos de notificación */
+      .divNotiError {
+            background-color: #e53935;
+      }
+      
+      .divNotiLike {
+            background-color: #4caf50;
+      }
+      
+      .divNotiNope {
+            background-color: #fb8c00;
+      }
+      
+      .divNotiOther {
+            background-color: #1e88e5;
+      }
+      
+      .divNotiSuccess {
+            background-color: green;
+      }
+      
+      .divNotiWarning {
+            background-color: orange;
+      }
+      
+      .divNotiInfo {
+            background-color: blue;
+      }
+      
 
 
 /* 
@@ -340,182 +274,167 @@
       - Admin Panel
 */
 
-      /* 6.5 Mensajes */
+      /* 6.4 Login */
 
-      /* Contenedor para todo el contenido de la página */
-      .container-messenger {
-            margin-top: 50px;
-            width: 100%;
-            max-width: 480px;
+      #login {
+            background-color: #b1a6db;
+      }
+      #login-header {
+            margin-bottom: 100px;
+      }
+
+      /* Header */
+      #login-image {
+            width: 400px;
+            display: block;
             margin: 0 auto;
-            padding: 10px;
-            box-sizing: border-box;
-        }
-
-        /* Contenedor para los "matches" */
-        .container-matches {
-            display: flex;
-            flex-wrap: nowrap;
-            overflow-x: auto;
-            gap: 20px;
-            padding: 10px 0;
-            margin-bottom: 20px;
-        }
-
-     
-
-        .title-messenger {
-            margin-bottom: 10px;
-            font-size: 20px;
-        }
-
-        /* Estilos para los elementos "match" */
-        .match-item {
-            min-width: 100px;
-            height: 100px;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            align-items: center;
-            text-align: center;
-            font-size: 16px;
-            box-sizing: border-box;
-            overflow: hidden;
-            transition: all 0.3s ease-in-out;
-        }
-
-        /* Estilos para los elementos de conversación */
-        .conversation-item {
-            width: 200px;
-            height: 100px; /* Permite que la altura cambie dinámicamente según el contenido */
-            display: flex;
-            justify-content: flex-start;
-            align-items: center;
-            font-size: 16px;
-            overflow: hidden; 
-            transition: all 0.3s ease-in-out;
-            flex-shrink: 0;
-        }
-
-                
-                /* Efectos al pasar el cursor sobre los items */
-        .match-item:hover, .conversation-item:hover {
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            transform: none; /* Elimina la expansión del tamaño */
-        }
-
-        /* Estilos para el contenedor de la foto */
-        .contenedor-foto-match {
-            width: 60%;
-            height: 60%;
-            margin-bottom: 3px; /* Espaciado para separar la foto del contenido */
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-
-        /* Estilos para las imágenes */
-        .match-item img {
-            width: 100%;
-            height: 100%;
-            border-radius: 50%;
-            
-            padding: 5px;
-            object-fit: cover;
-        }
-
-        /* Estilos para los nombres y mensajes */
-        .match-name {
-            font-size: 10px;
+      }
+      #login-eslogan {
+            color: var(--secondary-color);
+            font-size: 30px;
             font-weight: 500;
-            color: black; /* Cambiado a negro */
-            margin-top: 0px;
-            margin-bottom: 10px;
-        }
+            justify-self: center;
+      }     
 
-       
-        
-    /* Estilos para las conversaciones */
-    .container-conversaciones {
-        display: flex;
-        flex-direction: column;
-        justify-content: left;
-        overflow-y: auto;
-        width: 100%;
-        height: 355px; /* Altura fija para habilitar el scroll */
-        margin-top: 0px;
-    }
+      /* Error Message */
+      .login-alert{
+            color: var(--a-focus-color);
+            font-size: 25px;
+            margin-top: 10px;
+            justify-self: center;
+      }
 
-    /* Estilo para cada item de la conversación */
-    .conversation-item {
-        display: flex;
-        align-items: center;
-        width: 100%;
-        height: 80px;
-        margin-bottom: 15px;
-        padding: 10px;
-        box-sizing: border-box;
-        transition: all 0.3s ease-in-out;
-        flex-shrink: 0;
-    }
+      /* Inputs */
+      .form__group {
+            position: relative;
+            padding: 20px 20px 0;
+            margin-bottom: 20px;
+            width: 100%;
+      }
 
-    /* Contenedor para la foto de la conversación */
-    .contenedor-foto-conversation {
-        width: 60px; /* Establecemos un tamaño fijo */
-        height: 60px; /* Debe ser el mismo que el ancho */
-        margin-bottom: 3px;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        margin-right: 10px;
-    }
+      .form__field {
+            font-family: inherit;
+            width: 100%;
+            border: none;
+            border-bottom: 2px solid #fff;
+            /* Borde blanco */
+            outline: 0;
+            font-size: 17px;
+            color: #fff;
+            padding: 7px 0;
+            background: transparent;
+            transition: border-color 0.2s;
+      }
 
-    /* Estilo para las imágenes dentro de la conversación */
-    .conversation-item img {
-        width: 100%;
-        height: 100%;
-        padding: 3px;
-        border: 3px solid black;
-        border-radius: 50%; /* Esto hace la imagen redonda */
-        object-fit: cover; /* Hace que la imagen se ajuste dentro del contenedor sin distorsionarse */
-    }
+      .form__field::placeholder {
+            color: transparent;
+      }
 
-    /* Contenedor para el nombre y mensaje de la conversación */
-    .conversation-details {
-        display: flex;
-        flex-direction: column;
-    }
+      .form__field:placeholder-shown~.form__label {
+            font-size: 17px;
+            cursor: text;
+            top: 20px;
+      }
 
-    .conversation-name {
-        font-size: 14px;
-        font-weight: bold;
-        color: black;
-        margin-bottom: 0px;
-    }
+      .form__label {
+            position: absolute;
+            top: 0;
+            display: block;
+            transition: 0.2s;
+            font-size: 17px;
+            color: #fff;
+            /* Color blanco para la etiqueta */
+            pointer-events: none;
+      }
 
-    .last-message {
-        font-size: 12px;
-        color: #2F418F;
-    }
+      .form__field:focus {
+            padding-bottom: 6px;
+            font-weight: 700;
+            border-width: 3px;
+            border-color: #fff;
+            /* Borde blanco cuando el campo está enfocado */
+      }
 
-    .conversation-item:hover {
-        box-shadow: none;
-        
-    }
+      .form__field:focus~.form__label {
+            position: absolute;
+            top: 0;
+            display: block;
+            transition: 0.2s;
+            font-size: 17px;
+            color: #fff;
+            /* Color blanco para la etiqueta cuando está enfocada */
+            font-weight: 700;
+      }
 
-    .no-results-message {
-      width: 100%;
-      text-align: center;
-      font-size: 18px;
-      color: #333;
-      font-weight: bold;
-      margin-top: 30px;
-      padding: 10px;
-      background-color: #f8d7da;
-      border: 1px solid #f5c6cb;
-      border-radius: 5px;
-  }
-  
+      /* Error input */
+
+            .form__field--error {
+                  border-color: red;
+                  /* Cambia el color del borde a rojo */
+            }
+      
+            .form__field--error:focus {
+                  border-color: red;
+                  /* Cambia el borde a rojo cuando está enfocado */
+            }
+      
+            .form__label--error {
+                  color: red;
+                  /* Cambia el color del texto de la etiqueta a rojo */
+            }
+
+      /* reset input */
+      .form__field:required,
+      .form__field:invalid {
+            box-shadow: none;
+      }
+
+
+      /* Boton Login */
+      .styled-submit {
+            width: 200px;
+            margin: 20px;
+            margin-right: 20px;
+            padding: 12px 20px;
+            border: 2px solid #fff;
+            border-radius: 25px;
+            background: transparent;
+            color: #fff;
+            font-size: 17px;
+            font-weight: 700;
+            text-transform: uppercase;
+            cursor: pointer;
+            outline: none;
+            transition: background-color 0.2s, border-color 0.2s;
+            float: right;
+      }
+
+      .styled-submit:hover {
+            background-color: #fff;
+            color: #b1a6db;
+            border-color: #b1a6db;
+      }
+
+      .styled-submit:focus {
+            background-color: #fff;
+            color: #b1a6db;
+            border-color: #b1a6db;
+            outline: none;
+      }
+
+      /* Enlaces Login */
+      #login-links{
+            margin-top: 140px;
+            padding: 20px;
+      }
+      .login-link {
+            color: #fff;
+            font-size: 20px;
+            font-weight: 500;
+            text-decoration: none;
+            transition: .3s;
+            margin-top: 10px;
+      }
 
 
 
@@ -533,14 +452,18 @@
             margin-bottom: 20px;
             height: 500px;
             overflow: hidden;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
+            border-radius: 30px;
       }
 
       .profile-container {
-
+            display: flex;
+            flex-direction: column;
+            align-items: center;
             width: 100%;
             height: 100%;
             transition: transform 0.3s ease-out;
-            cursor: grab;
+            /* cursor: grab; */
             background: white;
             border-radius: 10px;
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
@@ -559,15 +482,25 @@
       #profile-info {
             position: absolute;
             bottom: 10px;
-            left: 10px;
             color: #fff;
             text-align: center;
             padding: 10px 0;
             border-radius: 10px 10px 0 0;
+            text-align: center;
+      }
+
+      #profile-info p {
+            display: inline-block;
+            text-align: center;
       }
 
       #user-name {
-            font-size: 23px;
+            font-size: 40px;
+            font-weight: bold;
+      }
+
+      #user-age {
+            font-size: 33px;
             font-weight: bold;
       }
 
@@ -583,15 +516,74 @@
       }
 
 
-      #nope, #like {
-            width: 100px;
-            padding: 15px;
-            font-size: 18px;
-            background-color: #f1f1f1;
-            border: 2px solid #ccc;
-            border-radius: 25px;
+
+
+      .discover-actionButton {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            border: none;
             cursor: pointer;
-            transition: background-color 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: white;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            transition: all 0.2s ease;
+      }
+
+      .discover-actionButton:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+      }
+
+      .discover-actionButton:active {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.12);
+      }
+
+      .nope-button {
+            border: 4px solid #ef4444;
+            transition: background-color 0.2s ease;
+      }
+
+      .nope-button:hover {
+            background-color: #ef4444;
+      }
+
+      .nope-button svg {
+            color: #ef4444;
+            transition: transform 0.2s ease;
+      }
+
+      .nope-button:hover svg {
+            transform: scale(1.1);
+            color: white;
+      }
+
+      .like-button {
+            border: 4px solid #22c55e;
+            transition: background-color 0.2s ease;
+      }
+
+      .like-button:hover {
+            background-color: #22c55e;
+      }
+
+      .like-button svg {
+            color: #22c55e;
+            transition: transform 0.2s ease;
+      }
+
+      .like-button:hover svg {
+            transform: scale(1.1);
+            color: white;
+      }
+
+      /* Match window */
+      .blur {
+            filter: blur(5px);
+            pointer-events: none;
       }
 
       /* Stamp Styles */
@@ -623,6 +615,332 @@
       .stamp.visible {
             opacity: 1;
       }
+
+      .slider {
+            position: relative;
+            width: 100%;
+            height: 100%;
+      }
+
+      .discover-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 10px;
+      }
+
+      .paginator {
+            display: flex;
+            justify-content: center;
+            margin-top: 10px;
+      }
+
+      .dot {
+            height: 10px;
+            width: 10px;
+            margin: 0 5px;
+            background-color: #717171;
+            border-radius: 50%;
+            display: inline-block;
+            transition: background-color 0.6s ease;
+      }
+
+      .dot.active {
+            background-color: #bbb;
+      }
+
+      /* Match Popout */
+      #showMatch {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            border: 1px solid black;
+            padding: 10px;
+            background-color: white;
+            width: 340px;
+            height: auto;
+            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
+            z-index: 1000;
+            text-align: center;
+            border-radius: 20px;
+      }
+
+      #matchTitle {
+            margin-bottom: 30px;
+            font-size: 50px;
+            font-family: "Funnel Display", serif;
+      }
+
+      #closeMatch1 {
+            font-size: 18px;
+            margin-bottom: 20px;
+            margin-right: 10px;
+            padding: 10px 20px;
+            background-color: #af4ca8;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+      }
+
+      #closeMatch2 {
+            font-size: 18px;
+            margin-right: 10px;
+            padding: 10px 20px;
+            background-color: #af4ca8;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+      }
+
+      /* 6.4 Profile */
+      .container-cabecera {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+      }
+
+      .profile-image {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            object-fit: cover;
+      }
+      /* Form */
+      .profile-form {
+            margin-top: 30px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            width: 100%;
+            font-size: 18px;
+      }
+
+      .profile-form .input-group {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            
+      }
+
+      .profile-form label {
+            width: 120px;
+            font-weight: bold;
+      }
+
+      .profile-form input[type="text"],
+      .profile-form input[type="date"],
+      .profile-form input[type="password"] {
+            padding: 8px;
+            font-size: 14px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            width: 100%;
+            max-width: 300px;
+            box-sizing: border-box;
+            font-size: 16px;
+      }
+
+      .profile-form input[type="submit"] {
+            padding: 10px;
+            font-size: 16px;
+            color: white;
+            background-color: #af4ca8;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+      }
+
+      .profile-form input[type="submit"]:hover {
+            background-color: #9c3e8d;
+      }
+      .re-pie {
+            margin-top: 50px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+            font-size: 18px;
+      }
+
+      /* Mapa */
+      .input-group {
+            position: relative;
+      }
+
+      #location {
+            padding-right: 30px;
+            /* Añadir espacio para la chincheta */
+      }
+
+      #location-icon {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            cursor: pointer;
+      }
+
+      #map-container {
+            display: none;
+            position: absolute;
+            top: 200px;
+            /* Ajusta según sea necesario */
+            left: 50px;
+            /* Ajusta según sea necesario */
+            width: 80%;
+            height: 500px;
+            z-index: 1000;
+            background: white;
+            border: 1px solid #ccc;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      }
+
+
+      /* 6.4 Mensajes */
+
+
+      /* Matches */
+      #messages-matches {
+            height: 220px;
+            align-items: center;
+      }
+
+      .messages-no-content {
+            margin: 10px;
+            margin-top: 40px;
+            font-size: 19px;
+            text-align: center;
+      }
+      #matches-container {
+            display: flex;
+            padding: 10px;
+            border-radius: 10px;
+            gap: 10px;
+            scroll-snap-type: x mandatory;
+            scroll-behavior: smooth;
+            overflow-x: hidden;
+      }
+
+      #matches-container:hover {
+            overflow-x: auto;
+            scrollbar-width: thin;
+            scrollbar-color: #888 #f5f5f5;
+      }
+
+      .match-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            width: 100px;
+            flex: 0 0 auto;
+            scroll-snap-align: center;
+      }
+
+      .match-item img {
+            width: auto;
+            height: 100px;
+            border-radius: 10%;
+            object-fit: cover;
+      }
+
+      .match-name {
+            margin-top: 5px;
+            font-size: 17px;
+            color: #333;
+      }
+
+
+      /* Mensajes */
+      #conversaciones-container {
+            padding: 10px;
+            border-radius: 10px;
+            gap: 10px;
+            display: flex;
+            flex-direction: column;
+            margin-top: 20px;
+            height: 405px;
+            width: 430px;
+            overflow-y: hidden;
+            scrollbar-width: thin;
+            scrollbar-color: #888 #f5f5f5;
+            scroll-snap-type: x mandatory;
+            scroll-behavior: smooth;      
+      }
+
+      #conversaciones-container:hover {
+            overflow-y: auto;
+            scrollbar-width: thin;
+            scrollbar-color: #888 #f5f5f5;
+      }
+
+      #messages-conversaciones {
+            align-items: center;
+      }
+
+      #messages-conversaciones p {
+            margin: 10px;
+            margin-top: 40px;
+      }
+      .conversation-item {
+            display: flex;
+            align-items: center;
+            padding: 10px;
+            background-color: #fff;
+            border-radius: 10px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+      }
+
+      /* Efecto al pasar el mouse sobre la conversación */
+      .conversation-item:hover {
+            background-color: #f9f9f9;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+      }
+
+      /* Estilo para la foto de perfil */
+      .contenedor-foto-conversation {
+            width: 60px;
+            height: 60px;
+            margin-right: 15px;
+            border-radius: 50%;
+            overflow: hidden;
+      }
+
+      /* Foto de perfil */
+      .contenedor-foto-conversation img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+      }
+
+      /* Detalles de la conversación */
+      .conversation-details {
+            flex: 1;
+      }
+
+      /* Nombre del usuario */
+      .conversation-name {
+            font-weight: bold;
+            font-size: 20px;
+            color: #333;
+            margin-bottom: 5px;
+      }
+
+      /* Último mensaje */
+      .last-message {
+            font-size: 16px;
+            color: #555;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+      }
+
 
 /* 
       ==================================================

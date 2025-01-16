@@ -5,22 +5,20 @@ DROP DATABASE IF EXISTS tinder;
 CREATE DATABASE tinder;
 USE tinder;
 
--- Tabla usuarios
+-- Tabla users
 CREATE TABLE users (
     id INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(255) NOT NULL,
     surname VARCHAR(255) NOT NULL,
     alias VARCHAR(100) NOT NULL,
     birth_date DATE NOT NULL,
-    location VARCHAR(75) NOT NULL,  -- Nueva columna location como VARCHAR(75)
+    location VARCHAR(255),
     genre ENUM('home', 'dona', 'no binari'),
     sexual_preference ENUM('heterosexual', 'homosexual', 'bisexual') NOT NULL,
     password VARCHAR(255) NOT NULL,
     email VARCHAR(255) UNIQUE NOT NULL,
     created_at DATE NOT NULL
 );
-
-
 
 -- Tabla fotos_Usuarios
 CREATE TABLE user_images (
@@ -33,13 +31,13 @@ CREATE TABLE user_images (
 
 
 -- Tabla solicitudes
-CREATE TABLE requests (
+CREATE TABLE matches (
     request_id INT AUTO_INCREMENT PRIMARY KEY,
-    sender_id INT NOT NULL,
-    receiver_id INT NOT NULL,
-    status ENUM('pending', 'accepted', 'rejected') DEFAULT 'pending',
-    request_date DATE,
-    like_date DATE NULL,
+    sender_id INT NOT NULL, -- Quien envia LIKE
+    receiver_id INT NOT NULL,   -- Quien recibe LIKE
+    status ENUM('pending', 'accepted', 'rejected'),
+    request_date DATE, -- Fecha en la que se envia el like
+    like_date DATE NULL, -- Fecha en la que se hace match
     FOREIGN KEY (sender_id) REFERENCES users(id) ON DELETE CASCADE,
     FOREIGN KEY (receiver_id) REFERENCES users(id) ON DELETE CASCADE,
     UNIQUE (sender_id, receiver_id)
@@ -56,4 +54,3 @@ CREATE TABLE messages (
     FOREIGN KEY (sender_id) REFERENCES users(id) ON DELETE CASCADE,
     FOREIGN KEY (receiver_id) REFERENCES users(id) ON DELETE CASCADE
 );
-
