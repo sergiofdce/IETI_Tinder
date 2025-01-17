@@ -155,7 +155,6 @@ logEvent("page_view", "El usuario ha accedido a la página Discover", $_SESSION[
             <div class="container">
                   <div id="discover-profiles">
                         <div class="profile-container">
-                              <!-- <img id="discover-image" src="" alt="Profile Image"> -->
                               <div id="profile-info">
                                     <p id="user-name">Username <span id="user-age">Age</span></p>
                               </div>
@@ -198,17 +197,20 @@ logEvent("page_view", "El usuario ha accedido a la página Discover", $_SESSION[
                   <ul>
                         <li>
                               <a href="discover.php">
-                                    <img class="footer-icons" src="assets/img/web/search.png" alt="Logout">
+                                    Descubrir
+                                    <!-- <img class="footer-icons" src="assets/img/web/search.png" alt="Logout"> -->
                               </a>
                         </li>
                         <li>
                               <a href="messages.php">
-                                    <img class="footer-icons" src="assets/img/web/message.png" alt="Logout">
+                                    Mensajes
+                                    <!-- <img class="footer-icons" src="assets/img/web/message.png" alt="Logout"> -->
                               </a>
                         </li>
                         <li>
                               <a href="profile.php">
-                                    <img class="footer-icons" src="assets/img/web/user.png" alt="Logout">
+                                    Perfil
+                                    <!-- <img class="footer-icons" src="assets/img/web/user.png" alt="Logout"> -->
                               </a>
                         </li>
                   </ul>

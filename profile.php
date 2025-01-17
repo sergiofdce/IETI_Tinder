@@ -53,7 +53,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         executeQuery($pdo, $update_query, $update_params);
         echo json_encode(['status' => 'success', 'message' => '¡Cambio realizado con éxito!', 'name' => $name]);
         logEvent("profile_update", "El usuario ha actualizado sus datos", $_SESSION["email"]);
-
     } catch (Exception $e) {
         echo json_encode(['status' => 'error', 'message' => '¡Error! Algo salió mal']);
     }
@@ -155,17 +154,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <ul>
                 <li>
                     <a href="discover.php">
-                        <img class="footer-icons" src="assets/img/web/search.png" alt="Logout">
+                        Descubrir
+                        <!-- <img class="footer-icons" src="assets/img/web/search.png" alt="Logout"> -->
                     </a>
                 </li>
                 <li>
                     <a href="messages.php">
-                        <img class="footer-icons" src="assets/img/web/message.png" alt="Logout">
+                        Mensajes
+                        <!-- <img class="footer-icons" src="assets/img/web/message.png" alt="Logout"> -->
                     </a>
                 </li>
                 <li>
                     <a href="profile.php">
-                        <img class="footer-icons" src="assets/img/web/user.png" alt="Logout">
+                        Perfil
+                        <!-- <img class="footer-icons" src="assets/img/web/user.png" alt="Logout"> -->
                     </a>
                 </li>
             </ul>

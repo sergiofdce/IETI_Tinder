@@ -50,7 +50,7 @@ CREATE TABLE messages (
     sender_id INT NOT NULL,
     receiver_id INT NOT NULL,
     message TEXT,
-    sent_at DATETIME,
+    sent_at DATETIME DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (sender_id) REFERENCES users(id) ON DELETE CASCADE,
     FOREIGN KEY (receiver_id) REFERENCES users(id) ON DELETE CASCADE
 );

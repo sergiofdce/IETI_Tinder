@@ -10,6 +10,76 @@ require_once 'config/db_connection.php';
 include 'includes/functions.php';
 logEvent("page_view", "El usuario ha accedido a la página Messages", $_SESSION["email"]);
 
+// Endpoint para cargar mensajes
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['action'] === 'load') {
+    if (isset($_POST['senderId']) && isset($_POST['receiverId'])) {
+        $senderId = $_POST['senderId'];
+        $receiverId = $_POST['receiverId'];
+
+        $query = "SELECT m.message, m.sent_at, 
+                         CASE 
+                             WHEN m.sender_id = ? THEN 'sender' 
+                             ELSE 'receiver' 
+                         END AS role,
+                         (SELECT ui.path FROM user_images ui WHERE ui.user_id = m.sender_id LIMIT 1) AS 'foto'
+                  FROM messages m
+                  WHERE (m.sender_id = ? AND m.receiver_id = ?) OR (m.sender_id = ? AND m.receiver_id = ?)
+                  ORDER BY m.sent_at ASC";
+        $params = [$senderId, $senderId, $receiverId, $receiverId, $senderId];
+        $messages = executeQuery($pdo, $query, $params);
+
+        echo json_encode($messages);
+    } else {
+        echo json_encode(['error' => true, 'message' => 'Invalid parameters']);
+    }
+    exit;
+}
+
+
+// Endpoint para enviar mensajes
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['action'] === 'send') {
+    if (isset($_POST['senderId']) && isset($_POST['receiverId']) && isset($_POST['message'])) {
+        $senderId = $_POST['senderId'];
+        $receiverId = $_POST['receiverId'];
+        $message = $_POST['message'];
+
+        $query = "INSERT INTO messages (sender_id, receiver_id, message, sent_at) VALUES (?, ?, ?, ?)";
+        $params = [$senderId, $receiverId, $message, date('Y-m-d H:i:s')];
+        $result = executeQuery($pdo, $query, $params);
+
+        if ($result) {
+            echo json_encode(['error' => false, 'message' => 'Mensaje enviado']);
+        } else {
+            echo json_encode(['error' => true, 'message' => 'Error al enviar el mensaje']);
+        }
+    } else {
+        echo json_encode(['error' => true, 'message' => 'Parámetros inválidos']);
+    }
+    exit;
+}
+
+// Endpoint para obtener información del usuario
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['action'] === 'getUserInfo') {
+    if (isset($_POST['userId'])) {
+        $userId = $_POST['userId'];
+
+        $query = "SELECT u.name AS nombre, u.birth_date as fecha_nacimiento, ui.path AS foto
+                  FROM users u
+                  JOIN user_images ui ON u.id = ui.user_id
+                  WHERE u.id = ?";
+        $params = [$userId];
+        $result = executeQuery($pdo, $query, $params);
+
+        if ($result) {
+            echo json_encode($result[0]);
+        } else {
+            echo json_encode(['error' => true, 'message' => 'Usuario no encontrado']);
+        }
+    } else {
+        echo json_encode(['error' => true, 'message' => 'Parámetros inválidos']);
+    }
+    exit;
+}
 ?>
 
 <!DOCTYPE html>
@@ -26,7 +96,8 @@ logEvent("page_view", "El usuario ha accedido a la página Messages", $_SESSION[
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Funnel+Display:wght@300..800&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Funnel+Display:wght@300..800&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
-
+    <!-- Mensajes JS-->
+    <script src="assets/js/messages.js"></script>
 </head>
 
 
@@ -34,9 +105,9 @@ logEvent("page_view", "El usuario ha accedido a la página Messages", $_SESSION[
     <header>
         <img src="assets/img/web/logo.png" alt="EasyDates" id="logo">
     </header>
-    <main>
+    <main id="main-content">
         <div id="messages-matches">
-            <h1 class="title-messenger fuente-titulos">Matches</h1>
+            <h1 class="title-messenger fuente-titulos">Mis Matches</h1>
 
             <div id="matches-container">
                 <?php
@@ -57,7 +128,7 @@ logEvent("page_view", "El usuario ha accedido a la página Messages", $_SESSION[
                         foreach ($resultat as $row) {
                             if (!in_array($row['id'], $displayedUsers)) {
                                 $displayedUsers[] = $row['id'];
-                                echo "<a href='' class='match-item' style='text-decoration: none;'>";
+                                echo "<a href='#' onclick='loadUserMessages(" . $id_usuario . ", " . $row['id'] . ")' class='match-item' style='text-decoration: none;'>";
                                 echo "<div class='contenedor-foto-match'>";
                                 $foto_path = $row['foto'];
                                 $base_url = 'assets/img/seeder/'; //////////////////////////////////////////////////////
@@ -112,7 +183,7 @@ logEvent("page_view", "El usuario ha accedido a la página Messages", $_SESSION[
                         foreach ($resultat as $row) {
                             if (!in_array($row['id'], $displayedUsers)) {
                                 $displayedUsers[] = $row['id'];
-                                echo "<a href='#'>";
+                                echo "<a href='#' onclick='loadUserMessages(" . $id_usuario . ", " . $row['id'] . ")'>";
                                 echo "<div class='conversation-item'>";
                                 echo "<div class='contenedor-foto-conversation'>";
                                 $foto_path = $row['foto'];
@@ -149,17 +220,20 @@ logEvent("page_view", "El usuario ha accedido a la página Messages", $_SESSION[
             <ul>
                 <li>
                     <a href="discover.php">
-                        <img class="footer-icons" src="assets/img/web/search.png" alt="Logout">
+                        Descubrir
+                        <!-- <img class="footer-icons" src="assets/img/web/search.png" alt="Logout"> -->
                     </a>
                 </li>
                 <li>
                     <a href="messages.php">
-                        <img class="footer-icons" src="assets/img/web/message.png" alt="Logout">
+                        Mensajes
+                        <!-- <img class="footer-icons" src="assets/img/web/message.png" alt="Logout"> -->
                     </a>
                 </li>
                 <li>
                     <a href="profile.php">
-                        <img class="footer-icons" src="assets/img/web/user.png" alt="Logout">
+                        Perfil
+                        <!-- <img class="footer-icons" src="assets/img/web/user.png" alt="Logout"> -->
                     </a>
                 </li>
             </ul>
