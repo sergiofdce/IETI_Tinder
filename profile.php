@@ -9,8 +9,8 @@ require_once 'config/db_connection.php';
 include 'includes/functions.php';
 logEvent("page_view", "El usuario ha accedido a la página Profile", $_SESSION["email"]);
 
-$query = "SELECT id, name, surname, alias, birth_date, location, 
-                (SELECT path FROM user_images WHERE user_id = ? LIMIT 1) AS photo 
+$query = "SELECT id, name, surname, alias, birth_date, location, genre, sexual_preference,
+                (SELECT GROUP_CONCAT(path ORDER BY id ASC) FROM user_images WHERE user_id = ?) AS photos 
                 FROM users WHERE id = ?";
 
 $params = [$user_id, $user_id];
@@ -29,32 +29,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $alias = $_POST['username'];
     $birth_date = $_POST['birthdate'];
     $location = $_POST['location'];
-    $password = $_POST['password'];
-    $password2 = $_POST['password2'];
+    $genre = $_POST['genre'];
+    $sexual_preference = $_POST['sexual_preference'];
 
-    if (!empty($password) && $password !== $password2) {
-        echo json_encode(['status' => 'error', 'message' => 'Las contraseñas no coinciden']);
-        exit();
-    }
-
-    $update_query = "UPDATE users SET name = ?, surname = ?, alias = ?, birth_date = ?, location = ?";
-    $update_params = [$name, $surname, $alias, $birth_date, $location];
-
-    if (!empty($password)) {
-        $hashed_password = hash('sha512', $password);
-        $update_query .= ", password = ?";
-        $update_params[] = $hashed_password;
-    }
-
-    $update_query .= " WHERE id = ?";
-    $update_params[] = $user_id;
+    $update_query = "UPDATE users SET name = ?, surname = ?, alias = ?, birth_date = ?, location = ?, genre = ?, sexual_preference = ? WHERE id = ?";
+    $update_params = [$name, $surname, $alias, $birth_date, $location, $genre, $sexual_preference, $user_id];
 
     try {
         executeQuery($pdo, $update_query, $update_params);
         echo json_encode(['status' => 'success', 'message' => '¡Cambio realizado con éxito!', 'name' => $name]);
         logEvent("profile_update", "El usuario ha actualizado sus datos", $_SESSION["email"]);
     } catch (Exception $e) {
-        echo json_encode(['status' => 'error', 'message' => '¡Error! Algo salió mal']);
+        echo json_encode(['status' => 'error', 'message' => '¡Error! Algo salió mal', 'error' => $e->getMessage()]);
+        error_log("Error al actualizar perfil: " . $e->getMessage());
     }
     exit();
 }
@@ -84,67 +71,98 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     <header>
         <img src="assets/img/web/logo.png" alt="EasyDates" id="logo">
+        <div class="dropdown">
+            <button class="dropbtn">...</button>
+            <div class="dropdown-content">
+                <a href="logout.php">Cerrar sesión</a>
+                <a href="#">Modificar contraseña</a>
+                <a href="#">Eliminar cuenta</a>
+            </div>
+        </div>
     </header>
 
     <main>
-        <div>
-            <div class="container-cabecera">
-                <h1 class="fuente-titulos"><?php echo htmlspecialchars($user['name']); ?></h1>
-                <?php
-                $base_url = 'assets/img/seeder/';
-                $photo_path = !empty($user['photo']) ? $user['photo'] : 'default.png';
-                $full_photo_path = $base_url . basename($photo_path);
-
-                if (!file_exists($full_photo_path)) {
-                    $full_photo_path = $base_url . 'default.png';
-                }
-
-                echo "<img src='$full_photo_path' alt='Foto de perfil' class='profile-image'>";
-                ?>
+        <div id="profile-container">
+            <div class="tabs">
+                <button onclick="showTab('mostrar')">Mostrar</button>
+                <button onclick="showTab('editar')">Editar</button>
             </div>
+            <div id="mostrar" class="tab-content">
+                <div class="profile-container">
+                    <div class="slider">
+                        <?php
+                        $photos = explode(',', $user['photos']);
+                        foreach ($photos as $index => $photo) {
+                            $display = $index === 0 ? 'block' : 'none';
+                            echo "<img class='profile-showImage' src='" . htmlspecialchars($photo) . "' alt='Profile Image' style='display: $display;'>";
+                        }
+                        ?>
+                    </div>
+                    <div id="profile-showInfo">
+                        <div class="paginator">
+                            <?php
+                            foreach ($photos as $index => $photo) {
+                                $active = $index === 0 ? 'active' : '';
+                                echo "<span class='dot $active'></span>";
+                            }
+                            ?>
+                        </div>
+                        <p id="user-name"><?php echo htmlspecialchars($user['name']); ?> <span id="user-age"><?php echo date_diff(date_create($user['birth_date']), date_create('today'))->y; ?></span></p>
 
-            <form class="profile-form" method="POST" action="profile.php" id="profileForm">
-                <div class="input-group">
-                    <label for="name">Nombre:</label>
-                    <input type="text" id="name" name="name" value="<?php echo htmlspecialchars($user['name']); ?>" placeholder="Nombre">
+                    </div>
                 </div>
-                <div class="input-group">
-                    <label for="surname">Apellidos:</label>
-                    <input type="text" id="surname" name="surname" value="<?php echo htmlspecialchars($user['surname']); ?>" placeholder="Apellidos">
-                </div>
-                <div class="input-group">
-                    <label for="username">Alias:</label>
-                    <input type="text" id="username" name="username" value="<?php echo htmlspecialchars($user['alias']); ?>" placeholder="Alias">
-                </div>
-                <div class="input-group">
-                    <label for="birthdate">Fecha de nacimiento:</label>
-                    <input type="date" id="birthdate" name="birthdate" value="<?php echo $user['birth_date']; ?>">
-                </div>
-                <div class="input-group">
-                    <label for="location">Ubicación:</label>
-                    <input type="text" id="location" name="location" value="<?php echo htmlspecialchars($user['location']); ?>" placeholder="Ubicación">
-                    <span id="location-icon">📍</span>
-                </div>
-                <div id="map-container" style="display: none; position: absolute; z-index: 1000;">
-                    <div id="map" style="height: 500px;"></div>
-                </div>
-                <div class="input-group">
-                    <label for="password">Contraseña:</label>
-                    <input type="password" id="password" name="password" placeholder="Nueva contraseña">
-                </div>
-                <div class="input-group">
-                    <label for="password2">Repetir contraseña:</label>
-                    <input type="password" id="password2" name="password2" placeholder="Confirmar contraseña">
-                </div>
-                <input type="submit" value="Modificar">
-            </form>
-
-
-            <div class="re-pie">
-                <p><a href="">Editar fotos</a></p>
-                <p><a href="logout.php">Cerrar sesión</a></p>
             </div>
+            <div id="editar" class="tab-content" style="display:none;">
 
+
+                <form class="profile-form" method="POST" action="profile.php" id="profileForm">
+                    <div class="input-group">
+                        <label for="name">Nombre:</label>
+                        <input type="text" id="name" name="name" value="<?php echo htmlspecialchars($user['name']); ?>" placeholder="Nombre">
+                    </div>
+                    <div class="input-group">
+                        <label for="surname">Apellidos:</label>
+                        <input type="text" id="surname" name="surname" value="<?php echo htmlspecialchars($user['surname']); ?>" placeholder="Apellidos">
+                    </div>
+                    <div class="input-group">
+                        <label for="username">Alias:</label>
+                        <input type="text" id="username" name="username" value="<?php echo htmlspecialchars($user['alias']); ?>" placeholder="Alias">
+                    </div>
+                    <div class="input-group">
+                        <label for="birthdate">Fecha de nacimiento:</label>
+                        <input type="date" id="birthdate" name="birthdate" value="<?php echo $user['birth_date']; ?>">
+                    </div>
+                    <div class="input-group">
+                        <label for="location">Ubicación:</label>
+                        <input type="text" id="location" name="location" value="<?php echo htmlspecialchars($user['location']); ?>" placeholder="Ubicación">
+                        <span id="location-icon">📍</span>
+                    </div>
+                    <div id="map-container" style="display: none; position: absolute; z-index: 1000;">
+                        <div id="map" style="height: 500px;"></div>
+                    </div>
+                    <div class="input-group">
+                        <label for="genre">Género:</label>
+                        <select id="genre" name="genre">
+                            <option value="home" <?php echo $user['genre'] == 'home' ? 'selected' : ''; ?>>Hombre</option>
+                            <option value="dona" <?php echo $user['genre'] == 'dona' ? 'selected' : ''; ?>>Mujer</option>
+                            <option value="no binari" <?php echo $user['genre'] == 'no binari' ? 'selected' : ''; ?>>No binario</option>
+                        </select>
+                    </div>
+                    <div class="input-group">
+                        <label for="sexual_preference">Preferencia Sexual:</label>
+                        <select id="sexual_preference" name="sexual_preference">
+                            <option value="heterosexual" <?php echo $user['sexual_preference'] == 'heterosexual' ? 'selected' : ''; ?>>Heterosexual</option>
+                            <option value="homosexual" <?php echo $user['sexual_preference'] == 'homosexual' ? 'selected' : ''; ?>>Homosexual</option>
+                            <option value="bisexual" <?php echo $user['sexual_preference'] == 'bisexual' ? 'selected' : ''; ?>>Bisexual</option>
+                        </select>
+                    </div>
+                    <input type="submit" value="Modificar">
+                </form>
+
+                <div class="re-pie">
+                    <p><a href="">Modificar mis fotos</a></p>
+                </div>
+            </div>
         </div>
         <div class="notification-container" id="notificationContainer"></div>
     </main>
@@ -174,9 +192,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         </nav>
     </footer>
 
-
     <script src="assets/js/profile.js"></script>
-
 
 </body>
 
