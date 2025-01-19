@@ -591,7 +591,7 @@ function showFilterPopup() {
       ((minSlider.value - minSlider.min) / (minSlider.max - minSlider.min)) *
       100;
     const percent2 =
-      ((maxSlider.value - minSlider.min) / (minSlider.max - minSlider.min)) *
+      ((maxSlider.value - minSlider.min) / (maxSlider.max - minSlider.min)) *
       100;
     track.style.background = `linear-gradient(to right, #ddd ${percent1}%, #ff4458 ${percent1}%, #ff4458 ${percent2}%, #ddd ${percent2}%)`;
   }
@@ -630,9 +630,9 @@ function showFilterPopup() {
 
   // Apply filter button handler
   document.getElementById("applyFilter").addEventListener("click", () => {
-    const savedMinAge = parseInt(minSlider.value);
-    const savedMaxAge = parseInt(maxSlider.value);
-    const savedRadius = parseInt(radiusSlider.value);
+    savedMinAge = parseInt(minSlider.value);
+    savedMaxAge = parseInt(maxSlider.value);
+    savedRadius = parseInt(radiusSlider.value);
 
     const [userLat, userLon] = userLocation
       .split(",")
