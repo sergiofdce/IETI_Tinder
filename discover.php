@@ -173,6 +173,9 @@ logEvent("page_view", "El usuario ha accedido a la página Discover", $_SESSION[
                               </svg>
                         </button>
                   </div>
+                  <div id="filtro">
+                        <button id="filtroButton">Filtrar</button>
+                  </div>
             </div>
 
             <div id="showMatch">
@@ -182,9 +185,10 @@ logEvent("page_view", "El usuario ha accedido a la página Discover", $_SESSION[
             </div>
 
             <script>
-                  const profiles = <?php echo $profiles_json; ?>;
+                  let profiles = <?php echo $profiles_json; ?>;
                   const userId = <?php echo $user_id; ?>;
                   const userEmail = <?php echo json_encode($user_email); ?>;
+                  const userLocation = <?php echo json_encode($user_location); ?>;
             </script>
 
             <script src="assets/js/discover_Slider.js"></script>

@@ -737,6 +737,138 @@
             cursor: pointer;
       }
 
+      /* Filtro de perfiles */
+              .filter-overlay {
+                    position: fixed;
+                    top: 0;
+                    left: 0;
+                    width: 100%;
+                    height: 100%;
+                    background: rgba(0, 0, 0, 0.5);
+                    z-index: 998;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+              }
+      
+              .filter-popup {
+                    position: fixed;
+                    top: 50%;
+                    left: 50%;
+                    transform: translate(-50%, -50%);
+                    background: white;
+                    padding: 20px;
+                    border-radius: 10px;
+                    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+                    z-index: 999;
+                    min-width: 300px;
+                    animation: fadeIn 0.3s ease-in-out;
+              }
+      
+              .age-range-container {
+                    position: relative;
+                    padding: 20px 10px;
+              }
+      
+              .range-slider {
+                    position: relative;
+                    height: 5px;
+                    margin: 20px 0;
+              }
+      
+              .slider-track {
+                    position: absolute;
+                    width: 100%;
+                    height: 5px;
+                    background: #ddd;
+                    border-radius: 5px;
+              }
+      
+              .range-slider input[type="range"] {
+                    -webkit-appearance: none;
+                    appearance: none;
+                    position: absolute;
+                    width: 100%;
+                    height: 5px;
+                    background: none;
+                    pointer-events: none;
+                    outline: none;
+              }
+      
+              input[type="range"]::-webkit-slider-thumb {
+                    -webkit-appearance: none;
+                    appearance: none;
+                    width: 20px;
+                    height: 20px;
+                    background: #ff4458;
+                    border-radius: 50%;
+                    cursor: pointer;
+                    pointer-events: auto;
+                    margin-top: -8px;
+              }
+      
+              input[type="range"]::-moz-range-thumb {
+                    width: 20px;
+                    height: 20px;
+                    background: #ff4458;
+                    border-radius: 50%;
+                    cursor: pointer;
+                    pointer-events: auto;
+                    border: none;
+              }
+      
+              .range-values {
+                    text-align: center;
+                    margin-top: 10px;
+                    font-weight: bold;
+              }
+
+              .radius-container {
+                    text-align: center;
+                    margin-top: 20px;
+                    width: 100%;
+              }
+      
+              .radius-container label {
+                    font-weight: bold;
+              }
+      
+              .radius-container input[type="range"] {
+                    width: 100%;
+              }
+      
+              .filter-buttons {
+                    display: flex;
+                    justify-content: center;
+                    margin-top: 20px;
+              }
+      
+              .filter-buttons button {
+                    padding: 8px 16px;
+                    border-radius: 5px;
+                    border: none;
+                    cursor: pointer;
+                    background: #ff4458;
+                    color: white;
+                    font-weight: bold;
+              }
+      
+              .filter-buttons button:hover {
+                    background: #e5394c;
+              }
+      
+              @keyframes fadeIn {
+                    from {
+                          opacity: 0;
+                          transform: translate(-50%, -60%);
+                    }
+      
+                    to {
+                          opacity: 1;
+                          transform: translate(-50%, -50%);
+                    }
+              }
+
       /* 6.4 Profile */
       .container-cabecera {
             display: flex;
