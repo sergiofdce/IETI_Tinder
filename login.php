@@ -6,6 +6,8 @@ require_once 'config/db_connection.php';
 error_reporting(E_ERROR | E_PARSE);
 
 $message = "";
+$emailErrorClass = "";
+$passwordErrorClass = "";
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if (!empty($_POST["email"]) && !empty($_POST["password"])) {
@@ -22,14 +24,33 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             logEvent("login_success", "El usuario " . $results[0]["email"] . " ha iniciado sesion", $results[0]["email"]);
             header("Location: discover.php");
         } else {
-            $message = "Datos incorrectos";
-            $passwordErrorClass = "form__field--error";
-            logEvent("login_failure", "El usuario " . $_POST["email"] . " ha fallado la contraseña", $_POST["email"]);
+            
+            $checkEmailQuery = "SELECT * FROM users WHERE email = :email";
+            $checkEmailParams = [':email' => $email];
+            $checkEmailResults = executeQuery($pdo, $checkEmailQuery, $checkEmailParams);
+
+            if ($checkEmailResults) {
+
+                $message = "Contraseña incorrecta";
+                $passwordErrorClass = "form__field--error";
+                logEvent("login_failure", "El usuario " . $_POST["email"] . " ha fallado la contraseña", $_POST["email"]);
+
+            } else{
+
+                $message = "Datos incorrectos";
+                $emailErrorClass = "form__field--error";
+                logEvent("login_failure", "Un usuario ha introducido un email inexistente", $_POST["email"]);
+
+            }
+
         }
     } else {
         $message = "Rellene ambos campos";
         logEvent("login_failure", "Se ha introducido uno o varios campos vacíos", "empty");
     }
+}
+if ($_SESSION["verified"]) {
+    $message = "Cuenta verificada correctamente. Por favor, inicie sesión";
 }
 ?>
 

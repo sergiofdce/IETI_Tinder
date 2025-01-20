@@ -3,7 +3,7 @@
 // ==================================================
 // IMPORTS
 // ==================================================
-// Importar Faker
+// // Importar Faker
 // require_once '../assets/modules/faker/vendor/autoload.php';
 // use Faker\Factory;
 
@@ -37,7 +37,8 @@
 //             // Definir datos
 //             $name = $faker->firstName;
 //             $lastName = $faker->lastName;
-//             $alias = $faker->userName;
+//             //$alias = $faker->userName;
+//             $alias = $name . $lastName; //así tiene coherencia con los datos de nombre
 
 //             // Generar una fecha de nacimiento aleatoria, asegurando que la persona tiene como máximo 18 años
 //             $birthDate = $faker->date('Y-m-d', $eighteenYearsAgo);
@@ -53,7 +54,7 @@
 //             $profileImage2 = "assets/img/seeder/" . basename($imageFiles[$profileImages[1]]);
 
 //             // Generar email
-//             $email = $alias . '@iesesteveterradas.cat';
+//             $email = $alias . '@ieti.site';
 
 //             // Agregar datos al array
 //             $data[] = [

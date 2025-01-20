@@ -369,7 +369,7 @@
       /* Error input */
 
             .form__field--error {
-                  border-color: red;
+                  border-color: red !important;
                   /* Cambia el color del borde a rojo */
             }
       
@@ -734,7 +734,8 @@
 
       .profile-form input[type="text"],
       .profile-form input[type="date"],
-      .profile-form input[type="password"] {
+      .profile-form input[type="password"],
+      .profile-form select {
             padding: 8px;
             font-size: 14px;
             border: 1px solid #ccc;
@@ -941,6 +942,14 @@
             white-space: nowrap;
       }
 
+      /* 6.4 Registro */
+      .confirmation-message {
+            font: inherit;
+            font-size: 2em;
+            margin-top: 50%;
+            padding: 10px;
+            text-align: center;
+      }
 
 /* 
       ==================================================
