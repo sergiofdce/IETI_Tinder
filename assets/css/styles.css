@@ -272,6 +272,7 @@
       - Descubrir
       - Chat/Mensajes
       - Admin Panel
+      - Editar fotos
 */
 
       /* 6.4 Login */
@@ -941,7 +942,44 @@
             white-space: nowrap;
       }
 
+      /* 6.5 Editar Fotos */
 
+      #divEditPictures{
+            height: 100%;
+      }
+
+      #photoList{
+            list-style: none;
+            display: flex;
+            flex-wrap: wrap;
+            height: 100%;
+            justify-content: space-around;
+            align-content: space-around;
+      }
+
+      #photoList li{
+            width: 35%;
+            height: 30%;
+      }
+
+      #photoList li label{
+            position: relative;
+            height: 100%;
+            width: 100%;
+            display: flex;
+      }
+
+      #photoList li .deletePhotos{
+            right: 0;
+            position: absolute;
+            width: 12%;
+      }
+
+      #photoList li img{
+            margin: 0 auto;
+            width: 100%;
+            object-fit: cover;
+      }
 /* 
       ==================================================
       7. Utilidades y helpers
