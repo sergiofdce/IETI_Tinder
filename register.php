@@ -53,9 +53,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             echo json_encode(['status' => 'error', 'message' => 'El email ya existe']);
             exit();
         }
+        $token = generateToken();
 
-        $register_query = "INSERT INTO unverified_users SET name = ?, surname = ?, alias = ?, birth_date = ?, location = ?, genre = ?, sexual_preference = ?, password = ?, email = ?, created_at = ?";
-        $register_params = [$name, $surname, $alias, $birth_date, $location, $genre, $sexual_preference, $hashed_password, $email, $timestamp];
+        $register_query = "INSERT INTO unverified_users SET name = ?, surname = ?, alias = ?, birth_date = ?, location = ?, genre = ?, sexual_preference = ?, password = ?, email = ?, created_at = ?, token = ?";
+        $register_params = [$name, $surname, $alias, $birth_date, $location, $genre, $sexual_preference, $hashed_password, $email, $timestamp, $token];
 
         try {
             executeQuery($pdo, $register_query, $register_params);
@@ -63,7 +64,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             echo json_encode(['status' => 'success', 'message' => '¡Registro realizado con éxito!', 'name' => $name]);
             logEvent("new_register", "El usuario " . $email . " se ha registrado", $email);
 
-            sendVerificationEmail($email, $pdo);
+            sendVerificationEmail($email, $token, $pdo);
         } catch (Exception $e) {
             echo json_encode(['status' => 'error', 'message' => '¡Error! Algo salió mal'. $e->getMessage()]);
         }
@@ -102,10 +103,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 }
 
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
-    if (isset($_GET['verify'])) {
+    if (isset($_GET['verify']) && isset($_GET['token'])) {
         $user_id = $_GET['verify'];
-        $query = "SELECT * FROM unverified_users WHERE id = :user_id";
-        $params = [':user_id' => $user_id];
+        $user_token = $_GET['token'];
+        $query = "SELECT * FROM unverified_users WHERE id = :user_id AND token = :user_token";
+        $params = [':user_id' => $user_id, ':user_token' => $user_token];
         $results = executeQuery($pdo, $query, $params);
 
         if ($results) {
@@ -124,10 +126,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
         }
         header("Location: login.php");
     }
+    else {
+        //mostrar un mensaje de error
+        echo "     
+            <script>
+                document.addEventListener('DOMContentLoaded', function() {
+                    showMessage('wrongEmail', 'El enlace de verificación no es válido.');
+                })
+            </script>";
+    }
+}
+
+function generateToken() {
+    return bin2hex(random_bytes(16));
 }
 
 function sendVerificationEmail($email, $pdo) {
-    $queryGetId = "SELECT id FROM unverified_users WHERE email = :email";
+    $queryGetId = "SELECT id, token FROM unverified_users WHERE email = :email";
     $paramsGetId = [':email' => $email];
     $userId = executeQuery($pdo, $queryGetId, $paramsGetId);
 
@@ -136,7 +151,7 @@ function sendVerificationEmail($email, $pdo) {
     'X-Mailer: PHP/' . phpversion();
 
     $subject = "EasyDates - Verificación de cuenta";
-    $message = "Para verificar su cuenta, por favor haga clic en el siguiente enlace: http://tinder4.ieti.site/register.php?verify=" . $userId[0]['id'];
+    $message = "Para verificar su cuenta, por favor haga clic en el siguiente enlace: http://tinder4.ieti.site/register.php?verify=" . $userId[0]['id'] . "&token=" . $userId[0]['token'];
     mail($email, $subject, $message, $mailHeader);
 }
 ?>
