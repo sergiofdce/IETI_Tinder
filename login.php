@@ -18,9 +18,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $params = [':email' => $email, ':password' => $password];
         $results = executeQuery($pdo, $query, $params);
 
+
         if ($results) {
             $_SESSION["user_id"] = $results[0]["id"];
             $_SESSION["email"] = $results[0]["email"];
+
+            if($results[0]["privileges"] == "admin"){
+                logEvent("login_admin", "El usuario " . $results[0]["email"] . " ha iniciado sesion con privilegios de administrador", $results[0]["email"]);
+                header("Location: admin/index.php");
+                exit();
+            }
+
             logEvent("login_success", "El usuario " . $results[0]["email"] . " ha iniciado sesion", $results[0]["email"]);
             header("Location: discover.php");
         } else {

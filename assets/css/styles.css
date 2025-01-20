@@ -951,6 +951,11 @@
             text-align: center;
       }
 
+      /*6.10 Admin Panels */
+      #adminPanel {
+            width: 100%;
+      }
+
 /* 
       ==================================================
       7. Utilidades y helpers
