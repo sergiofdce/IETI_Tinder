@@ -18,6 +18,8 @@ logEvent($eventType, $description, $userEmail)
       Acciones relacionadas con cambios en el perfil.
 
       profile_update: El usuario ha actualizado su perfl
+      profile_photoUpload: El usuario ha subido una foto
+      profile_photodelete: El usuario ha eliminado una foto
 
 3. Interacción entre usuarios (interaction)
 

@@ -6,8 +6,6 @@ if (!isset($_SESSION["user_id"])) {
 
 $user_id = $_SESSION["user_id"];
 require_once 'config/db_connection.php';
-include 'includes/functions.php';
-logEvent("page_view", "El usuario ha accedido a la página Profile", $_SESSION["email"]);
 
 $query = "SELECT id, name, surname, alias, birth_date, location, 
                 (SELECT path FROM user_images WHERE user_id = ? LIMIT 1) AS photo 
@@ -23,6 +21,16 @@ if (empty($user)) {
 
 $user = $user[0];
 
+// Configuración de la cantidad máxima de fotos visibles
+$maxVisiblePhotos = 6;
+
+// Obtener las fotos del usuario
+$query = "SELECT path FROM user_images WHERE user_id = ?";
+$stmt = $pdo->prepare($query);
+$stmt->execute([$user_id]);
+$photos = $stmt->fetchAll(PDO::FETCH_COLUMN);
+
+$photosJson = json_encode($photos);
 ?>
 
 <!DOCTYPE html>
@@ -80,8 +88,8 @@ $user = $user[0];
         
         <ul id="photoList">
             <script>
-                // Convertir el JSON de PHP a un array de JavaScript
-                const photos = <?php echo $photosJson; ?>;
+                const photos = <?php echo $photosJson; ?>; // Fotos del usuario desde PHP
+                const maxVisiblePhotos = <?php echo $maxVisiblePhotos; ?>; // Configuración de cantidad máxima
 
                 // Llamar a la función para renderizar las fotos
                 renderPhotos(photos);

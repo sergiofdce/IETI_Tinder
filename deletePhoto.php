@@ -6,6 +6,7 @@ if (!isset($_SESSION["user_id"])) {
     exit();
 }
 
+require_once 'includes/functions.php';
 require_once 'config/db_connection.php';
 
 $user_id = $_SESSION["user_id"];
@@ -50,6 +51,7 @@ try {
     }
 
     echo json_encode(['success' => true, 'message' => 'Foto eliminada correctamente.']);
+    logEvent("profile_photoDelete", "El usuario ha eliminado la foto: " . $photoPath, $_SESSION["email"]);
 } catch (PDOException $e) {
     echo json_encode(['success' => false, 'message' => 'Error al eliminar la foto: ' . $e->getMessage()]);
 }
