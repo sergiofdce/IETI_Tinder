@@ -4,7 +4,8 @@ include '../includes/functions.php';
 require_once '../config/db_connection.php';
 
 if (!isset($_SESSION["user_id"])) {
-    header('HTTP/1.0 403 Forbidden');
+    header("HTTP/1.0 403 Forbidden");
+    die("Error 403: Forbidden");
 }
 
 $user_id = $_SESSION["user_id"];
@@ -12,7 +13,8 @@ $query = "SELECT privileges FROM users WHERE id = :user_id";
 $params = [':user_id' => $user_id];
 $user = executeQuery($pdo, $query, $params);
 if ($user[0]['privileges'] != "admin") {
-    header('HTTP/1.0 403 Forbidden');
+    header("HTTP/1.0 403 Forbidden");
+    die("Error 403: Forbidden");
 }
 
 ?>
