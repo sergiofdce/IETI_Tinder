@@ -160,7 +160,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 </form>
 
                 <div class="re-pie">
-                    <p><a href="">Modificar mis fotos</a></p>
+                    <p><a href="profilePictures.php">Modificar mis fotos</a></p>
                 </div>
             </div>
         </div>

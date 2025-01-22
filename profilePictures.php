@@ -67,12 +67,12 @@ $photosJson = json_encode($photos);
             try {
                 // Consulta SQL
                 $sql = "SELECT path FROM user_images WHERE user_id = :user_id";
-                
+
                 // Preparar y ejecutar la consulta
                 $stmt = $pdo->prepare($sql);
                 $stmt->bindParam(':user_id', $user, PDO::PARAM_INT);
                 $stmt->execute();
-            
+
                 // Obtener resultados y guardar rutas en un array
                 $photos = [];
                 while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
@@ -86,7 +86,7 @@ $photosJson = json_encode($photos);
                 $photosJson = '[]';
             }
             ?>
-            
+
             <ul id="photoList">
                 <script>
                     const photos = <?php echo $photosJson; ?>; // Fotos del usuario desde PHP
@@ -97,7 +97,7 @@ $photosJson = json_encode($photos);
                 </script>
             </ul>
 
-            
+
         </div>
 
         <div class="notification-container" id="notificationContainer"></div>
@@ -108,17 +108,20 @@ $photosJson = json_encode($photos);
             <ul>
                 <li>
                     <a href="discover.php">
-                        <img class="footer-icons" src="assets/img/web/search.png" alt="Logout">
+                        Descubrir
+                        <!-- <img class="footer-icons" src="assets/img/web/search.png" alt="Logout"> -->
                     </a>
                 </li>
                 <li>
                     <a href="messages.php">
-                        <img class="footer-icons" src="assets/img/web/message.png" alt="Logout">
+                        Mensajes
+                        <!-- <img class="footer-icons" src="assets/img/web/message.png" alt="Logout"> -->
                     </a>
                 </li>
                 <li>
                     <a href="profile.php">
-                        <img class="footer-icons" src="assets/img/web/user.png" alt="Logout">
+                        Perfil
+                        <!-- <img class="footer-icons" src="assets/img/web/user.png" alt="Logout"> -->
                     </a>
                 </li>
             </ul>
