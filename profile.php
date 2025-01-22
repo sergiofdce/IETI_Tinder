@@ -142,7 +142,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 
             <div class="re-pie">
-                <p><a href="">Editar fotos</a></p>
+                <p><a href="profilePictures.php">Editar fotos</a></p>
                 <p><a href="logout.php">Cerrar sesión</a></p>
             </div>
 
