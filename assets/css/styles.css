@@ -341,6 +341,11 @@ a:focus {
       margin-bottom: 100px;
 }
 
+/* 6.4 Register */
+#register main{
+      overflow-y: auto;
+}
+
 /* Header */
 #login-image {
       width: 400px;
@@ -1275,7 +1280,8 @@ to {
 
 .profile-form input[type="text"],
 .profile-form input[type="date"],
-.profile-form input[type="password"] {
+.profile-form input[type="password"],
+.profile-form input[type="file"] {
       padding: 8px;
       font-size: 14px;
       border: 1px solid #ccc;
