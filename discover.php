@@ -79,7 +79,7 @@ logEvent("page_view", "El usuario ha accedido a la página Discover", $_SESSION[
                         -- Calcular el score basado en la interacción
                         (SELECT COUNT(*) 
                         FROM matches m 
-                        WHERE m.sender_id = u.id AND m.status = 'accepted') -
+                        WHERE m.sender_id = u.id AND m.status = 'pending' OR m.status = 'accepted') -
                         (SELECT COUNT(*) 
                         FROM matches m 
                         WHERE m.sender_id = u.id AND m.status = 'rejected') AS interaction_score
