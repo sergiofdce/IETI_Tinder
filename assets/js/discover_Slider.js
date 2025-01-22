@@ -699,6 +699,7 @@ function showFilterPopup() {
       maxLat: userLat + latRadius,
       minLon: userLon - lonRadius,
       maxLon: userLon + lonRadius,
+      radius: savedRadius
     };
 
     // Enviar datos

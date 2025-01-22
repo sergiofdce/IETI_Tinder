@@ -26,8 +26,9 @@ $user_long = substr($user_location, strpos($user_location, ',') + 1);
 $input = file_get_contents("php://input");
 $data = json_decode($input, true);
 
-if ($data && isset($data['minAge'], $data['maxAge'], $data['minLat'], $data['maxLat'], $data['minLon'], $data['maxLon'])) {
-        $query = "
+if ($data && isset($data['minAge'], $data['maxAge'], $data['minLat'], $data['maxLat'], $data['minLon'], $data['maxLon'], $data['radius'])) {
+
+$query = "
             SELECT DISTINCT u.id, u.name, u.surname, u.alias, u.birth_date, u.location, u.genre, u.sexual_preference, u.email,
             GROUP_CONCAT(ui.path ORDER BY ui.id ASC) AS images,
             (
@@ -51,12 +52,11 @@ if ($data && isset($data['minAge'], $data['maxAge'], $data['minLat'], $data['max
             )
             AND TIMESTAMPDIFF(YEAR, u.birth_date, CURDATE()) BETWEEN :minAge AND :maxAge
             AND (
-                (SUBSTRING_INDEX(u.location, ',', 1) BETWEEN :minLat AND :maxLat)
-                OR (SUBSTRING_INDEX(u.location, ',', 1) = :lat)
-            )
-            AND (
-                (SUBSTRING_INDEX(u.location, ',', -1) BETWEEN :minLon AND :maxLon)
-                OR (SUBSTRING_INDEX(u.location, ',', -1) = :long)
+                6371 * acos(
+                    cos(radians(:lat)) * cos(radians(SUBSTRING_INDEX(u.location, ',', 1))) *
+                    cos(radians(SUBSTRING_INDEX(u.location, ',', -1)) - radians(:long)) +
+                    sin(radians(:lat)) * sin(radians(SUBSTRING_INDEX(u.location, ',', 1)))
+                ) <= :radius
             )
             AND NOT EXISTS (
                 SELECT 1 FROM matches m_accepted
@@ -91,7 +91,7 @@ if ($data && isset($data['minAge'], $data['maxAge'], $data['minLat'], $data['max
             GROUP BY u.id, u.name, u.surname, u.alias, u.birth_date, u.location, u.genre, u.sexual_preference, u.email
             ORDER BY distance ASC";
 
-        $params = [
+    $params = [
             ':session_id' => $user_id,
             ':user_genre' => $user_genre,
             ':user_preference' => $user_preference,
@@ -102,7 +102,8 @@ if ($data && isset($data['minAge'], $data['maxAge'], $data['minLat'], $data['max
             ':minLat' => (float)$data['minLat'],
             ':maxLat' => (float)$data['maxLat'],
             ':minLon' => (float)$data['minLon'],
-            ':maxLon' => (float)$data['maxLon']
+            ':maxLon' => (float)$data['maxLon'],
+            ':radius' => (float)$data['radius']
         ];
 
     $results = executeQuery($pdo, $query, $params);

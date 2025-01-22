@@ -116,15 +116,14 @@ logEvent("page_view", "El usuario ha accedido a la página Discover", $_SESSION[
                   )
                   -- Filtro de edad
                   AND TIMESTAMPDIFF(YEAR, u.birth_date, CURDATE()) BETWEEN :minAge AND :maxAge
-                  -- Filtros de localización
+                  -- Filtro por radio de 50 km
                   AND (
-                  (SUBSTRING_INDEX(u.location, ',', 1) BETWEEN :minLat AND :maxLat)
-                  OR (SUBSTRING_INDEX(u.location, ',', 1) = :lat)
-                  )
-                  AND (
-                  (SUBSTRING_INDEX(u.location, ',', -1) BETWEEN :minLon AND :maxLon)
-                  OR (SUBSTRING_INDEX(u.location, ',', -1) = :long)
-                  )
+                        6371 * acos(
+                              cos(radians(:lat)) * cos(radians(SUBSTRING_INDEX(u.location, ',', 1))) *
+                              cos(radians(SUBSTRING_INDEX(u.location, ',', -1)) - radians(:long)) +
+                              sin(radians(:lat)) * sin(radians(SUBSTRING_INDEX(u.location, ',', 1)))
+                        )
+                  ) <= 50
                   AND NOT EXISTS (
                   SELECT 1 
                   FROM matches m_accepted
