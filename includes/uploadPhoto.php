@@ -44,7 +44,7 @@ if (isset($_FILES['photo']) && $_FILES['photo']['error'] === UPLOAD_ERR_OK) {
 
         echo json_encode(['success' => true, 'message' => 'Foto subida correctamente.']);
 
-        logEvent("profile_update, "El usuario ha subido la foto: " . $newFileName, $_SESSION["email"]);
+        logEvent("profile_update", "El usuario ha subido la foto: " . $newFileName, $_SESSION["email"]);
     } else {
         echo json_encode(['success' => false, 'message' => 'Error al mover el archivo.']);
     }
