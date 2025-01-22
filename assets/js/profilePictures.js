@@ -1,3 +1,24 @@
+document.addEventListener("DOMContentLoaded", () => {
+    fetchUserPhotos();
+});
+
+function fetchUserPhotos() {
+    fetch('includes/getUserPhotos.php') // Realizar la solicitud al archivo PHP
+        .then(response => response.json()) // Convertir la respuesta a JSON
+        .then(data => {
+            if (data.success) {
+                // Llamar a renderPhotos con las fotos obtenidas
+                renderPhotos(data.photos);
+            } else {
+                console.error("Error al obtener las fotos:", data.message);
+            }
+        })
+        .catch(error => {
+            console.error("Error en la solicitud:", error);
+        });
+}
+
+
 function renderPhotos(photoArray) {
     const ulElement = document.getElementById('photoList');
     ulElement.innerHTML = ''; // Limpia cualquier contenido existente
@@ -61,7 +82,7 @@ async function handleFileUpload(event) {
     formData.append('photo', file);
 
     try {
-        const response = await fetch('uploadPhoto.php', {
+        const response = await fetch('includes/uploadPhoto.php', {
             method: 'POST',
             body: formData,
         });
@@ -72,7 +93,7 @@ async function handleFileUpload(event) {
             typeMessenger('green','Imagen subida');
 
             // Obtener la lista actualizada de fotos usando AJAX
-            const photosResponse = await fetch('getUserPhotos.php'); // Endpoint para obtener las fotos del usuario
+            const photosResponse = await fetch('includes/getUserPhotos.php'); // Endpoint para obtener las fotos del usuario
             const photosResult = await photosResponse.json();
 
             if (photosResult.success) {
@@ -102,7 +123,7 @@ async function handleDeletePhoto(event) {
     }
 
     try {
-        const response = await fetch('deletePhoto.php', {
+        const response = await fetch('includes/deletePhoto.php', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ path: photoPath }),
@@ -114,7 +135,7 @@ async function handleDeletePhoto(event) {
             typeMessenger('green','Imagen eliminada');
 
             // Actualizar la lista de fotos
-            const photosResponse = await fetch('getUserPhotos.php');
+            const photosResponse = await fetch('includes/getUserPhotos.php');
             const photosResult = await photosResponse.json();
 
             if (photosResult.success) {

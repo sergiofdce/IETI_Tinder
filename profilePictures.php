@@ -23,14 +23,6 @@ $user = $user[0];
 
 // Configuración de la cantidad máxima de fotos visibles
 $maxVisiblePhotos = 6;
-
-// Obtener las fotos del usuario
-$query = "SELECT path FROM user_images WHERE user_id = ?";
-$stmt = $pdo->prepare($query);
-$stmt->execute([$user_id]);
-$photos = $stmt->fetchAll(PDO::FETCH_COLUMN);
-
-$photosJson = json_encode($photos);
 ?>
 
 <!DOCTYPE html>
@@ -49,9 +41,8 @@ $photosJson = json_encode($photos);
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Funnel+Display:wght@300..800&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Funnel+Display:wght@300..800&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
     <script src="assets/js/profilePictures.js"></script>
-
+    <script src="assets/js/profile.js"></script>
 </head>
 
 <body>
@@ -63,41 +54,11 @@ $photosJson = json_encode($photos);
     <main>
         <h2>Mis fotos</h2>
         <div id="divEditPictures">
-            <?php
-            try {
-                // Consulta SQL
-                $sql = "SELECT path FROM user_images WHERE user_id = :user_id";
-                
-                // Preparar y ejecutar la consulta
-                $stmt = $pdo->prepare($sql);
-                $stmt->bindParam(':user_id', $user, PDO::PARAM_INT);
-                $stmt->execute();
-            
-                // Obtener resultados y guardar rutas en un array
-                $photos = [];
-                while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-                    $photos[] = $row['path'];
-                }
-
-                // Pasar las rutas al JavaScript como JSON
-                $photosJson = json_encode($photos);
-            } catch (PDOException $e) {
-                echo "Error al conectar o consultar la base de datos: " . $e->getMessage();
-                $photosJson = '[]';
-            }
-            ?>
-            
             <ul id="photoList">
                 <script>
-                    const photos = <?php echo $photosJson; ?>; // Fotos del usuario desde PHP
                     const maxVisiblePhotos = <?php echo $maxVisiblePhotos; ?>; // Configuración de cantidad máxima
-
-                    // Llamar a la función para renderizar las fotos
-                    renderPhotos(photos);
                 </script>
             </ul>
-
-            
         </div>
 
         <div class="notification-container" id="notificationContainer"></div>
@@ -124,10 +85,6 @@ $photosJson = json_encode($photos);
             </ul>
         </nav>
     </footer>
-
-
-    <script src="assets/js/profile.js"></script>
-
 
 </body>
 

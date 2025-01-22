@@ -6,8 +6,8 @@ if (!isset($_SESSION["user_id"])) {
     exit();
 }
 
-require_once 'includes/functions.php';
-require_once 'config/db_connection.php';
+require_once 'functions.php';
+require_once '../config/db_connection.php';
 
 $user_id = $_SESSION["user_id"];
 
@@ -46,8 +46,8 @@ try {
     $stmt->execute([':path' => $photoPath, ':user_id' => $user_id]);
 
     // Eliminar el archivo físico del servidor
-    if (file_exists($photoPath)) {
-        unlink($photoPath);
+    if (file_exists("../" . $photoPath)) {
+        unlink("../" . $photoPath);
     }
 
     echo json_encode(['success' => true, 'message' => 'Foto eliminada correctamente.']);
