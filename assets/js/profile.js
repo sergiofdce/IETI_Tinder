@@ -52,34 +52,11 @@ function showMessage(type, message) {
     }
 }
 
-// Ocultar el label e input de repetir contraseña inicialmente
-document.getElementById('password2').style.display = 'none';
-document.querySelector('label[for="password2"]').style.display = 'none';
 
-// Mostrar el campo de repetir contraseña solo cuando haya algo escrito en el campo de contraseña
-document.getElementById('password').addEventListener('input', function() {
-    const password2 = document.getElementById('password2');
-    const password2Label = document.querySelector('label[for="password2"]');
-    if (this.value) {
-        password2.style.display = 'block';
-        password2Label.style.display = 'block';
-    } else {
-        password2.style.display = 'none';
-        password2Label.style.display = 'none';
-    }
-});
 
 // Manejo del formulario con Ajax
 document.getElementById('profileForm').addEventListener('submit', function(event) {
     event.preventDefault();
-
-    const password = document.getElementById('password').value;
-    const password2 = document.getElementById('password2').value;
-
-    if (password && password !== password2) {
-        showMessage('error', 'Las contraseñas no coinciden');
-        return;
-    }
 
     const formData = new FormData(this);
 
@@ -91,7 +68,6 @@ document.getElementById('profileForm').addEventListener('submit', function(event
     .then(data => {
         if (data.status === 'success') {
             showMessage('success', data.message);
-            document.querySelector('.container-cabecera h1').innerText = data.name;
         } else {
             showMessage('error', data.message);
         }
@@ -166,4 +142,35 @@ map.on("click", function (e) {
 
   // Ocultar el mapa después de seleccionar la coordenada
   document.getElementById("map-container").style.display = "none";
+});
+
+// ==================================================
+// Slider de imágenes
+// ==================================================
+
+function showTab(tabName) {
+  document.querySelectorAll(".tab-content").forEach((tab) => {
+    tab.style.display = "none";
+  });
+  document.getElementById(tabName).style.display = "block";
+}
+
+function setupSlider() {
+  const images = document.querySelectorAll(".profile-showImage");
+  const dots = document.querySelectorAll(".dot");
+  let currentIndex = 0;
+
+  images.forEach((image, index) => {
+    image.addEventListener("click", () => {
+      images[currentIndex].style.display = "none";
+      dots[currentIndex].classList.remove("active");
+      currentIndex = (currentIndex + 1) % images.length;
+      images[currentIndex].style.display = "block";
+      dots[currentIndex].classList.add("active");
+    });
+  });
+}
+
+document.addEventListener("DOMContentLoaded", function () {
+  setupSlider();
 });

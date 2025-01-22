@@ -155,7 +155,6 @@ logEvent("page_view", "El usuario ha accedido a la página Discover", $_SESSION[
             <div class="container">
                   <div id="discover-profiles">
                         <div class="profile-container">
-                              <!-- <img id="discover-image" src="" alt="Profile Image"> -->
                               <div id="profile-info">
                                     <p id="user-name">Username <span id="user-age">Age</span></p>
                               </div>
@@ -174,18 +173,32 @@ logEvent("page_view", "El usuario ha accedido a la página Discover", $_SESSION[
                               </svg>
                         </button>
                   </div>
+                  <div id="filtro">
+                        <!-- <button id="filtroButton">Filtrar</button> -->
+                        <!-- From Uiverse.io by andrew-demchenk0 -->
+                        <button class="filtroButton" id="filtroButton">
+                              <svg xmlns="http://www.w3.org/2000/svg" width="20" viewBox="0 0 20 20" height="20" fill="none" class="svg-icon">
+                                    <g stroke-width="1.5" stroke-linecap="round" stroke="#5d41de">
+                                          <circle r="2.5" cy="10" cx="10"></circle>
+                                          <path fill-rule="evenodd" d="m8.39079 2.80235c.53842-1.51424 2.67991-1.51424 3.21831-.00001.3392.95358 1.4284 1.40477 2.3425.97027 1.4514-.68995 2.9657.82427 2.2758 2.27575-.4345.91407.0166 2.00334.9702 2.34248 1.5143.53842 1.5143 2.67996 0 3.21836-.9536.3391-1.4047 1.4284-.9702 2.3425.6899 1.4514-.8244 2.9656-2.2758 2.2757-.9141-.4345-2.0033.0167-2.3425.9703-.5384 1.5142-2.67989 1.5142-3.21831 0-.33914-.9536-1.4284-1.4048-2.34247-.9703-1.45148.6899-2.96571-.8243-2.27575-2.2757.43449-.9141-.01669-2.0034-.97028-2.3425-1.51422-.5384-1.51422-2.67994.00001-3.21836.95358-.33914 1.40476-1.42841.97027-2.34248-.68996-1.45148.82427-2.9657 2.27575-2.27575.91407.4345 2.00333-.01669 2.34247-.97026z" clip-rule="evenodd"></path>
+                                    </g>
+                              </svg>
+                              <span class="filtroButton-label">Filtros</span>
+                        </button>
+                  </div>
             </div>
 
             <div id="showMatch">
                   <p id="matchTitle">It's a Match!</p>
-                  <button id="closeMatch1">Conversa</button>
-                  <button id="closeMatch2">Discover</button>
+                  <button id="closeMatch1">Ir al Chat</button>
+                  <button id="closeMatch2">Seguir Descubriendo</button>
             </div>
 
             <script>
-                  const profiles = <?php echo $profiles_json; ?>;
+                  let profiles = <?php echo $profiles_json; ?>;
                   const userId = <?php echo $user_id; ?>;
                   const userEmail = <?php echo json_encode($user_email); ?>;
+                  const userLocation = <?php echo json_encode($user_location); ?>;
             </script>
 
             <script src="assets/js/discover_Slider.js"></script>
@@ -198,17 +211,20 @@ logEvent("page_view", "El usuario ha accedido a la página Discover", $_SESSION[
                   <ul>
                         <li>
                               <a href="discover.php">
-                                    <img class="footer-icons" src="assets/img/web/search.png" alt="Logout">
+                                    Descubrir
+                                    <!-- <img class="footer-icons" src="assets/img/web/search.png" alt="Logout"> -->
                               </a>
                         </li>
                         <li>
                               <a href="messages.php">
-                                    <img class="footer-icons" src="assets/img/web/message.png" alt="Logout">
+                                    Mensajes
+                                    <!-- <img class="footer-icons" src="assets/img/web/message.png" alt="Logout"> -->
                               </a>
                         </li>
                         <li>
                               <a href="profile.php">
-                                    <img class="footer-icons" src="assets/img/web/user.png" alt="Logout">
+                                    Perfil
+                                    <!-- <img class="footer-icons" src="assets/img/web/user.png" alt="Logout"> -->
                               </a>
                         </li>
                   </ul>
