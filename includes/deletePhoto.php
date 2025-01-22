@@ -51,7 +51,7 @@ try {
     }
 
     echo json_encode(['success' => true, 'message' => 'Foto eliminada correctamente.']);
-    logEvent("profile_photoDelete", "El usuario ha eliminado la foto: " . basename($photoPath), $_SESSION["email"]);
+    logEvent("profile_update", "El usuario ha eliminado la foto: " . basename($photoPath), $_SESSION["email"]);
 } catch (PDOException $e) {
     echo json_encode(['success' => false, 'message' => 'Error al eliminar la foto: ' . $e->getMessage()]);
 }
