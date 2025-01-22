@@ -6,8 +6,8 @@ if (!isset($_SESSION["user_id"])) {
     exit();
 }
 
-include 'includes/functions.php';
-require_once 'config/db_connection.php';
+include 'functions.php';
+require_once '../config/db_connection.php';
 
 $user_id = $_SESSION["user_id"];
 
@@ -27,16 +27,13 @@ if (isset($_FILES['photo']) && $_FILES['photo']['error'] === UPLOAD_ERR_OK) {
 
     // Definir la carpeta destino
     $uploadFolder = 'assets/img/seeder/';
-    if (!is_dir($uploadFolder)) {
-        mkdir($uploadFolder, 0777, true);
-    }
 
     // Generar un nombre único para el archivo
     $newFileName = uniqid().".webp";
     $destPath = $uploadFolder . $newFileName;
 
     // Mover el archivo al directorio destino
-    if (move_uploaded_file($fileTmpPath, $destPath)) {
+    if (move_uploaded_file($fileTmpPath, "../" . $destPath)) {
         // Guardar la ruta en la base de datos
         $sql = "INSERT INTO user_images (user_id, path) VALUES (:user_id, :path)";
         $stmt = $pdo->prepare($sql);
