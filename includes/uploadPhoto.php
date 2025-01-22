@@ -8,7 +8,6 @@ if (!isset($_SESSION["user_id"])) {
 
 include 'functions.php';
 require_once '../config/db_connection.php';
-
 $user_id = $_SESSION["user_id"];
 
 // Validar si se recibió un archivo
