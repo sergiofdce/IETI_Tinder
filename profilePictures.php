@@ -61,43 +61,44 @@ $photosJson = json_encode($photos);
     </header>
 
     <main>
-    <div id="divEditPictures">
-        <?php
-        try {
-            // Consulta SQL
-            $sql = "SELECT path FROM user_images WHERE user_id = :user_id";
+        <h2>Mis fotos</h2>
+        <div id="divEditPictures">
+            <?php
+            try {
+                // Consulta SQL
+                $sql = "SELECT path FROM user_images WHERE user_id = :user_id";
+                
+                // Preparar y ejecutar la consulta
+                $stmt = $pdo->prepare($sql);
+                $stmt->bindParam(':user_id', $user, PDO::PARAM_INT);
+                $stmt->execute();
             
-            // Preparar y ejecutar la consulta
-            $stmt = $pdo->prepare($sql);
-            $stmt->bindParam(':user_id', $user, PDO::PARAM_INT);
-            $stmt->execute();
-        
-            // Obtener resultados y guardar rutas en un array
-            $photos = [];
-            while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-                $photos[] = $row['path'];
+                // Obtener resultados y guardar rutas en un array
+                $photos = [];
+                while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+                    $photos[] = $row['path'];
+                }
+
+                // Pasar las rutas al JavaScript como JSON
+                $photosJson = json_encode($photos);
+            } catch (PDOException $e) {
+                echo "Error al conectar o consultar la base de datos: " . $e->getMessage();
+                $photosJson = '[]';
             }
+            ?>
+            
+            <ul id="photoList">
+                <script>
+                    const photos = <?php echo $photosJson; ?>; // Fotos del usuario desde PHP
+                    const maxVisiblePhotos = <?php echo $maxVisiblePhotos; ?>; // Configuración de cantidad máxima
 
-            // Pasar las rutas al JavaScript como JSON
-            $photosJson = json_encode($photos);
-        } catch (PDOException $e) {
-            echo "Error al conectar o consultar la base de datos: " . $e->getMessage();
-            $photosJson = '[]';
-        }
-        ?>
-        
-        <ul id="photoList">
-            <script>
-                const photos = <?php echo $photosJson; ?>; // Fotos del usuario desde PHP
-                const maxVisiblePhotos = <?php echo $maxVisiblePhotos; ?>; // Configuración de cantidad máxima
+                    // Llamar a la función para renderizar las fotos
+                    renderPhotos(photos);
+                </script>
+            </ul>
 
-                // Llamar a la función para renderizar las fotos
-                renderPhotos(photos);
-            </script>
-        </ul>
-
-        
-    </div>
+            
+        </div>
 
         <div class="notification-container" id="notificationContainer"></div>
     </main>

@@ -946,7 +946,7 @@
 
       #divEditPictures{
             overflow: auto;
-            height: 100%;
+            height: 96%;
             scroll-snap-type: x mandatory;
             scroll-behavior: smooth;
             scrollbar-width: thin;
@@ -957,7 +957,7 @@
             list-style: none;
             display: flex;
             flex-wrap: wrap;
-            height: 100%;
+            height: 98%;
             justify-content: space-around;
             align-content: space-around;
       }
@@ -967,9 +967,26 @@
             height: 30%;
       }
 
-      #photoList li:nth-child(n+3){
-            margin-top: 20px;
+      li#firstPhoto{
+            position: relative;
       }
+
+      #mainPhotoLabel{
+            width: 100%;
+            position: absolute;
+            z-index: 1;
+            bottom: 0;
+            background-color: #800f2fa3;
+            text-align: center;
+            padding: 10px;
+            border-radius: 0px 0px 10px 10px;
+            font-weight: 600;
+            color: white;
+      }
+
+      /*#photoList li:nth-child(n+3){
+            margin-top: 20px;
+      }*/
 
       #photoList li label{
             position: relative;

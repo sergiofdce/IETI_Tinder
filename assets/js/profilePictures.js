@@ -11,17 +11,26 @@ function renderPhotos(photoArray) {
     photosToRender.slice(0, maxVisiblePhotos).forEach((photo, index) => {
         const li = document.createElement('li');
 
+        // Si es el primer <li>, asignar un id y añadir un div con el texto "Foto principal"
+        if (index === 0) {
+            li.id = 'firstPhoto';
+            const mainPhotoDiv = document.createElement('div');
+            mainPhotoDiv.id = 'mainPhotoLabel';
+            mainPhotoDiv.innerHTML = `<p>Foto principal</p>`;
+            li.appendChild(mainPhotoDiv);
+        }
+
         // Verificar si la foto es la foto por defecto
         if (photo === defaultPhoto) {
             // Foto por defecto: se puede subir una nueva
-            li.innerHTML = `
+            li.innerHTML += `
                 <label>
                     <img src="${photo}" alt="Foto por defecto" class="default-photo">
                     <input type="file" class="file-input" data-index="${index}" style="display: none;">
                 </label>
             `;
         } else {
-            li.innerHTML = `
+            li.innerHTML += `
                 <label>
                     <img src="assets/img/web/eliminar.png" alt="cruz" class="deletePhotos" data-path="${photo}">
                     <img src="${photo}" alt="Foto existente" class="normal-photo">
