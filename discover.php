@@ -56,10 +56,31 @@ logEvent("page_view", "El usuario ha accedido a la página Discover", $_SESSION[
             $user_genre = $results[0]['genre'];
             $user_preference = $results[0]['sexual_preference'];
             $user_location = $results[0]['location'];
+            $user_birth_date = $results[0]['birth_date'];
 
             //$user_location tiene formato 'lat, long' y hay que separarlo en dos variables
             $user_lat = substr($user_location, 0, strpos($user_location, ','));
             $user_long = substr($user_location, strpos($user_location, ',') + 1);
+
+            // Configurar rango de edad (18-100 años)
+            $min_age = 18;
+            $max_age = 100;
+
+            // Radio de búsqueda en kilómetros
+            $radius = 50;
+
+            // Convertir el radio en diferencias de latitud/longitud aproximadas
+            // 1 grado de latitud = ~111km
+            // 1 grado de longitud = ~111km * cos(latitud)
+            $lat_range = $radius / 111;
+            $long_range = $radius / (111 * cos(deg2rad($user_lat)));
+
+            // Calcular los límites de latitud y longitud
+            $min_lat = $user_lat - $lat_range;
+            $max_lat = $user_lat + $lat_range;
+            $min_long = $user_long - $long_range;
+            $max_long = $user_long + $long_range;
+
             // Algoritmo
 
             // Seleccionar todos los usuarios que no sean el usuario logueado
@@ -67,72 +88,81 @@ logEvent("page_view", "El usuario ha accedido a la página Discover", $_SESSION[
 
             $query = "
                   SELECT DISTINCT u.id, u.name, u.surname, u.alias, u.birth_date, u.location, u.genre, u.sexual_preference, u.email,
-                        GROUP_CONCAT(ui.path ORDER BY ui.id ASC) AS images,
-                        -- Calcular la distancia entre el usuario y el usuario logueado usando Haversine
-                        (
-                              6371 * acos(
-                                    cos(radians(:lat)) * cos(radians(SUBSTRING_INDEX(u.location, ',', 1))) *
-                                    cos(radians(SUBSTRING_INDEX(u.location, ',', -1)) - radians(:long)) +
-                                    sin(radians(:lat)) * sin(radians(SUBSTRING_INDEX(u.location, ',', 1)))
-                              )
-                        ) AS distance,
-                        -- Calcular el score basado en la interacción
-                        (SELECT COUNT(*) 
-                        FROM matches m 
-                        WHERE m.sender_id = u.id AND m.status = 'pending' OR m.status = 'accepted') -
-                        (SELECT COUNT(*) 
-                        FROM matches m 
-                        WHERE m.sender_id = u.id AND m.status = 'rejected') AS interaction_score
+                  GROUP_CONCAT(ui.path ORDER BY ui.id ASC) AS images,
+                  (
+                  6371 * acos(
+                        cos(radians(:lat)) * cos(radians(SUBSTRING_INDEX(u.location, ',', 1))) *
+                        cos(radians(SUBSTRING_INDEX(u.location, ',', -1)) - radians(:long)) +
+                        sin(radians(:lat)) * sin(radians(SUBSTRING_INDEX(u.location, ',', 1)))
+                  )
+                  ) AS distance,
+                  (SELECT COUNT(*) 
+                  FROM matches m 
+                  WHERE m.sender_id = u.id AND m.status = 'pending' OR m.status = 'accepted') -
+                  (SELECT COUNT(*) 
+                  FROM matches m 
+                  WHERE m.sender_id = u.id AND m.status = 'rejected') AS interaction_score
                   FROM users u
                   LEFT JOIN user_images ui ON u.id = ui.user_id
                   WHERE u.id != :session_id
+                  AND u.privileges != 'admin'
                   AND (
-                        (:user_genre = 'home' AND :user_preference = 'heterosexual' AND u.genre = 'dona')
-                        OR (:user_genre = 'home' AND :user_preference = 'homosexual' AND u.genre = 'home')
-                        OR (:user_genre = 'dona' AND :user_preference = 'heterosexual' AND u.genre = 'home')
-                        OR (:user_genre = 'dona' AND :user_preference = 'homosexual' AND u.genre = 'dona')
-                        OR (:user_preference = 'bisexual')
-                        OR (:user_genre = 'no binari')
+                  (:user_genre = 'home' AND :user_preference = 'heterosexual' AND u.genre = 'dona')
+                  OR (:user_genre = 'home' AND :user_preference = 'homosexual' AND u.genre = 'home')
+                  OR (:user_genre = 'dona' AND :user_preference = 'heterosexual' AND u.genre = 'home')
+                  OR (:user_genre = 'dona' AND :user_preference = 'homosexual' AND u.genre = 'dona')
+                  OR (:user_preference = 'bisexual')
+                  OR (:user_genre = 'no binari')
+                  )
+                  -- Filtro de edad
+                  AND TIMESTAMPDIFF(YEAR, u.birth_date, CURDATE()) BETWEEN :minAge AND :maxAge
+                  -- Filtro por radio de 50 km
+                  AND (
+                        6371 * acos(
+                              cos(radians(:lat)) * cos(radians(SUBSTRING_INDEX(u.location, ',', 1))) *
+                              cos(radians(SUBSTRING_INDEX(u.location, ',', -1)) - radians(:long)) +
+                              sin(radians(:lat)) * sin(radians(SUBSTRING_INDEX(u.location, ',', 1)))
+                        )
+                  ) <= 50
+                  AND NOT EXISTS (
+                  SELECT 1 
+                  FROM matches m_accepted
+                  WHERE m_accepted.status = 'accepted'
+                  AND (
+                  (m_accepted.sender_id = :session_id AND m_accepted.receiver_id = u.id)
+                  OR 
+                  (m_accepted.sender_id = u.id AND m_accepted.receiver_id = :session_id)
+                  )
                   )
                   AND NOT EXISTS (
+                  SELECT 1 
+                  FROM matches m_rejected
+                  WHERE m_rejected.status = 'rejected'
+                  AND (
+                  (m_rejected.sender_id = :session_id AND m_rejected.receiver_id = u.id)
+                  OR 
+                  (m_rejected.sender_id = u.id AND m_rejected.receiver_id = :session_id AND NOT EXISTS (
                         SELECT 1 
-                        FROM matches m_accepted
-                        WHERE m_accepted.status = 'accepted'
-                        AND (
-                              (m_accepted.sender_id = :session_id AND m_accepted.receiver_id = u.id)
-                              OR 
-                              (m_accepted.sender_id = u.id AND m_accepted.receiver_id = :session_id)
-                        )
+                        FROM matches m_pending
+                        WHERE m_pending.sender_id = :session_id
+                        AND m_pending.receiver_id = u.id
+                  ))
                   )
-                  AND NOT EXISTS (
-                        SELECT 1 
-                        FROM matches m_rejected
-                        WHERE m_rejected.status = 'rejected'
-                        AND (
-                              (m_rejected.sender_id = :session_id AND m_rejected.receiver_id = u.id)
-                              OR 
-                              (m_rejected.sender_id = u.id AND m_rejected.receiver_id = :session_id AND NOT EXISTS (
-                                    SELECT 1 
-                                    FROM matches m_pending
-                                    WHERE m_pending.sender_id = :session_id
-                                    AND m_pending.receiver_id = u.id
-                              ))
-                        )
                   )
                   AND (
-                        NOT EXISTS (
-                              SELECT 1 
-                              FROM matches m1
-                              WHERE m1.sender_id = :session_id 
-                              AND m1.receiver_id = u.id
-                        )
-                        OR EXISTS (
-                              SELECT 1 
-                              FROM matches m2
-                              WHERE m2.sender_id = u.id 
-                              AND m2.receiver_id = :session_id
-                              AND m2.status = 'pending'
-                        )
+                  NOT EXISTS (
+                  SELECT 1 
+                  FROM matches m1
+                  WHERE m1.sender_id = :session_id 
+                  AND m1.receiver_id = u.id
+                  )
+                  OR EXISTS (
+                  SELECT 1 
+                  FROM matches m2
+                  WHERE m2.sender_id = u.id 
+                  AND m2.receiver_id = :session_id
+                  AND m2.status = 'pending'
+                  )
                   )
                   GROUP BY u.id, u.name, u.surname, u.alias, u.birth_date, u.location, u.genre, u.sexual_preference, u.email
                   ORDER BY ((interaction_score * 0.7) + (1 - (distance / MAX(distance)) * 0.3)) DESC;
@@ -141,8 +171,19 @@ logEvent("page_view", "El usuario ha accedido a la página Discover", $_SESSION[
 
 
             // Le pasamos el user_id de la cookie como parámetro
-
-            $params = [':session_id' => $user_id, ':user_genre' => $user_genre, ':user_preference' => $user_preference, ':lat' => $user_lat, ':long' => $user_long];
+            $params =   [
+                        'session_id' => $user_id,
+                        'user_genre' => $user_genre,
+                        'user_preference' => $user_preference,
+                        'lat' => $user_lat,
+                        'long' => $user_long,
+                        'minAge' => $min_age,
+                        'maxAge' => $max_age,
+                        'minLat' => $min_lat,
+                        'maxLat' => $max_lat,
+                        'minLon' => $min_long,
+                        'maxLon' => $max_long
+                        ];
 
 
 
