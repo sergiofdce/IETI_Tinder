@@ -3,6 +3,8 @@ session_start();
 
 require_once 'config/db_connection.php';
 include 'includes/functions.php';
+
+
 logEvent("page_view", "Un usuario ha accedido a la página Register", "new_user");
 
 date_default_timezone_set('Europe/Madrid');
@@ -22,8 +24,20 @@ $errorPassword2 = "";
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
-    if (!empty($_POST['name']) && !empty($_POST['surname']) && !empty($_POST['username']) && !empty($_POST['birthdate']) && !empty($_POST['location']) && !empty($_POST['genre']) && !empty($_POST['sexual_preference']) && !empty($_POST['email']) && !empty($_POST['password']) && !empty($_POST['password2'])) {
-
+    if (
+        !empty($_POST['name']) && 
+        !empty($_POST['surname']) && 
+        !empty($_POST['username']) && 
+        !empty($_POST['birthdate']) && 
+        !empty($_POST['location']) && 
+        !empty($_POST['genre']) && 
+        !empty($_POST['sexual_preference']) && 
+        !empty($_POST['email']) && 
+        !empty($_POST['password']) && 
+        !empty($_POST['password2']) && 
+        isset($_FILES['media']) && $_FILES['media']['error'] === UPLOAD_ERR_OK &&
+        isset($_FILES['media2']) && $_FILES['media2']['error'] === UPLOAD_ERR_OK
+    ){    
         $name = $_POST['name'];
         $surname = $_POST['surname'];
         $alias = $_POST['username'];
@@ -55,18 +69,27 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
         $token = generateToken();
 
-        $register_query = "INSERT INTO unverified_users SET name = ?, surname = ?, alias = ?, birth_date = ?, location = ?, genre = ?, sexual_preference = ?, password = ?, email = ?, created_at = ?, token = ?";
+        $register_query = "INSERT INTO users SET name = ?, surname = ?, alias = ?, birth_date = ?, location = ?, genre = ?, sexual_preference = ?, password = ?, email = ?, created_at = ?, token = ?, status = 'unverified'";
         $register_params = [$name, $surname, $alias, $birth_date, $location, $genre, $sexual_preference, $hashed_password, $email, $timestamp, $token];
 
         try {
             executeQuery($pdo, $register_query, $register_params);
-            
+
             echo json_encode(['status' => 'success', 'message' => '¡Registro realizado con éxito!', 'name' => $name]);
             logEvent("new_register", "El usuario " . $email . " se ha registrado", $email);
 
             sendVerificationEmail($email, $token, $pdo);
+
+            $getIdQuery = "SELECT id FROM users WHERE email = :email";
+            $getIdParams = [':email' => $email];
+            $getIdResults = executeQuery($pdo, $getIdQuery, $getIdParams);
+            $_SESSION["user_id"] = $getIdResults[0]['id'];
+            $_SESSION["email"] = $email;
+
+            uploadPhotos($_SESSION["user_id"], $pdo); 
+
         } catch (Exception $e) {
-            echo json_encode(['status' => 'error', 'message' => '¡Error! Algo salió mal'. $e->getMessage()]);
+            echo json_encode(['status' => 'error', 'message' => '¡Error! Algo salió mal' . $e->getMessage()]);
         }
         exit();
     } else { //si alguno de los campos esta vacio dar el estilo del error
@@ -106,54 +129,111 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     if (isset($_GET['verify']) && isset($_GET['token'])) {
         $user_id = $_GET['verify'];
         $user_token = $_GET['token'];
-        $query = "SELECT * FROM unverified_users WHERE id = :user_id AND token = :user_token";
+        $query = "SELECT * FROM users WHERE id = :user_id AND token = :user_token";
         $params = [':user_id' => $user_id, ':user_token' => $user_token];
         $results = executeQuery($pdo, $query, $params);
 
         if ($results) {
             $user = $results[0];
-            $query = "INSERT INTO users (name, surname, alias, birth_date, location, genre, sexual_preference, password, email, created_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-            $params = [$user['name'], $user['surname'], $user['alias'], $user['birth_date'], $user['location'], $user['genre'], $user['sexual_preference'], $user['password'], $user['email'], $user['created_at']];
+            //actualizar la base de datos
+            $query = "UPDATE users SET status = 'verified' WHERE id = :user_id AND token = :user_token";
+            $params = [':user_id' => $user_id, ':user_token' => $user_token];
             executeQuery($pdo, $query, $params);
+            // $query = "INSERT INTO users (name, surname, alias, birth_date, location, genre, sexual_preference, password, email, created_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+            // $params = [$user['name'], $user['surname'], $user['alias'], $user['birth_date'], $user['location'], $user['genre'], $user['sexual_preference'], $user['password'], $user['email'], $user['created_at']];
+            // executeQuery($pdo, $query, $params);
 
-            $query = "DELETE FROM unverified_users WHERE id = :user_id";
-            $params = [':user_id' => $user_id];
-            executeQuery($pdo, $query, $params);
+            // $query = "DELETE FROM unverified_users WHERE id = :user_id";
+            // $params = [':user_id' => $user_id];
+            // executeQuery($pdo, $query, $params);
 
             logEvent("verify_success", "El usuario " . $user['email'] . " ha verificado su cuenta", $user['email']);
 
             $_SESSION["verified"] = true;
+            header("Location: login.php");
+        } else {
+            //mostrar un mensaje de error
+            echo "     
+                <script>
+                    document.addEventListener('DOMContentLoaded', function() {
+                        showMessage('wrongEmail', 'El enlace de verificación no es válido.');
+                    })
+                </script>";
         }
-        header("Location: login.php");
-    }
-    else {
-        //mostrar un mensaje de error
-        echo "     
-            <script>
-                document.addEventListener('DOMContentLoaded', function() {
-                    showMessage('wrongEmail', 'El enlace de verificación no es válido.');
-                })
-            </script>";
     }
 }
 
-function generateToken() {
+function generateToken()
+{
     return bin2hex(random_bytes(16));
 }
 
-function sendVerificationEmail($email, $pdo) {
-    $queryGetId = "SELECT id, token FROM unverified_users WHERE email = :email";
-    $paramsGetId = [':email' => $email];
+function sendVerificationEmail($email, $token, $pdo)
+{
+    $queryGetId = "SELECT id, token FROM users WHERE email = :email and token = :token";
+    $paramsGetId = [':email' => $email, ':token' => $token];
     $userId = executeQuery($pdo, $queryGetId, $paramsGetId);
 
     $mailHeader = 'From: verify@tinder4.ieti.site' . "\r\n" .
-    'Reply-To: verify@tinder4.ieti.site' .  "\r\n" .
-    'X-Mailer: PHP/' . phpversion();
+        'Reply-To: verify@tinder4.ieti.site' .  "\r\n" .
+        'X-Mailer: PHP/' . phpversion();
 
     $subject = "EasyDates - Verificación de cuenta";
     $message = "Para verificar su cuenta, por favor haga clic en el siguiente enlace: http://tinder4.ieti.site/register.php?verify=" . $userId[0]['id'] . "&token=" . $userId[0]['token'];
     mail($email, $subject, $message, $mailHeader);
 }
+
+
+function uploadPhotos($user_id, $pdo) {
+    // Validar si se recibieron archivos
+    if (!empty($_FILES)) {
+        foreach ($_FILES as $key => $file) {
+            // Verificar si el archivo fue subido correctamente
+            if ($file['error'] === UPLOAD_ERR_OK) {
+                $fileTmpPath = $file['tmp_name'];
+                $fileName = $file['name'];
+                $fileSize = $file['size'];
+                $fileType = $file['type'];
+
+                // Validar tipo de archivo (por ejemplo, solo imágenes)
+                $allowedMimeTypes = ['image/jpg', 'image/jpeg', 'image/png', 'image/webp'];
+                if (!in_array($fileType, $allowedMimeTypes)) {
+                    echo json_encode(['success' => false, 'message' => "Tipo de archivo no permitido para el archivo: $fileName."]);
+                    continue; // Pasar al siguiente archivo
+                }
+
+                // Definir la carpeta destino
+                $uploadFolder = 'assets/img/seeder/';
+
+                // Generar un nombre único para el archivo
+                $newFileName = uniqid() . ".webp";
+                $destPath = $uploadFolder . $newFileName;
+
+                // Mover el archivo al directorio destino
+                if (move_uploaded_file($fileTmpPath, $destPath)) {
+                    // Guardar la ruta en la base de datos
+                    
+                    $sql = "INSERT INTO user_images (user_id, path) VALUES (:user_id, :path)";
+                    $stmt = $pdo->prepare($sql);
+                    $stmt->execute([
+                        ':user_id' => $user_id,
+                        ':path' => $destPath,
+                    ]);
+
+                    // Registrar evento
+                    logEvent("profile_photoUpload", "El usuario ha subido la foto: " . $newFileName, $_SESSION["email"]);
+                } else {
+                    echo json_encode(['success' => false, 'message' => "Error al mover el archivo: $fileName."]);
+                }
+            } else {
+                echo json_encode(['success' => false, 'message' => "Error al subir el archivo: $fileName."]);
+            }
+        }
+    } else {
+        echo json_encode(['success' => false, 'message' => 'No se recibieron archivos.']);
+    }
+}
+
 ?>
 
 <!DOCTYPE html>
@@ -176,7 +256,7 @@ function sendVerificationEmail($email, $pdo) {
 
 </head>
 
-<body>
+<body id="register">
 
     <header>
         <img src="assets/img/web/logo.png" alt="EasyDates" id="logo">
@@ -188,7 +268,7 @@ function sendVerificationEmail($email, $pdo) {
                 <h1 class="fuente-titulos">Nuevo registro: </h1>
             </div>
 
-            <form class="profile-form" method="POST" action="register.php" id="registerForm">
+            <form class="profile-form" method="POST" action="register.php" id="registerForm"enctype="multipart/form-data">
                 <div class="login-alert"><?php echo $message; ?></div>
                 <div class="input-group">
                     <label for="name" id="name-label">Nombre:</label>
@@ -205,6 +285,14 @@ function sendVerificationEmail($email, $pdo) {
                 <div class="input-group">
                     <label for="email" id="email-label">Correo:</label>
                     <input type="text" id="email" name="email" placeholder="correo@ieti.site" class="<?php echo $errorEmail; ?>">
+                </div>
+                <div class="input-group">
+                    <label for="media" id="media-label">Imagen 1:</label>
+                    <input type="file" class="file-input" name="media" id="media" accept="image/*" />
+                </div>
+                <div class="input-group">
+                    <label for="media2" id="media2-label">Imagen 2:</label>
+                    <input type="file" class="file-input" name="media2" id="media2" accept="image/*" />
                 </div>
                 <div class="input-group">
                     <label for="genre" id="genre-label">Genero:</label>

@@ -18,23 +18,12 @@ CREATE TABLE users (
     password VARCHAR(255) NOT NULL,
     email VARCHAR(255) UNIQUE NOT NULL,
     created_at DATETIME NOT NULL,
-    privileges enum('user','admin') NOT NULL DEFAULT 'user'
+    privileges enum('user','admin') NOT NULL DEFAULT 'user',
+    status enum('verified','unverified','deleted') NOT NULL DEFAULT 'verified',
+    token text NOT NULL
 );
 
--- Tabla unverified_users
-CREATE TABLE unverified_users (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    name VARCHAR(255) NOT NULL,
-    surname VARCHAR(255) NOT NULL,
-    alias VARCHAR(100) NOT NULL,
-    birth_date DATE NOT NULL,
-    location VARCHAR(255),
-    genre ENUM('home', 'dona', 'no binari'),
-    sexual_preference ENUM('heterosexual', 'homosexual', 'bisexual') NOT NULL,
-    password VARCHAR(255) NOT NULL,
-    email VARCHAR(255) UNIQUE NOT NULL,
-    created_at DATETIME NOT NULL
-);
+
 
 -- Tabla fotos_Usuarios
 CREATE TABLE user_images (

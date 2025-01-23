@@ -84,6 +84,8 @@ document.getElementById('registerForm').addEventListener('submit', function (eve
   const sexual_preference = document.getElementById('sexual_preference').value;
   const birthdate = document.getElementById('birthdate').value;
   const location = document.getElementById('location').value;
+  const media = document.getElementById('media').value;
+  const media2 = document.getElementById('media2').value;
 
   const password = document.getElementById('password').value;
   const password2 = document.getElementById('password2').value;
@@ -103,6 +105,8 @@ document.getElementById('registerForm').addEventListener('submit', function (eve
     { id: 'sexual_preference', label: 'sexual_preference-label', value: sexual_preference },
     { id: 'birthdate', label: 'birthdate-label', value: birthdate },
     { id: 'location', label: 'location-label', value: location },
+    { id: 'media', label: 'media-label', value: media },
+    { id: 'media2', label: 'media2-label', value: media2 },
     { id: 'password', label: 'password-label', value: password },
     { id: 'password2', label: 'password2-label', value: password2 }
   ];
@@ -118,13 +122,13 @@ document.getElementById('registerForm').addEventListener('submit', function (eve
     }
   });
 
-  if (!name || !surname || !username || !email || !genre || !sexual_preference || !birthdate || !location) {
+  if (!name || !surname || !username || !email || !genre || !sexual_preference || !birthdate || !location || !media || !media2 || !password || !password2) {
     showMessage('error', 'Todos los campos son obligatorios');
     return;
   }
 
   const formData = new FormData(this);
-
+ 
   fetch('register.php', {
     method: 'POST',
     body: formData
@@ -215,3 +219,4 @@ map.on("click", function (e) {
   // Ocultar el mapa después de seleccionar la coordenada
   document.getElementById("map-container").style.display = "none";
 });
+
