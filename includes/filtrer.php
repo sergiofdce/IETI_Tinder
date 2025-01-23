@@ -37,7 +37,13 @@ $query = "
                     cos(radians(SUBSTRING_INDEX(u.location, ',', -1)) - radians(:long)) +
                     sin(radians(:lat)) * sin(radians(SUBSTRING_INDEX(u.location, ',', 1)))
                 )
-            ) AS distance
+            ) AS distance,
+             (SELECT COUNT(*) 
+                  FROM matches m 
+                  WHERE m.sender_id = u.id AND m.status = 'pending' OR m.status = 'accepted') -
+                  (SELECT COUNT(*) 
+                  FROM matches m 
+                  WHERE m.sender_id = u.id AND m.status = 'rejected') AS interaction_score
             FROM users u
             LEFT JOIN user_images ui ON u.id = ui.user_id
             WHERE u.id != :session_id
@@ -89,7 +95,7 @@ $query = "
                 )
             )
             GROUP BY u.id, u.name, u.surname, u.alias, u.birth_date, u.location, u.genre, u.sexual_preference, u.email
-            ORDER BY distance ASC";
+            ORDER BY ((interaction_score * 0.7) + (1 - (distance / MAX(distance)) * 0.3)) DESC";
 
     $params = [
             ':session_id' => $user_id,
