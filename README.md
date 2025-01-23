@@ -57,7 +57,7 @@ https://github.com/sergiofdce/IETI_Tinder.git
 
 3. Importa la base de datos:
 
-<img width="851" alt="image" src="https://github.com/user-attachments/assets/f1167eb2-899a-41fe-b87b-a6ad32bcc6ca" />
+<img width="858" alt="image" src="https://github.com/user-attachments/assets/ff675b2d-510f-4129-9f37-a576b7b7b2cf" />
 
 - Puedes encontrar el script en la ruta /config/tinder.sql
 ```bash
