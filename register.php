@@ -35,8 +35,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         !empty($_POST['email']) && 
         !empty($_POST['password']) && 
         !empty($_POST['password2']) && 
-        isset($_FILES['media']) && $_FILES['photo']['error'] === UPLOAD_ERR_OK &&
-        isset($_FILES['media2']) && $_FILES['photo2']['error'] === UPLOAD_ERR_OK
+        isset($_FILES['media']) && $_FILES['media']['error'] === UPLOAD_ERR_OK &&
+        isset($_FILES['media2']) && $_FILES['media2']['error'] === UPLOAD_ERR_OK
     ){    
         $name = $_POST['name'];
         $surname = $_POST['surname'];
@@ -137,7 +137,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
             $user = $results[0];
             //actualizar la base de datos
             $query = "UPDATE users SET status = 'verified' WHERE id = :user_id AND token = :user_token";
-            $params = [':user_id' => $user_id];
+            $params = [':user_id' => $user_id, ':user_token' => $user_token];
             executeQuery($pdo, $query, $params);
             // $query = "INSERT INTO users (name, surname, alias, birth_date, location, genre, sexual_preference, password, email, created_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
             // $params = [$user['name'], $user['surname'], $user['alias'], $user['birth_date'], $user['location'], $user['genre'], $user['sexual_preference'], $user['password'], $user['email'], $user['created_at']];
