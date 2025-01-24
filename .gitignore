@@ -4,3 +4,4 @@
 .DS_Store
 vendor/
 assets/img/seeder/
+assets/modules/phpmail/vendor
