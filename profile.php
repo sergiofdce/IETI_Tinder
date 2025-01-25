@@ -88,7 +88,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <button onclick="showTab('editar')">Editar</button>
             </div>
             <div id="mostrar" class="tab-content">
-                <div class="profile-container">
+                <div class="profile-container profile-container-porfile">
                     <div class="slider">
                         <?php
                         $photos = explode(',', $user['photos']);
