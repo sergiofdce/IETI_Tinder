@@ -14,7 +14,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $email = $_POST["email"];
         $password = hash('sha512', $_POST["password"]);
 
-        $query = "SELECT * FROM users WHERE email = :email AND password = :password";
+        $query = "SELECT * FROM users WHERE email = :email AND password = :password AND status = 'verified'";
         $params = [':email' => $email, ':password' => $password];
         $results = executeQuery($pdo, $query, $params);
 
@@ -39,7 +39,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
             if ($checkEmailResults) {
 
-                $message = "Contraseña incorrecta";
+                $message = "Contraseña incorrecta o usuario no verificado";
                 $passwordErrorClass = "form__field--error";
                 logEvent("login_failure", "El usuario " . $_POST["email"] . " ha fallado la contraseña", $_POST["email"]);
 

@@ -345,6 +345,14 @@ a:focus {
 #register main{
       overflow-y: auto;
 }
+#register .profile-form {
+      margin-top: 50px;
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+      width: 409px;
+      font-size: 18px;
+}
 
 /* Header */
 #login-image {
