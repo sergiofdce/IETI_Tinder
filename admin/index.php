@@ -1,4 +1,4 @@
-<?php 
+<?php
 session_start();
 include '../includes/functions.php';
 require_once '../config/db_connection.php';
@@ -22,12 +22,19 @@ if ($user[0]['privileges'] != "admin") {
 ?>
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>EasyDates - Admin Panel</title>
 </head>
+
 <body id="adminPanel">
     <h1>Admin Panel (En construcción)</h1>
+
+    <a href="users.php">Gestión de usuarios</a>
+    <a href="logs.php">Gestión de logs</a>
+
 </body>
+
 </html>
