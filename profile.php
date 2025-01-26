@@ -84,8 +84,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <main>
         <div id="profile-container">
             <div class="tabs">
-                <button onclick="showTab('mostrar')">Mostrar</button>
-                <button onclick="showTab('editar')">Editar</button>
+                <button id="buttonFocus" onclick="showTab('mostrar',this)">Mostrar</button>
+                <button onclick="showTab('editar',this)">Editar</button>
             </div>
             <div id="mostrar" class="tab-content">
                 <div class="profile-container profile-container-porfile">
@@ -182,7 +182,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         <!-- <img class="footer-icons" src="assets/img/web/message.png" alt="Logout"> -->
                     </a>
                 </li>
-                <li>
+                <li id="navFocus">
                     <a href="profile.php">
                         Perfil
                         <!-- <img class="footer-icons" src="assets/img/web/user.png" alt="Logout"> -->

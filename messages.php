@@ -224,7 +224,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
                         <!-- <img class="footer-icons" src="assets/img/web/search.png" alt="Logout"> -->
                     </a>
                 </li>
-                <li>
+                <li id="navFocus">
                     <a href="messages.php">
                         Mensajes
                         <!-- <img class="footer-icons" src="assets/img/web/message.png" alt="Logout"> -->

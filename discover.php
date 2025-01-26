@@ -252,7 +252,7 @@ logEvent("page_view", "El usuario ha accedido a la página Discover", $_SESSION[
       <footer>
             <nav>
                   <ul>
-                        <li>
+                        <li id="navFocus">
                               <a href="discover.php">
                                     Descubrir
                                     <!-- <img class="footer-icons" src="assets/img/web/search.png" alt="Logout"> -->

@@ -23,8 +23,8 @@ function loadUserMessages(senderId, receiverId) {
         </div>
         <div id="usermessages-container">
           <div class="tabs">
-            <button onclick="showTab('chat')">Chat</button>
-            <button onclick="showTab('perfil')">Perfil</button>
+            <button id="buttonFocus" onclick="showTab('chat',this)">Chat</button>
+            <button onclick="showTab('perfil',this)">Perfil</button>
           </div>
           <div id="chat" class="tab-content">
             <!-- Aquí se cargarán los mensajes -->
@@ -57,12 +57,25 @@ function loadDefaultMain() {
   location.reload();
 }
 
-function showTab(tabName) {
+function showTab(tabName, button) {
+  // Ocultar todo el contenido de las pestañas
   document.querySelectorAll(".tab-content").forEach((tab) => {
     tab.style.display = "none";
   });
+  
+  // Mostrar el contenido de la pestaña seleccionada
   document.getElementById(tabName).style.display = "block";
+
+  // Remover el id "buttonFocus" de todos los botones
+  const focusedButton = document.querySelector("#buttonFocus");
+  if (focusedButton) {
+    focusedButton.removeAttribute("id");
+  }
+
+  // Agregar el id "buttonFocus" al botón seleccionado
+  button.id = "buttonFocus";
 }
+
 
 function loadMessages(senderId, receiverId) {
   fetch("messages.php", {
