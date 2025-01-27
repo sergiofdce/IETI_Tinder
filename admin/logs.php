@@ -26,14 +26,14 @@ if ($user[0]['privileges'] != "admin") {
 if (isset($_GET['file'])) {
     $filename = basename($_GET['file']); // Sanitizar nombre de archivo
     $filepath = "../logs/" . $filename;
-    
+
     if (!file_exists($filepath)) {
         die("Archivo de log no encontrado.");
     }
 
     $logs = file_get_contents($filepath);
     $logs_array = array_filter(explode("\n", $logs));
-    
+
     // Procesar cada línea de log para extraer los componentes
     $processed_logs = [];
     foreach ($logs_array as $log) {
@@ -62,16 +62,22 @@ if (isset($_GET['file'])) {
 ?>
     <!DOCTYPE html>
     <html lang="en">
+
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>EasyDates - Detalles del Log</title>
-        <link rel="stylesheet" href="styles.css">
+        <link rel="stylesheet" href="../assets/css/styles.css">
     </head>
-    <body>
+
+    <body id="admin-panel">
         <h1>Logs del día: <?= htmlspecialchars(substr($filename, 0, -4)) ?></h1>
+
+        <a href="/admin/logs.php" class="card-link">Volver a la lista de logs</a>
+
+
         <div class="logs-container">
-            <table class="logs-table">
+            <table class="admin-table">
                 <thead>
                     <tr>
                         <th>Fecha y Hora</th>
@@ -79,7 +85,7 @@ if (isset($_GET['file'])) {
                         <th>Usuario</th>
                         <th>Descripción</th>
                         <th>IP</th>
-                        <th>URI</th>
+                        <th>URL</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -102,7 +108,7 @@ if (isset($_GET['file'])) {
                     <a href="/admin/logs.php?file=<?= urlencode($filename) ?>&log_page=<?= $log_page - 1 ?>" class="btn">Anterior</a>
                 <?php endif; ?>
 
-                <?php 
+                <?php
                 $start = max(1, min($log_page - 2, $total_log_pages - 4));
                 $end = min($total_log_pages, max($log_page + 2, 5));
 
@@ -114,8 +120,8 @@ if (isset($_GET['file'])) {
                 <?php endif; ?>
 
                 <?php for ($i = $start; $i <= $end; $i++): ?>
-                    <a href="/admin/logs.php?file=<?= urlencode($filename) ?>&log_page=<?= $i ?>" 
-                       <?= $i === $log_page ? 'class="active"' : '' ?>><?= $i ?></a>
+                    <a href="/admin/logs.php?file=<?= urlencode($filename) ?>&log_page=<?= $i ?>"
+                        <?= $i === $log_page ? 'class="active"' : '' ?>><?= $i ?></a>
                 <?php endfor; ?>
 
                 <?php if ($end < $total_log_pages): ?>
@@ -130,8 +136,9 @@ if (isset($_GET['file'])) {
                 <?php endif; ?>
             </div>
         </div>
-        <a href="/admin/logs.php" class="back-link">Volver a la lista de logs</a>
+
     </body>
+
     </html>
 <?php
     exit();
@@ -155,15 +162,20 @@ $current_files = array_slice($log_files, $offset, $limit);
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>EasyDates - Admin Panel - Logs</title>
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="../assets/css/styles.css">
 </head>
-<body>
+
+<body id="admin-panel">
     <h1>Registros del Sistema</h1>
-    <table>
+
+    <a href="/admin/index.php" class="card-link">Volver a Inicio</a>
+
+    <table class="admin-table">
         <thead>
             <tr>
                 <th>Fecha</th>
@@ -190,7 +202,7 @@ $current_files = array_slice($log_files, $offset, $limit);
             <a href="/admin/logs.php?page=<?= $page - 1 ?>" class="btn">Anterior</a>
         <?php endif; ?>
 
-        <?php 
+        <?php
         // Mostrar máximo 5 páginas alrededor de la página actual
         $start = max(1, min($page - 2, $total_pages - 4));
         $end = min($total_pages, max($page + 2, 5));
@@ -217,5 +229,7 @@ $current_files = array_slice($log_files, $offset, $limit);
             <a href="/admin/logs.php?page=<?= $page + 1 ?>" class="btn">Siguiente</a>
         <?php endif; ?>
     </div>
+
 </body>
+
 </html>

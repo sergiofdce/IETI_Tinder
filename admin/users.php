@@ -48,11 +48,13 @@ if (isset($_GET['id'])) {
             <meta charset="UTF-8">
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
             <title>EasyDates - Detalles del Usuario</title>
-            <link rel="stylesheet" href="styles.css">
+            <link rel="stylesheet" href="../assets/css/styles.css">
 
       </head>
 
-      <body>
+      <body id="admin-panel">
+            <a href="/admin/users.php" class="card-link">Volver a la lista de usuarios</a>
+
             <h1>Detalles del Usuario: <?= htmlspecialchars($user_detail['name'] . ' ' . $user_detail['surname']) ?></h1>
             <p><strong>Alias:</strong> <?= htmlspecialchars($user_detail['alias']) ?></p>
             <p><strong>Email:</strong> <?= htmlspecialchars($user_detail['email']) ?></p>
@@ -75,7 +77,8 @@ if (isset($_GET['id'])) {
                   <p>No hay imágenes para este usuario.</p>
             <?php endif; ?>
 
-            <a href="/admin/users.php">Volver a la lista de usuarios</a>
+
+
       </body>
 
       </html>
@@ -110,12 +113,15 @@ $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
       <meta charset="UTF-8">
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
       <title>EasyDates - Admin Panel - Usuarios</title>
-      <link rel="stylesheet" href="styles.css">
+      <link rel="stylesheet" href="../assets/css/styles.css">
 </head>
 
-<body>
+<body id="admin-panel">
       <h1>Lista de Usuarios</h1>
-      <table border="1">
+
+      <a href="/admin/index.php" class="card-link">Volver a Inicio</a>
+
+      <table class="admin-table" border="1">
             <thead>
                   <tr>
                         <th>ID</th>
@@ -148,7 +154,7 @@ $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
                   <a href="/admin/users.php?page=<?= $page - 1 ?>" class="btn">Anterior</a>
             <?php endif; ?>
 
-            <?php 
+            <?php
             // Mostrar máximo 5 páginas alrededor de la página actual
             $start = max(1, min($page - 2, $total_pages - 4));
             $end = min($total_pages, max($page + 2, 5));
@@ -161,8 +167,8 @@ $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
             <?php endif; ?>
 
             <?php for ($i = $start; $i <= $end; $i++): ?>
-                  <a href="/admin/users.php?page=<?= $i ?>" 
-                     <?= $i === $page ? 'class="active"' : '' ?>><?= $i ?></a>
+                  <a href="/admin/users.php?page=<?= $i ?>"
+                        <?= $i === $page ? 'class="active"' : '' ?>><?= $i ?></a>
             <?php endfor; ?>
 
             <?php if ($end < $total_pages): ?>
@@ -176,6 +182,7 @@ $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
                   <a href="/admin/users.php?page=<?= $page + 1 ?>" class="btn">Siguiente</a>
             <?php endif; ?>
       </div>
+
 </body>
 
 </html>
