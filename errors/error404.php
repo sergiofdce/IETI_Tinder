@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <link rel="stylesheet" href="../assets/css/styles.css">
@@ -10,14 +11,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Error 404</title>
 </head>
+
 <body id="bodyError">
-<main id="mainError">
-    <img src="../assets/img/web/logo.png" alt="EasyDates">
-    <h1>Error 404</h1>
-    <div>
-        <h2>Página no encontrada</h2>
-        <p>La página que buscas no existe, fue movida o el enlace es incorrecto. Vuelve a la <a href="../login.php">página principal.</a></p>
-    </div>
-</main>
+    <main id="mainError">
+        <img src="../assets/img/web/logo.png" alt="EasyDates">
+        <h1>Error 404</h1>
+        <div>
+            <h2>Página no encontrada</h2>
+            <p>La página que buscas no existe, fue movida o el enlace es incorrecto. <br>Vuelve a la <a href="../login.php">página principal.</a></p>
+        </div>
+    </main>
 </body>
+
 </html>

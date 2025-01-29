@@ -7,7 +7,7 @@ logEvent("page_view", "El usuario ha accedido a la página Admin", $_SESSION["em
 
 if (!isset($_SESSION["user_id"])) {
     header("HTTP/1.0 403 Forbidden");
-    die("Error 403: Forbidden");
+    die();
 }
 $user_id = $_SESSION["user_id"];
 $query = "SELECT privileges FROM users WHERE id = :user_id";
@@ -16,7 +16,8 @@ $user = executeQuery($pdo, $query, $params);
 if ($user[0]['privileges'] != "admin") {
     logEvent("page_view", "Problema de permisos, sin acceso a Admin", $_SESSION["email"]);
     header("HTTP/1.0 403 Forbidden");
-    die("Error 403: Forbidden");
+    include ('../errors/error403.php');
+    die();
 }
 
 ?>

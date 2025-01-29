@@ -165,8 +165,6 @@ function loadMessages(senderId, receiverId) {
 
           chatContainer.appendChild(messageElement);
         });
-          chatContainer.scrollTop = chatContainer.scrollHeight;
-
       }
     })
     .catch((error) => console.error("Error:", error));
