@@ -23,8 +23,8 @@ function loadUserMessages(senderId, receiverId) {
         </div>
         <div id="usermessages-container">
           <div class="tabs">
-            <button onclick="showTab('chat')">Chat</button>
-            <button onclick="showTab('perfil')">Perfil</button>
+            <button id="buttonFocus" onclick="showTab('chat',this)">Chat</button>
+            <button onclick="showTab('perfil',this)">Perfil</button>
           </div>
           <div id="chat" class="tab-content">
             <!-- Aquí se cargarán los mensajes -->
@@ -57,12 +57,25 @@ function loadDefaultMain() {
   location.reload();
 }
 
-function showTab(tabName) {
+function showTab(tabName, button) {
+  // Ocultar todo el contenido de las pestañas
   document.querySelectorAll(".tab-content").forEach((tab) => {
     tab.style.display = "none";
   });
+  
+  // Mostrar el contenido de la pestaña seleccionada
   document.getElementById(tabName).style.display = "block";
+
+  // Remover el id "buttonFocus" de todos los botones
+  const focusedButton = document.querySelector("#buttonFocus");
+  if (focusedButton) {
+    focusedButton.removeAttribute("id");
+  }
+
+  // Agregar el id "buttonFocus" al botón seleccionado
+  button.id = "buttonFocus";
 }
+
 
 function loadMessages(senderId, receiverId) {
   fetch("messages.php", {
@@ -74,6 +87,7 @@ function loadMessages(senderId, receiverId) {
   })
     .then((response) => response.json())
     .then((data) => {
+      console.log("Mensajes recibidos:", data); // Debug
       if (data.error) {
         console.error(data.message);
       } else {
@@ -128,10 +142,25 @@ function loadMessages(senderId, receiverId) {
           if (message.role === "sender") {
             messageElement.classList.add("message-sender");
             messageElement.appendChild(textElement); // Mensaje a la izquierda
+            // Si el mensaje tiene like, mostrar el corazón rojo tanto al emisor como al receptor
+            if (parseInt(message.liked_message) === 1) {
+              const likeIndicator = document.createElement("span");
+              likeIndicator.innerHTML = "❤️";
+              likeIndicator.style.marginRight = "5px";
+              messageElement.insertBefore(likeIndicator, textElement);
+            }
           } else {
             messageElement.classList.add("message-receiver");
             messageElement.appendChild(imgElement); // Foto a la izquierda
             messageElement.appendChild(textElement); // Mensaje a la derecha
+            const likeButton = document.createElement("div");
+            likeButton.innerHTML = parseInt(message.liked_message) === 1 ? "❤️" : "🤍";
+            likeButton.style.cursor = "pointer";
+            likeButton.onclick = function(event) {
+              event.preventDefault();
+              toggleLike(message.message_id, receiverId, event.target);
+            };
+            messageElement.appendChild(likeButton);
           }
 
           chatContainer.appendChild(messageElement);
@@ -172,4 +201,29 @@ function sendMessage(senderId, receiverId) {
       document.getElementById("message-input").value = ""; // Limpiar el campo de entrada en caso de error
       console.error("Error:", error);
     });
+}
+
+function toggleLike(messageId, receiverId, buttonElement) {
+  console.log("Enviando petición like:", {messageId, receiverId});
+  fetch("messages.php", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/x-www-form-urlencoded",
+    },
+    body: `action=likeMessage&messageId=${messageId}&userId=${receiverId}`,
+  })
+  .then(response => response.json())
+  .then(data => {
+    console.log("Respuesta del servidor:", data);
+    if (!data.error) {
+      const newState = data.liked === 1 || data.liked === true;
+      buttonElement.innerHTML = newState ? "❤️" : "🤍";
+      console.log("Like actualizado correctamente");
+    } else {
+      console.error("Error al actualizar like:", data.message);
+    }
+  })
+  .catch(error => {
+    console.error("Error en la petición:", error);
+  });
 }

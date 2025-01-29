@@ -16,17 +16,31 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
         $senderId = $_POST['senderId'];
         $receiverId = $_POST['receiverId'];
 
-        $query = "SELECT m.message, m.sent_at, 
-                         CASE 
-                             WHEN m.sender_id = ? THEN 'sender' 
-                             ELSE 'receiver' 
-                         END AS role,
-                         (SELECT ui.path FROM user_images ui WHERE ui.user_id = m.sender_id LIMIT 1) AS 'foto'
-                  FROM messages m
-                  WHERE (m.sender_id = ? AND m.receiver_id = ?) OR (m.sender_id = ? AND m.receiver_id = ?)
-                  ORDER BY m.sent_at ASC";
+        // Debug log para ver los IDs
+        error_log("Loading messages for senderId: $senderId, receiverId: $receiverId");
+
+        $query = "SELECT 
+                    m.message_id, 
+                    m.message, 
+                    m.sent_at, 
+                    m.sender_id, 
+                    m.receiver_id,
+                    CASE 
+                        WHEN m.sender_id = ? THEN 'sender' 
+                        ELSE 'receiver' 
+                    END AS role,
+                    (SELECT ui.path FROM user_images ui WHERE ui.user_id = m.sender_id LIMIT 1) AS 'foto',
+                    CAST(m.liked_message AS UNSIGNED INTEGER) AS liked_message
+                FROM messages m
+                WHERE (m.sender_id = ? AND m.receiver_id = ?) 
+                   OR (m.sender_id = ? AND m.receiver_id = ?)
+                ORDER BY m.sent_at ASC";
+
         $params = [$senderId, $senderId, $receiverId, $receiverId, $senderId];
         $messages = executeQuery($pdo, $query, $params);
+
+        // Debug log para ver el resultado
+        error_log("Query result: " . print_r($messages, true));
 
         echo json_encode($messages);
     } else {
@@ -74,6 +88,47 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
             echo json_encode($result[0]);
         } else {
             echo json_encode(['error' => true, 'message' => 'Usuario no encontrado']);
+        }
+    } else {
+        echo json_encode(['error' => true, 'message' => 'Parámetros inválidos']);
+    }
+    exit;
+}
+
+// Endpoint para dar like a un mensaje
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['action'] === 'likeMessage') {
+    if (isset($_POST['messageId']) && isset($_POST['userId'])) {
+        $messageId = $_POST['messageId'];
+        $userId = $_POST['userId'];
+
+        // Debug
+        error_log("Recibido - messageId: " . $messageId . ", userId: " . $userId);
+
+        try {
+            // Actualizar el estado del like directamente
+            $query = "UPDATE messages 
+                     SET liked_message = IF(liked_message = 1, 0, 1)
+                     WHERE message_id = ?";
+            $params = [$messageId];
+            
+            $result = executeQuery($pdo, $query, $params);
+            
+            // Obtener el nuevo estado
+            $stateQuery = "SELECT liked_message FROM messages WHERE message_id = ?";
+            $stateResult = executeQuery($pdo, $stateQuery, [$messageId]);
+            
+            if ($stateResult && isset($stateResult[0])) {
+                echo json_encode([
+                    'error' => false,
+                    'message' => 'Like actualizado',
+                    'liked' => $stateResult[0]['liked_message']
+                ]);
+            } else {
+                echo json_encode(['error' => true, 'message' => 'Error al obtener el estado del like']);
+            }
+        } catch (Exception $e) {
+            error_log("Error en la actualización del like: " . $e->getMessage());
+            echo json_encode(['error' => true, 'message' => 'Error en la base de datos: ' . $e->getMessage()]);
         }
     } else {
         echo json_encode(['error' => true, 'message' => 'Parámetros inválidos']);
@@ -199,7 +254,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
                                 echo $row['name'] . " " . $row['surname'];
                                 echo "</div>";
                                 echo "<div class='last-message'>";
-                                echo $row['message'];
+                                echo strlen($row['message']) > 23 ? substr($row['message'], 0, 23) . "..." : $row['message'];
                                 echo "</div>";
                                 echo "</div>";
                                 echo "</div>";
@@ -224,7 +279,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
                         <!-- <img class="footer-icons" src="assets/img/web/search.png" alt="Logout"> -->
                     </a>
                 </li>
-                <li>
+                <li id="navFocus">
                     <a href="messages.php">
                         Mensajes
                         <!-- <img class="footer-icons" src="assets/img/web/message.png" alt="Logout"> -->
