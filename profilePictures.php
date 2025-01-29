@@ -79,7 +79,7 @@ $maxVisiblePhotos = 6;
                         <!-- <img class="footer-icons" src="assets/img/web/message.png" alt="Logout"> -->
                     </a>
                 </li>
-                <li>
+                <li id="navFocus">
                     <a href="profile.php">
                         Perfil
                         <!-- <img class="footer-icons" src="assets/img/web/user.png" alt="Logout"> -->

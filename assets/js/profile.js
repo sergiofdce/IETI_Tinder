@@ -148,12 +148,30 @@ map.on("click", function (e) {
 // Slider de imágenes
 // ==================================================
 
-function showTab(tabName) {
+function showTab(tabName, button) {
+  // Ocultar todo el contenido de las pestañas
   document.querySelectorAll(".tab-content").forEach((tab) => {
     tab.style.display = "none";
   });
-  document.getElementById(tabName).style.display = "block";
+
+  // Mostrar el contenido de la pestaña seleccionada con diferentes estilos según el id
+  const tabContent = document.getElementById(tabName);
+  if (tabName === "mostrar") {
+    tabContent.style.display = "flex";
+  } else{
+    tabContent.style.display = "block";
+  }
+
+  // Remover el id "buttonFocus" del botón actualmente seleccionado
+  const focusedButton = document.querySelector("#buttonFocus");
+  if (focusedButton) {
+    focusedButton.removeAttribute("id");
+  }
+
+  // Agregar el id "buttonFocus" al botón actual
+  button.id = "buttonFocus";
 }
+
 
 function setupSlider() {
   const images = document.querySelectorAll(".profile-showImage");
