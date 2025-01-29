@@ -74,6 +74,8 @@ document.getElementById('registerForm').addEventListener('submit', function (eve
   const password = document.getElementById('password').value;
   const password2 = document.getElementById('password2').value;
 
+  document.getElementById('location').disabled = false;
+
   if (password && password !== password2) {
     showMessage('error', 'Las contraseñas no coinciden');
     return;

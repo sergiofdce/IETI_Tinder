@@ -58,6 +58,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 }
 if ($_SESSION["verified"]) {
     $message = "Cuenta verificada correctamente. Por favor, inicie sesión";
+    unset($_SESSION["verified"]);
 }
 ?>
 
