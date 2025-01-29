@@ -289,6 +289,10 @@ a:focus {
       animation: fadeOut 6s forwards;
       box-sizing: border-box;
       /* Asegura que el padding no afecte el tamaño */
+      position: fixed;
+      left: 50%;
+      top: 10%;
+      transform: translateX(-50%);
 }
 
 /* Estilos de notificación */

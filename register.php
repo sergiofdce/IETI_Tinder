@@ -354,6 +354,7 @@ function uploadPhotos($user_id, $pdo)
                 <div class="input-group">
                     <label for="genre" id="genre-label">Genero:</label>
                     <select id="genre" name="genre">
+                        <option value="" disabled selected>Elegir uno</option>
                         <option value="home">Masculino</option>
                         <option value="dona">Femenino</option>
                         <option value="no binari">No binario</option>
@@ -362,6 +363,7 @@ function uploadPhotos($user_id, $pdo)
                 <div class="input-group">
                     <label for="sexual_preference" id="sexual_preference-label">Preferencia sexual:</label>
                     <select id="sexual_preference" name="sexual_preference">
+                        <option value="" disabled selected>Elegir uno</option>
                         <option value="heterosexual">Heterosexual</option>
                         <option value="homosexual">Homosexual</option>
                         <option value="bisexual">Bisexual</option>
@@ -373,7 +375,7 @@ function uploadPhotos($user_id, $pdo)
                 </div>
                 <div class="input-group">
                     <label for="location" id="location-label">Ubicación:</label>
-                    <input type="text" id="location" name="location" placeholder="Ubicación">
+                    <input type="text" disabled id="location" name="location" placeholder="Clica en la chincheta">
                     <span id="location-icon">📍</span>
                 </div>
                 <div id="map-container" style="display: none; position: absolute; z-index: 1000;">
