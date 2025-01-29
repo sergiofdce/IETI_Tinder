@@ -147,6 +147,7 @@ document.getElementById('registerForm').addEventListener('submit', function (eve
       }
     })
     .catch(error => {
+      
       showMessage('error', '¡Error! Algo salió mal ' + error.message);
 
     });

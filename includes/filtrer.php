@@ -48,6 +48,7 @@ $query = "
             LEFT JOIN user_images ui ON u.id = ui.user_id
             WHERE u.id != :session_id
             AND u.privileges != 'admin'
+            AND u.status = 'verified'
             AND (
                 (:user_genre = 'home' AND :user_preference = 'heterosexual' AND u.genre = 'dona')
                 OR (:user_genre = 'home' AND :user_preference = 'homosexual' AND u.genre = 'home')
