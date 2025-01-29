@@ -75,8 +75,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <button class="dropbtn">...</button>
             <div class="dropdown-content">
                 <a href="logout.php">Cerrar sesión</a>
-                <a href="#">Modificar contraseña</a>
-                <a href="#">Eliminar cuenta</a>
+                <a href="forgot_password.php">Modificar contraseña</a>
+                <a href="delete-account.php">Eliminar cuenta</a>
             </div>
         </div>
     </header>
@@ -134,7 +134,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     </div>
                     <div class="input-group">
                         <label for="location">Ubicación:</label>
-                        <input type="text" id="location" name="location" value="<?php echo htmlspecialchars($user['location']); ?>" placeholder="Ubicación">
+                        <input type="text" id="location" disabled name="location" value="<?php echo htmlspecialchars($user['location']); ?>" placeholder="Ubicación">
                         <span id="location-icon">📍</span>
                     </div>
                     <div id="map-container" style="display: none; position: absolute; z-index: 1000;">

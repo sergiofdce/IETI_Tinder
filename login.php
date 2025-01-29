@@ -33,12 +33,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             header("Location: discover.php");
         } else {
             
-            $checkEmailQuery = "SELECT * FROM users WHERE email = :email";
+            $checkEmailQuery = "SELECT * FROM users WHERE email = :email AND status = 'unverified' OR status = 'verified'";
             $checkEmailParams = [':email' => $email];
             $checkEmailResults = executeQuery($pdo, $checkEmailQuery, $checkEmailParams);
 
             if ($checkEmailResults) {
-
                 $message = "Contraseña incorrecta o usuario no verificado";
                 $passwordErrorClass = "form__field--error";
                 logEvent("login_failure", "El usuario " . $_POST["email"] . " ha fallado la contraseña", $_POST["email"]);
@@ -59,6 +58,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 }
 if ($_SESSION["verified"]) {
     $message = "Cuenta verificada correctamente. Por favor, inicie sesión";
+    unset($_SESSION["verified"]);
 }
 ?>
 
@@ -113,7 +113,7 @@ if ($_SESSION["verified"]) {
                 </form>
 
                 <div id="login-links">
-                    <p class="login-link"><a href="#">¿Has olvidado la contraseña?</a></p>
+                    <p class="login-link"><a href="forgot_password.php">¿Has olvidado la contraseña?</a></p>
                     <p class="login-link"><a href="register.php">Crear nueva cuenta</a></p>
                 </div>
 

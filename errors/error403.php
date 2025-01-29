@@ -16,7 +16,7 @@
     <h1>Error 403</h1>
     <div>
         <h2>Acceso Denegado</h2>
-        <p>No tienes permiso para acceder a esta página. Vuelve a la <a href="../login.php">página principal.</a></p>
+        <p>No tienes permiso para acceder a esta página. <br>Vuelve a la <a href="../login.php">página principal.</a></p>
     </div>
 </main>
 </body>

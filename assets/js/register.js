@@ -56,22 +56,6 @@ function showMessage(type, message) {
   }
 }
 
-// Ocultar el label e input de repetir contraseña inicialmente
-document.getElementById('password2').style.display = 'none';
-document.querySelector('label[for="password2"]').style.display = 'none';
-
-// Mostrar el campo de repetir contraseña solo cuando haya algo escrito en el campo de contraseña
-document.getElementById('password').addEventListener('input', function () {
-  const password2 = document.getElementById('password2');
-  const password2Label = document.querySelector('label[for="password2"]');
-  if (this.value) {
-    password2.style.display = 'block';
-    password2Label.style.display = 'block';
-  } else {
-    password2.style.display = 'none';
-    password2Label.style.display = 'none';
-  }
-});
 
 // Manejo del formulario con Ajax
 document.getElementById('registerForm').addEventListener('submit', function (event) {
@@ -89,6 +73,8 @@ document.getElementById('registerForm').addEventListener('submit', function (eve
 
   const password = document.getElementById('password').value;
   const password2 = document.getElementById('password2').value;
+
+  document.getElementById('location').disabled = false;
 
   if (password && password !== password2) {
     showMessage('error', 'Las contraseñas no coinciden');
@@ -147,6 +133,7 @@ document.getElementById('registerForm').addEventListener('submit', function (eve
       }
     })
     .catch(error => {
+      
       showMessage('error', '¡Error! Algo salió mal ' + error.message);
 
     });

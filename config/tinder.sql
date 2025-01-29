@@ -56,6 +56,7 @@ CREATE TABLE messages (
     receiver_id INT NOT NULL,
     message TEXT,
     sent_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    liked_message BOOLEAN DEFAULT FALSE,
     FOREIGN KEY (sender_id) REFERENCES users(id) ON DELETE CASCADE,
     FOREIGN KEY (receiver_id) REFERENCES users(id) ON DELETE CASCADE
 );

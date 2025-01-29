@@ -33,6 +33,18 @@ logEvent("page_view", "El usuario ha accedido a la página Discover", $_SESSION[
 
       <header>
             <img src="assets/img/web/logo.png" alt="EasyDates" id="logo">
+            <div class="dropdown">
+                  <button class="dropbtn">...</button>
+                  <div class="dropdown-content">
+                        <div id="filtro">
+                              <!-- <button id="filtroButton">Filtrar</button> -->
+                              <!-- From Uiverse.io by andrew-demchenk0 -->
+                              <button class="filtroButton" id="filtroButton">
+                                    <span>Filtros</span>
+                              </button>
+                        </div>
+                  </div>
+            </div>
       </header>
 
       <main>
@@ -106,6 +118,7 @@ logEvent("page_view", "El usuario ha accedido a la página Discover", $_SESSION[
                   LEFT JOIN user_images ui ON u.id = ui.user_id
                   WHERE u.id != :session_id
                   AND u.privileges != 'admin'
+                  AND u.status = 'verified'
                   AND (
                   (:user_genre = 'home' AND :user_preference = 'heterosexual' AND u.genre = 'dona')
                   OR (:user_genre = 'home' AND :user_preference = 'homosexual' AND u.genre = 'home')
@@ -172,18 +185,18 @@ logEvent("page_view", "El usuario ha accedido a la página Discover", $_SESSION[
 
             // Le pasamos el user_id de la cookie como parámetro
             $params =   [
-                        'session_id' => $user_id,
-                        'user_genre' => $user_genre,
-                        'user_preference' => $user_preference,
-                        'lat' => $user_lat,
-                        'long' => $user_long,
-                        'minAge' => $min_age,
-                        'maxAge' => $max_age,
-                        'minLat' => $min_lat,
-                        'maxLat' => $max_lat,
-                        'minLon' => $min_long,
-                        'maxLon' => $max_long
-                        ];
+                  'session_id' => $user_id,
+                  'user_genre' => $user_genre,
+                  'user_preference' => $user_preference,
+                  'lat' => $user_lat,
+                  'long' => $user_long,
+                  'minAge' => $min_age,
+                  'maxAge' => $max_age,
+                  'minLat' => $min_lat,
+                  'maxLat' => $max_lat,
+                  'minLon' => $min_long,
+                  'maxLon' => $max_long
+            ];
 
 
 
@@ -214,19 +227,6 @@ logEvent("page_view", "El usuario ha accedido a la página Discover", $_SESSION[
                               <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                     <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"></path>
                               </svg>
-                        </button>
-                  </div>
-                  <div id="filtro">
-                        <!-- <button id="filtroButton">Filtrar</button> -->
-                        <!-- From Uiverse.io by andrew-demchenk0 -->
-                        <button class="filtroButton" id="filtroButton">
-                              <svg xmlns="http://www.w3.org/2000/svg" width="20" viewBox="0 0 20 20" height="20" fill="none" class="svg-icon">
-                                    <g stroke-width="1.5" stroke-linecap="round" stroke="#5d41de">
-                                          <circle r="2.5" cy="10" cx="10"></circle>
-                                          <path fill-rule="evenodd" d="m8.39079 2.80235c.53842-1.51424 2.67991-1.51424 3.21831-.00001.3392.95358 1.4284 1.40477 2.3425.97027 1.4514-.68995 2.9657.82427 2.2758 2.27575-.4345.91407.0166 2.00334.9702 2.34248 1.5143.53842 1.5143 2.67996 0 3.21836-.9536.3391-1.4047 1.4284-.9702 2.3425.6899 1.4514-.8244 2.9656-2.2758 2.2757-.9141-.4345-2.0033.0167-2.3425.9703-.5384 1.5142-2.67989 1.5142-3.21831 0-.33914-.9536-1.4284-1.4048-2.34247-.9703-1.45148.6899-2.96571-.8243-2.27575-2.2757.43449-.9141-.01669-2.0034-.97028-2.3425-1.51422-.5384-1.51422-2.67994.00001-3.21836.95358-.33914 1.40476-1.42841.97027-2.34248-.68996-1.45148.82427-2.9657 2.27575-2.27575.91407.4345 2.00333-.01669 2.34247-.97026z" clip-rule="evenodd"></path>
-                                    </g>
-                              </svg>
-                              <span class="filtroButton-label">Filtros</span>
                         </button>
                   </div>
             </div>
