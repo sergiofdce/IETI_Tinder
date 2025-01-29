@@ -61,13 +61,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $checkEmailParams = [':email' => $userEmail];
         $checkEmailResults = executeQuery($pdo, $checkEmailQuery, $checkEmailParams);
         $token = generateToken();
-        $previouslyDeleted = false;
+        $userExists = false;
 
         if ($checkEmailResults) {
             //comprobar si es un usuario previamente borrado
-            if ($checkEmailResults[0]['status'] === 'deleted') {
-                $previouslyDeleted = true;
-            } else {
+            foreach ($checkEmailResults as $checkresult) {
+                if ($checkresult['status'] != 'deleted') {
+                    $userExists = true;
+                    break;
+                }
+            }
+            if ($userExists) {
                 echo json_encode(['status' => 'error', 'message' => 'El email ya existe']);
                 exit();
             }
@@ -103,7 +107,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     } else { //si alguno de los campos esta vacio dar el estilo del error
         // esta comprobación de errores sólo se realizaría en caso de no ejecutarse el javascript
         $message = "Uno o más campos están vacíos";
-        // echo json_encode(['status' => 'error', 'message' => $message]);
+        echo json_encode(['status' => 'error', 'message' => $message]);
         exit();
     }
 }
@@ -191,6 +195,9 @@ function sendVerificationEmail($userEmail, $token, $pdo)
                                         border-radius: 10px;
                                         text-align: center;
                                     }
+                                            img {
+                                            width: 100%;
+                                        }
                                     .logo {
                                         font-size: 24px;
                                         font-weight: bold;
@@ -253,7 +260,7 @@ function uploadPhotos($user_id, $pdo)
                 // Validar tipo de archivo (por ejemplo, solo imágenes)
                 $allowedMimeTypes = ['image/jpg', 'image/jpeg', 'image/png', 'image/webp'];
                 if (!in_array($fileType, $allowedMimeTypes)) {
-                    // echo json_encode(['success' => false, 'message' => "Tipo de archivo no permitido para el archivo: $fileName."]);
+                    echo json_encode(['success' => false, 'message' => "Tipo de archivo no permitido para el archivo: $fileName."]);
                     exit();
                 }
 
@@ -278,16 +285,16 @@ function uploadPhotos($user_id, $pdo)
                     // Registrar evento
                     logEvent("profile_photoUpload", "El usuario ha subido la foto: " . $newFileName, $_SESSION["email"]);
                 } else {
-                    // echo json_encode(['success' => false, 'message' => "Error al mover el archivo: $fileName."]);
+                     echo json_encode(['success' => false, 'message' => "Error al mover el archivo: $fileName."]);
                     exit();
                 }
             } else {
-                // echo json_encode(['success' => false, 'message' => "Error al subir ficheros."]);
+                 echo json_encode(['success' => false, 'message' => "Error al subir ficheros."]);
                 exit();
             }
         }
     } else {
-        // echo json_encode(['success' => false, 'message' => 'No se recibieron archivos.']);
+         echo json_encode(['success' => false, 'message' => 'No se recibieron archivos.']);
         exit();
     }
 }

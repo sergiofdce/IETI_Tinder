@@ -5,8 +5,9 @@ require_once '../config/db_connection.php';
 
 
 if (!isset($_SESSION["user_id"])) {
+    logEvent("page_view", "Problema de permisos, sin acceso a Admin", $_SESSION["email"]);
     header("HTTP/1.0 403 Forbidden");
-    include('../errors/error403.php');
+    include ('../errors/error403.php');
     die();
 }
 $user_id = $_SESSION["user_id"];
