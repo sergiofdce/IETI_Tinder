@@ -377,6 +377,16 @@ a:focus {
       font-size: 18px;
 }
 
+.confirmation-message {
+      margin-top: 20px;
+      color: var(--secondary-color);
+      font-size: 25px;
+      margin-top: 10px;
+      justify-self: center;
+      width: 100%;
+      word-wrap: break-word;
+}
+
 /* Header */
 #login-image {
       width: 100%;
