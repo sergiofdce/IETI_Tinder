@@ -49,6 +49,8 @@ if (isset($_GET['id'])) {
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
             <title>EasyDates - Detalles del Usuario</title>
             <link rel="stylesheet" href="../assets/css/styles.css">
+            <link rel="icon" type="image/png" href="../assets/img/web/icon.ico">
+
 
       </head>
 
@@ -114,6 +116,8 @@ $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
       <title>EasyDates - Admin Panel - Usuarios</title>
       <link rel="stylesheet" href="../assets/css/styles.css">
+      <link rel="icon" type="image/png" href="../assets/img/web/icon.ico">
+
 </head>
 
 <body id="admin-panel">

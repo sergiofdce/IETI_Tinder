@@ -68,6 +68,8 @@ if (isset($_GET['file'])) {
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>EasyDates - Detalles del Log</title>
         <link rel="stylesheet" href="../assets/css/styles.css">
+        <link rel="icon" type="image/png" href="../assets/img/web/icon.ico">
+
     </head>
 
     <body id="admin-panel">
@@ -103,38 +105,40 @@ if (isset($_GET['file'])) {
             </table>
 
             <!-- Paginador para los logs -->
-            <div class="pagination">
-                <?php if ($log_page > 1): ?>
-                    <a href="/admin/logs.php?file=<?= urlencode($filename) ?>&log_page=<?= $log_page - 1 ?>" class="btn">Anterior</a>
-                <?php endif; ?>
-
-                <?php
-                $start = max(1, min($log_page - 2, $total_log_pages - 4));
-                $end = min($total_log_pages, max($log_page + 2, 5));
-
-                if ($start > 1): ?>
-                    <a href="/admin/logs.php?file=<?= urlencode($filename) ?>&log_page=1">1</a>
-                    <?php if ($start > 2): ?>
-                        <span>...</span>
+            <?php if ($total_log_pages > 1): ?>
+                <div class="pagination">
+                    <?php if ($log_page > 1): ?>
+                        <a href="/admin/logs.php?file=<?= urlencode($filename) ?>&log_page=<?= $log_page - 1 ?>" class="btn">Anterior</a>
                     <?php endif; ?>
-                <?php endif; ?>
 
-                <?php for ($i = $start; $i <= $end; $i++): ?>
-                    <a href="/admin/logs.php?file=<?= urlencode($filename) ?>&log_page=<?= $i ?>"
-                        <?= $i === $log_page ? 'class="active"' : '' ?>><?= $i ?></a>
-                <?php endfor; ?>
+                    <?php
+                    $start = max(1, min($log_page - 2, $total_log_pages - 4));
+                    $end = min($total_log_pages, max($log_page + 2, 5));
 
-                <?php if ($end < $total_log_pages): ?>
-                    <?php if ($end < $total_log_pages - 1): ?>
-                        <span>...</span>
+                    if ($start > 1): ?>
+                        <a href="/admin/logs.php?file=<?= urlencode($filename) ?>&log_page=1">1</a>
+                        <?php if ($start > 2): ?>
+                            <span>...</span>
+                        <?php endif; ?>
                     <?php endif; ?>
-                    <a href="/admin/logs.php?file=<?= urlencode($filename) ?>&log_page=<?= $total_log_pages ?>"><?= $total_log_pages ?></a>
-                <?php endif; ?>
 
-                <?php if ($log_page < $total_log_pages): ?>
-                    <a href="/admin/logs.php?file=<?= urlencode($filename) ?>&log_page=<?= $log_page + 1 ?>" class="btn">Siguiente</a>
-                <?php endif; ?>
-            </div>
+                    <?php for ($i = $start; $i <= $end; $i++): ?>
+                        <a href="/admin/logs.php?file=<?= urlencode($filename) ?>&log_page=<?= $i ?>"
+                            <?= $i === $log_page ? 'class="active"' : '' ?>><?= $i ?></a>
+                    <?php endfor; ?>
+
+                    <?php if ($end < $total_log_pages): ?>
+                        <?php if ($end < $total_log_pages - 1): ?>
+                            <span>...</span>
+                        <?php endif; ?>
+                        <a href="/admin/logs.php?file=<?= urlencode($filename) ?>&log_page=<?= $total_log_pages ?>"><?= $total_log_pages ?></a>
+                    <?php endif; ?>
+
+                    <?php if ($log_page < $total_log_pages): ?>
+                        <a href="/admin/logs.php?file=<?= urlencode($filename) ?>&log_page=<?= $log_page + 1 ?>" class="btn">Siguiente</a>
+                    <?php endif; ?>
+                </div>
+            <?php endif; ?>
         </div>
 
     </body>
@@ -168,6 +172,8 @@ $current_files = array_slice($log_files, $offset, $limit);
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>EasyDates - Admin Panel - Logs</title>
     <link rel="stylesheet" href="../assets/css/styles.css">
+    <link rel="icon" type="image/png" href="../assets/img/web/icon.ico">
+
 </head>
 
 <body id="admin-panel">
@@ -196,39 +202,41 @@ $current_files = array_slice($log_files, $offset, $limit);
         </tbody>
     </table>
 
-    <!-- Cambiar esta sección del paginador -->
-    <div class="pagination">
-        <?php if ($page > 1): ?>
-            <a href="/admin/logs.php?page=<?= $page - 1 ?>" class="btn">Anterior</a>
-        <?php endif; ?>
-
-        <?php
-        // Mostrar máximo 5 páginas alrededor de la página actual
-        $start = max(1, min($page - 2, $total_pages - 4));
-        $end = min($total_pages, max($page + 2, 5));
-
-        if ($start > 1): ?>
-            <a href="/admin/logs.php?page=1">1</a>
-            <?php if ($start > 2): ?>
-                <span>...</span>
+    <!-- Paginador para la lista de archivos -->
+    <?php if ($total_pages > 1): ?>
+        <div class="pagination">
+            <?php if ($page > 1): ?>
+                <a href="/admin/logs.php?page=<?= $page - 1 ?>" class="btn">Anterior</a>
             <?php endif; ?>
-        <?php endif; ?>
 
-        <?php for ($i = $start; $i <= $end; $i++): ?>
-            <a href="/admin/logs.php?page=<?= $i ?>" <?= $i === $page ? 'class="active"' : '' ?>><?= $i ?></a>
-        <?php endfor; ?>
+            <?php
+            // Mostrar máximo 5 páginas alrededor de la página actual
+            $start = max(1, min($page - 2, $total_pages - 4));
+            $end = min($total_pages, max($page + 2, 5));
 
-        <?php if ($end < $total_pages): ?>
-            <?php if ($end < $total_pages - 1): ?>
-                <span>...</span>
+            if ($start > 1): ?>
+                <a href="/admin/logs.php?page=1">1</a>
+                <?php if ($start > 2): ?>
+                    <span>...</span>
+                <?php endif; ?>
             <?php endif; ?>
-            <a href="/admin/logs.php?page=<?= $total_pages ?>"><?= $total_pages ?></a>
-        <?php endif; ?>
 
-        <?php if ($page < $total_pages): ?>
-            <a href="/admin/logs.php?page=<?= $page + 1 ?>" class="btn">Siguiente</a>
-        <?php endif; ?>
-    </div>
+            <?php for ($i = $start; $i <= $end; $i++): ?>
+                <a href="/admin/logs.php?page=<?= $i ?>" <?= $i === $page ? 'class="active"' : '' ?>><?= $i ?></a>
+            <?php endfor; ?>
+
+            <?php if ($end < $total_pages): ?>
+                <?php if ($end < $total_pages - 1): ?>
+                    <span>...</span>
+                <?php endif; ?>
+                <a href="/admin/logs.php?page=<?= $total_pages ?>"><?= $total_pages ?></a>
+            <?php endif; ?>
+
+            <?php if ($page < $total_pages): ?>
+                <a href="/admin/logs.php?page=<?= $page + 1 ?>" class="btn">Siguiente</a>
+            <?php endif; ?>
+        </div>
+    <?php endif; ?>
 
 </body>
 
