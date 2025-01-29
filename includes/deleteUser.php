@@ -9,6 +9,7 @@ if ($_POST['delete'] == 'Eliminar') {
     $query = "UPDATE users SET status = 'deleted' WHERE id = :user_id";
     $params = [':user_id' => $user_id];
     executeQuery($pdo, $query, $params);
+    logEvent("page_view", "Un usuario ha eliminado su cuenta", $user_id);
 
     echo json_encode(['status' => 'success', 'message' => 'Cuenta eliminada correctamente']);
     session_destroy();

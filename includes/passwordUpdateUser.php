@@ -15,6 +15,7 @@ if (isset($_POST['password']) && isset($_POST['password2'])) {
         $query = "UPDATE users SET password = :password WHERE id = :userId";
         $params = [':password' => $hashedPassword, ':userId' => $user_id];
         executeQuery($pdo, $query, $params);
+        logEvent("page_view", "Un usuario ha cambiado su contraseña", $user_id);
 
         echo json_encode(['status' => 'success', 'message' => 'Contraseña actualizada correctamente']);
     } else {

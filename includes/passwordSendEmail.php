@@ -15,7 +15,6 @@ require_once '../config/db_connection.php';
 include 'functions.php';
 
 
-logEvent("page_view", "Un usuario ha accedido a la página Register", "new_user");
 
 date_default_timezone_set('Europe/Madrid');
 
@@ -26,6 +25,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     if (!empty($_POST['email'])) {
         $userEmail = $_POST['email'];
+        logEvent("page_view", "Un usuario ha solicitado un email de recuperación de contraseña", $userEmail);
 
         // comprobar que el email exista
         $checkEmailQuery = "SELECT * FROM users WHERE email = :email AND status = 'verified'";
@@ -44,9 +44,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         executeQuery($pdo, $updateTokenQuery, $updateTokenParams);
 
         if (sendVerificationEmail($userEmail, $token, $pdo)) {
+            logEvent("page_view", "Un usuario ha recibido un email de recuperación de contraseña", $userEmail);
             echo json_encode(['status' => 'success', 'message' => 'Se ha enviado un email de verificación']);
             exit();
         }else {
+            logEvent("error", "Se ha fallado el envío del email de recuperación de contraseña", $userEmail);
             echo json_encode(['status' => 'error', 'message' => 'Error al enviar el email de verificación']);
             exit();
         }
