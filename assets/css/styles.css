@@ -1380,10 +1380,9 @@ main div#mostrar .profile-container{
       position: absolute;
       top: 200px;
       /* Ajusta según sea necesario */
-      left: 50px;
       /* Ajusta según sea necesario */
-      width: 80%;
-      height: 500px;
+      width: 350px;
+      height: 350px;
       z-index: 1000;
       background: white;
       border: 1px solid #ccc;
