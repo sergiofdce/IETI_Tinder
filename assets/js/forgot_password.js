@@ -123,7 +123,9 @@ if (document.getElementById('forgotPasswordForm')) {
         if (password && password !== password2) {
             showMessage('error', 'Las contraseñas no coinciden');
             document.getElementById('password').classList.add('form__field--error');
-            document.getElementById('password2').classList.add('form__label--error');
+            document.getElementById('password2').classList.add('form__field--error');
+            document.getElementById('password-label').classList.add('form__label--error');
+            document.getElementById('password2-label').classList.add('form__label--error');
             return;
         }
 
@@ -168,7 +170,7 @@ if (document.getElementById('forgotPasswordForm')) {
                     document.querySelector('.container-cabecera h1').innerText = "Contraseña actualizada";
                     document.getElementById('forgotPasswordForm').remove();
                     //añadir mensaje de registro correcto
-                    document.querySelector('.container-cabecera').insertAdjacentHTML('afterend', '<p class="confirmation-message">Contraseña cambiada con éxito. Vuelva a <a href="login.php">iniciar sesión</a></p>.');
+                    document.querySelector('.container-cabecera').insertAdjacentHTML('afterend', '<p class="confirmation-message">Contraseña cambiada con éxito. Vuelva a <a href="login.php">iniciar sesión</a>.</p>');
                 } else {
                     showMessage('error', data.message);
                 }

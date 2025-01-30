@@ -375,6 +375,11 @@ a:focus {
       width: 409px;
       font-size: 18px;
 }
+.confirmation-message a {
+      color: var(--primary-color);
+      text-decoration: underline;
+}
+      
 
 .confirmation-message {
       margin-top: 20px;
