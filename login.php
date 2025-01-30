@@ -33,7 +33,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             header("Location: discover.php");
         } else {
             
-            $checkEmailQuery = "SELECT * FROM users WHERE email = :email AND status = 'unverified' OR status = 'verified'";
+            $checkEmailQuery = "SELECT * FROM users WHERE email = :email AND (status = 'unverified' OR status = 'verified')";
             $checkEmailParams = [':email' => $email];
             $checkEmailResults = executeQuery($pdo, $checkEmailQuery, $checkEmailParams);
 
