@@ -147,12 +147,12 @@ function sendVerificationEmail($userEmail, $token, $pdo)
                                 <div class="container">
                                     <div class="logo"><img src="https://tinder4.ieti.site/assets/img/web/logo.png" alt="EasyDates" id="logo"></div>
                                     <p class="message">Para recuperar su contraseña, por favor haga clic en el botón de abajo.</p>
-                                    <a href=" http://tinder4.ieti.site/register.php?verify=' . $userId[0]['id'] . '&token=' . $userId[0]['token'] . '" class="button">Verificar Cuenta</a>
+                                    <a href=" http://tinder4.ieti.site/forgot_password.php?verify=' . $userId[0]['id'] . '&token=' . $userId[0]['token'] . '" class="button">Recuperar contraseña</a>
                                     <p class="footer">Si no solicitaste este correo, puedes ignorarlo.</p>
                                 </div>
                             </body>
                             </html>
-                            ';        $mail->AltBody = "Para recuperar su contraseña, por favor haga clic en el siguiente enlace: http://tinder4.ieti.site/register.php?verify=" . $userId[0]['id'] . "&token=" . $userId[0]['token'];
+                            ';        $mail->AltBody = "Para recuperar su contraseña, por favor haga clic en el siguiente enlace: http://tinder4.ieti.site/forgot_password.php?verify=" . $userId[0]['id'] . "&token=" . $userId[0]['token'];
 
         $mail->send();
         return true;
