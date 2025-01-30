@@ -1876,7 +1876,9 @@ img.default-photo {
       max-width: 100%;
       background-color: #b1a6db;
 }
-
+body#bodyError {
+      box-shadow: none;     
+}
 #bodyError #mainError{
       height: 100%;
       background-color: unset;
