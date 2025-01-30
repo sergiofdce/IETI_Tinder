@@ -58,6 +58,7 @@ function showMessage(type, message) {
 document.getElementById('profileForm').addEventListener('submit', function(event) {
     event.preventDefault();
 
+    document.getElementById('location').disabled = false;
     const formData = new FormData(this);
 
     fetch('profile.php', {
@@ -68,6 +69,7 @@ document.getElementById('profileForm').addEventListener('submit', function(event
     .then(data => {
         if (data.status === 'success') {
             showMessage('success', data.message);
+            document.getElementById('location').disabled = true;
         } else {
             showMessage('error', data.message);
         }
