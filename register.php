@@ -95,10 +95,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $getIdQuery = "SELECT id FROM users WHERE email = :email AND status = 'unverified'";
             $getIdParams = [':email' => $userEmail];
             $getIdResults = executeQuery($pdo, $getIdQuery, $getIdParams);
-            $_SESSION["user_id"] = $getIdResults[0]['id'];
-            $_SESSION["email"] = $userEmail;
 
-            uploadPhotos($_SESSION["user_id"], $pdo);
+            uploadPhotos($getIdResults[0]['id'], $userEmail, $pdo);
         } catch (Exception $e) {
             echo json_encode(['status' => 'error', 'message' => '¡Error en el try catch!' . $e->getMessage()]);
             exit();
@@ -245,7 +243,7 @@ function sendVerificationEmail($userEmail, $token, $pdo)
 }
 
 
-function uploadPhotos($user_id, $pdo)
+function uploadPhotos($user_id, $userEmail ,$pdo)
 {
     // Validar si se recibieron archivos
     if (!empty($_FILES)) {
@@ -283,7 +281,7 @@ function uploadPhotos($user_id, $pdo)
                     ]);
 
                     // Registrar evento
-                    logEvent("profile_photoUpload", "El usuario ha subido la foto: " . $newFileName, $_SESSION["email"]);
+                    logEvent("profile_photoUpload", "El usuario ha subido la foto: " . $newFileName, $userEmail);
                 } else {
                      echo json_encode(['success' => false, 'message' => "Error al mover el archivo: $fileName."]);
                     exit();
